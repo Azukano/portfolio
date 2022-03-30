@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "cd .. && rm -f _build/esbuild*",
-    "deploy-tailwind": "NODE_ENV=prod tailwindcss --postcss --minify -i css/app.css -o ../priv/static/app.css"
+    "deploy": "NODE_ENV=production tailwindcss --postcss --minify --input=css/app.css --output=../priv/static/assets/app.css; cd .. && mix assets.deploy && rm -f _build/esbuild"
   },
   "keywords": [],
   "author": "",
