@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "NODE_ENV=production tailwindcss --postcss --minify -i css/app.css -o ../priv/static/app.css"
+    "deploy": "NODE_ENV=prod tailwindcss --postcss --minify -i css/app.css -o ../priv/static/app.css"
   },
   "keywords": [],
   "author": "",
