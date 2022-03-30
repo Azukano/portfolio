@@ -66,6 +66,7 @@ defmodule Portfolio.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.deploy": [
         "cmd npm run deploy",
+        "cmd npm run deploy-tailwind",
         "esbuild default --minify",
         "phx.digest"]
     ]
