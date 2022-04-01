@@ -10,20 +10,35 @@
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
   </head>
   <body class="bg-black">
-    <header>
-      <section class="container">
-        <nav>
-          <ul>
-            <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
-            <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-              <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
-            <% end %>
-          </ul>
-        </nav>
-        <a href="https://phoenixframework.org/" class="phx-logo">
-          <img src={Routes.static_path(@conn, "/images/phoenix.png")} alt="Phoenix Framework Logo"/>
-        </a>
-      </section>
+    <header class="max-w-[1440px] h-[84px] bg-[#242526] flex justify-between align-center mx-auto">
+      <div class="text-3xl font-bold h-full flex items-center mx-auto">
+        <p class="text-[#C4B5FD]">emac</p>
+        <p class="text-[#E6E6E6]">.developer</p>
+      </div>
+      <nav class="h-full bg-[#F3F4F6] text-white text-xl font-medium flex items-center text-bold mx-auto">
+        <ul class="h-full flex">
+          <li class="h-full w-[180px] flex items-center pl-[16px] bg-[#242526] ml-[2px]">
+            <span>
+              Home
+            </span>
+          </li>
+          <li class="h-full w-[180px] flex items-center pl-[16px] bg-[#242526] ml-[2px]">
+            <span>
+              Games
+            </span>
+          </li>
+          <li class="h-full w-[180px] flex items-center pl-[16px] bg-[#242526] ml-[2px]">
+            <span>
+              About
+            </span>
+          </li>
+          <li class="h-full w-[180px] flex items-center pl-[16px] bg-[#242526] ml-[2px]">
+            <span>
+              Hire me!
+            </span>
+          </li>
+        </ul>
+      </nav>
     </header>
     <%= @inner_content %>
   </body>
