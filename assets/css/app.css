@@ -2,3 +2,16 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+/* always hidden */
+[x-cloak=""] { display: none; }
+
+/* hidden on mobile/smaller screens */
+@media screen and (max-width: 768px) {
+    [x-cloak="mobile"] { display: none; }
+}
+
+/* hidden on mobile/smaller screens */
+@media screen and (min-width: 768px) {
+    [x-cloak="desk"] { display: none; }
+}
