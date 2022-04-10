@@ -9,7 +9,7 @@ import Config
 
 # Start the phoenix server if environment is set and running in a release
 if System.get_env("PHX_SERVER") && System.get_env("RELEASE_NAME") do
-  config :portfolio, PortfolioWeb.Endpoint, server: true
+  config :portfolio, PortfolioWeb.Endpoint
 end
 
 if config_env() == :prod do
@@ -23,7 +23,6 @@ if config_env() == :prod do
   maybe_ipv6 = if System.get_env("ECTO_IPV6"), do: [:inet6], else: []
 
   config :portfolio, Portfolio.Repo,
-    ssl: true,
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
     socket_options: maybe_ipv6
@@ -53,6 +52,12 @@ if config_env() == :prod do
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
       port: port
     ],
+    #https: [
+    #  port: 443,
+    #  cipher_suite: :strong,
+    #  certfile: "priv/cert/selfsigned.pem",
+    #  keyfile: "priv/cert/selfsigned_key.pem"
+    #],
     secret_key_base: secret_key_base
 
   # ## Using releases
@@ -60,7 +65,9 @@ if config_env() == :prod do
   # If you are doing OTP releases, you need to instruct Phoenix
   # to start each relevant endpoint:
   #
-  #     config :portfolio, PortfolioWeb.Endpoint, server: true
+  config :portfolio, PortfolioWeb.Endpoint,
+    server: true,
+    force_ssl: [rewrite_on: [:x_forwarded_proto]]
   #
   # Then you can assemble a release by calling `mix release`.
   # See `mix help release` for more information.
