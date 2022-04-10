@@ -66,8 +66,7 @@ if config_env() == :prod do
   # to start each relevant endpoint:
   #
   config :portfolio, PortfolioWeb.Endpoint,
-    server: true,
-    force_ssl: [rewrite_on: [:x_forwarded_proto]]
+    server: true
   #
   # Then you can assemble a release by calling `mix release`.
   # See `mix help release` for more information.
