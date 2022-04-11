@@ -43,6 +43,10 @@ module.exports = {
       grayscale:{
         50: '50%', 
         75: '75%'
+      },
+      height: {
+        'calc-vh1': 'calc(-84px + 100vh)',
+        'calc-vh2': 'calc(-56px + 100vh)'
       }
     },
   },
