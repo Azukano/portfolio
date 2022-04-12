@@ -32,6 +32,9 @@ module.exports = {
 
       '2xl': '1536px',
       // => @media (min-width: 1536px) { ... }
+
+      '2.5xl': '1669px',
+      // => @media (min-width: 1536px) { ... }
     },
     extend: {
       textColor: {
@@ -50,5 +53,5 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/aspect-ratio')],
 }
