@@ -24,6 +24,9 @@ module.exports = {
       'md': '768px',
       // => @media (min-width: 768px) { ... }
 
+      'md-lg': '900px',
+      // => @media (min-width: 1024px) { ... }
+
       'lg': '1024px',
       // => @media (min-width: 1024px) { ... }
 
@@ -31,9 +34,6 @@ module.exports = {
       // => @media (min-width: 1280px) { ... }
 
       '2xl': '1536px',
-      // => @media (min-width: 1536px) { ... }
-
-      '2.5xl': '1669px',
       // => @media (min-width: 1536px) { ... }
     },
     extend: {
@@ -48,6 +48,10 @@ module.exports = {
         75: '75%'
       },
       height: {
+        'calc-vh1': 'calc(-84px + 100vh)',
+        'calc-vh2': 'calc(-56px + 100vh)'
+      },
+      minHeight: {
         'calc-vh1': 'calc(-84px + 100vh)',
         'calc-vh2': 'calc(-56px + 100vh)'
       }

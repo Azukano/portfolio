@@ -7,11 +7,12 @@
 [x-cloak="cloaked"] { display: none; }
 
 /* hidden on mobile/smaller screens */
-@media screen and (min-width: 768px) {
-    [x-cloak="desktop"] { display: none; }
-}
-
-/* hidden on desktop/larger screens */
 @media screen and (max-width: 768px) {
     [x-cloak="mobile"] { display: none; }
 }
+
+/* hidden on mobile/smaller screens */
+@media screen and (max-width: 540px) {
+    [x-cloak="sm-mobile"] { display: none; }
+}
+
