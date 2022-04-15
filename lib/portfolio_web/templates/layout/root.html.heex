@@ -10,7 +10,6 @@
     <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
   </head>
-  <!-- METADATA -->
   <body class="min-h-screen m-0 p-0">
     <!-- HEADER -->
     <header class="w-full h-[56px] lg:h-[84px] flex bg-[#242526]">
@@ -58,7 +57,6 @@
       </div>
 
     </header>
-    <!-- HEADER -->
     <%= @inner_content %>
   </body>
 </html>

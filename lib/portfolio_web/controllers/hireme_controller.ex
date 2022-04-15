@@ -1,4 +1,4 @@
-defmodule PortfolioWeb.AboutController do
+defmodule PortfolioWeb.HiremeController do
   use PortfolioWeb, :controller
 
   def index(conn, _params) do
