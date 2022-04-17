@@ -1,4 +1,4 @@
-defmodule PortfolioWeb.PageController do
+defmodule PortfolioWeb.HomeController do
   use PortfolioWeb, :controller
 
   def index(conn, _params) do

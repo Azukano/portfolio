@@ -1,3 +1,3 @@
-defmodule PortfolioWeb.HiremeView do
+defmodule PortfolioWeb.AboutView do
   use PortfolioWeb, :view
 end

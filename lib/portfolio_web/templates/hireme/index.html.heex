@@ -6,7 +6,7 @@
        class="w-full h-full object-cover absolute mix-blend-overlay">
     <article class="w-[90%] min-h-full mx-auto text-[#E6E6E6] my-10
                     border-[#242526] z-10 bg-[#242526]/60 border-8 
-                    rounded-3xl flex flex-col sm:w-[95%] md:w-[70%] md:flex-row">                                       
+                    rounded-3xl flex flex-col sm:w-[95%] md:w-[90%] xl:w-[70%] md:flex-row">                                       
         <!-- LEFT DIV -->
         <div class="w-full text-center 
                     flex flex-col justify-center items-center">
@@ -49,7 +49,7 @@
           </span>
 
         </div>
-        <!-- LEFT DIV -->
+        <!-- RIGHT DIV -->
         <div class="w-full text-center 
                     flex flex-col justify-center items-center">
           <span class="w-full my-10 mx-2">
@@ -58,24 +58,31 @@
             </h2>           
             <ul class="w-full py-10 px-2">
               <li>
-                <input class="w-[80%] rounded-md text-[#242526] text-[40px] text-center" 
-                        type="text" 
-                        id="name" 
-                        value="Name">
+                <input id="name" type="text"
+                       required class="w-[80%] bg-[#242526] mx-auto text-[#e3e3e3] shadow-sm
+                                     focus:text-gray-700 focus:bg-[#e6e6e6] focus:border-black"
+                       placeholder="name">
               </li>
               <li class="my-6">
-                <input class="w-[80%] rounded-md text-[#242526] text-[40px] text-center" 
-                        type="email" 
-                          id="email" 
-                       value="Email">
+                <input id="email" type="email"
+                       autocomplete="email" 
+                       required class="w-[80%] bg-[#242526] mx-auto text-[#e3e3e3]/20 shadow-sm
+                                     focus:text-gray-700 focus:bg-[#e6e6e6] focus:border-black"
+                       placeholder="email">
               </li>
               <li class="h-[100%]">
-                <input class="w-[80%] rounded-md text-[#242526] text-[40px] text-center md:h-[250px]" 
-                        type="text" 
-                          id="message" 
-                       value="Message">
+                <textarea id="message"
+                  class="w-[80%] mx-auto bg-[#242526] text-[#e3e3e3]/20 rounded transition
+                       focus:text-gray-700 focus:bg-[#e6e6e6] focus:border-black"
+            placeholder="Your message..."></textarea> 
               </li>
             </ul>
+            <div class="w-full px-2">
+              <button class="w-[80%] bg-[#505151] p-2 mx-2
+                             rounded-lg hover:bg-[#2374e1] ">
+                Send
+              </button>
+            </div>
           </span>
         </div>
 
