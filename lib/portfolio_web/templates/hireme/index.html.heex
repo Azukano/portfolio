@@ -41,7 +41,7 @@
               <li class="">
                 <svg width="69" height="62" viewBox="0 0 69 62" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="1.45605" y="1.7506" width="66" height="58.4988" rx="3" fill="#0072B1"/>
-                  <path d="M17.8864 57.2494H5.44713V22.1986H17.8864V57.2494ZM11.6601 17.4174C7.68239 17.4174 4.45605 14.5346 4.45605 11.0541C4.45605 9.38231 5.21505 7.77899 6.56606 6.59685C7.91708 5.41471 9.74945 4.7506 11.6601 4.7506C13.5707 4.7506 15.4031 5.41471 16.7541 6.59685C18.1051 7.77899 18.8641 9.38231 18.8641 11.0541C18.8641 14.5346 15.6364 17.4174 11.6601 17.4174ZM64.4427 57.2494H52.0302V40.1869C52.0302 36.1205 51.9364 30.9057 45.5627 30.9057C39.0953 30.9057 38.1043 35.3236 38.1043 39.8939V57.2494H25.6784V39.724V22.1986H37.6087V26.9799H37.7828C39.4436 24.226 43.5003 21.3197 49.5525 21.3197C62.1418 21.3197 64.4561 28.5736 64.4561 37.9955V57.2494H64.4427Z" fill="black"/>
+                  <path d="M17.8864 57.2494H5.44713V22.1986H17.8864V57.2494ZM11.6601 17.4174C7.68239 17.4174 4.45605 14.5346 4.45605 11.0541C4.45605 9.38231 5.21505 7.77899 6.56606 6.59685C7.91708 5.41471 9.74945 4.7506 11.6601 4.7506C13.5707 4.7506 15.4031 5.41471 16.7541 6.59685C18.1051 7.77899 18.8641 9.38231 18.8641 11.0541C18.8641 14.5346 15.6364 17.4174 11.6601 17.4174ZM64.4427 57.2494H52.0302V40.1869C52.0302 36.1205 51.9364 30.9057 45.5627 30.9057C39.0953 30.9057 38.1043 35.3236 38.1043 39.8939V57.2494H25.6784V39.724V22.1986H37.6087V26.9799H37.7828C39.4436 24.226 43.5003 21.3197 49.5525 21.3197C62.1418 21.3197 64.4561 28.5736 64.4561 37.9955V57.2494H64.4427Z" fill="white"/>
                   <rect x="1.45605" y="1.7506" width="66" height="58.4988" rx="3" stroke="black" stroke-width="2"/>
                 </svg>                    
               </li>
@@ -50,42 +50,41 @@
 
         </div>
         <!-- RIGHT DIV -->
-        <div class="w-full text-center 
-                    flex flex-col justify-center items-center">
-          <span class="w-full my-10 mx-2">
-            <h2 class="font-semibold text-[50px]">
-              Contact Me
-            </h2>           
-            <ul class="w-full py-10 px-2">
-              <li>
-                <input id="name" type="text"
-                       required class="w-[80%] bg-[#242526] mx-auto text-[#e3e3e3] shadow-sm
-                                     focus:text-gray-700 focus:bg-[#e6e6e6] focus:border-black"
-                       placeholder="name">
-              </li>
-              <li class="my-6">
-                <input id="email" type="email"
-                       autocomplete="email" 
-                       required class="w-[80%] bg-[#242526] mx-auto text-[#e3e3e3]/20 shadow-sm
-                                     focus:text-gray-700 focus:bg-[#e6e6e6] focus:border-black"
-                       placeholder="email">
-              </li>
-              <li class="h-[100%]">
-                <textarea id="message"
-                  class="w-[80%] mx-auto bg-[#242526] text-[#e3e3e3]/20 rounded transition
-                       focus:text-gray-700 focus:bg-[#e6e6e6] focus:border-black"
-            placeholder="Your message..."></textarea> 
-              </li>
-            </ul>
-            <div class="w-full px-2">
-              <button class="w-[80%] bg-[#505151] p-2 mx-2
-                             rounded-lg hover:bg-[#2374e1] ">
-                Send
-              </button>
+        <div class="w-full">
+          <%= form_for @changeset, Routes.hireme_path(@conn, :create), fn f ->  %>
+            <div class="w-full text-center 
+                        flex flex-col justify-center items-center">
+              <span class="w-full my-10 mx-2">
+                <h2 class="font-semibold text-[50px]">
+                  Contact Me
+                </h2>           
+                <ul class="w-full py-10 px-2">
+                  <li>
+                    <%= text_input f, :name, class: "w-[100%] bg-[#242526] mx-auto text-[#e3e3e3] shadow-sm
+                                                    focus:text-gray-700 focus:bg-[#e6e6e6] focus:border-black",
+                        placeholder: "name" %>
+                  </li>
+                  <li class="my-6">
+                    <%= text_input f, :email, class: "w-[100%] bg-[#242526] mx-auto text-[#e3e3e3] shadow-sm
+                                                    focus:text-gray-700 focus:bg-[#e6e6e6] focus:border-black",
+                        placeholder: "email" %>
+                  </li>
+                  <li class="h-[100%]">
+                    <%= textarea f, :message, class: "w-[100%] bg-[#242526] mx-auto text-[#e3e3e3] shadow-sm
+                                                    focus:text-gray-700 focus:bg-[#e6e6e6] focus:border-black",
+                        placeholder: "your message..." %> 
+                  </li>
+                </ul>
+                <div class="w-full px-2">
+                  <button class="w-[80%] bg-[#505151] p-2 mx-2
+                                rounded-lg hover:bg-[#2374e1] ">
+                    Send
+                  </button>
+                </div>
+              </span>
             </div>
-          </span>
+          <% end %>
         </div>
-
     </article>
     
 

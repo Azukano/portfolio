@@ -21,6 +21,7 @@ defmodule PortfolioWeb.Router do
     get "/games", GamesController, :index
     get "/about", AboutController, :index
     get "/hireme", HiremeController, :index
+    post "/hireme", HiremeController, :create
   end
 
   # Other scopes may use custom stacks.
