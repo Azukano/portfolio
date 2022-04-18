@@ -1,7 +1,7 @@
-defmodule Portfolio.Hireme.Message do
+defmodule Portfolio.Message.Send do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Portfolio.Hireme.Message
+  alias Portfolio.Message.Send
 
   schema "messages" do
     field :name, :string
@@ -12,7 +12,7 @@ defmodule Portfolio.Hireme.Message do
   end
 
   @doc false
-  def changeset(%Message{} = message, attrs) do
+  def changeset(%Send{} = message, attrs) do
     message
     |> cast(attrs, [:name, :email, :message])
     |> validate_required([:name])

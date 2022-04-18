@@ -1,16 +1,16 @@
 defmodule PortfolioWeb.HiremeController do
-  alias Portfolio.Hireme.Message
-  alias Portfolio.Hireme
+  alias Portfolio.Message.Send
+  alias Portfolio.Message
 
   use PortfolioWeb, :controller
 
   def index(conn, _params) do
-    changeset = Message.changeset(%Message{}, %{})
+    changeset = Send.changeset(%Send{}, %{})
     render(conn, "index.html", changeset: changeset)
   end
 
-  def create(conn, %{"message" => message_params}) do
-    case Hireme.create_message(message_params) do
+  def create(conn, %{"send" => message_params}) do
+    case Message.send_message(message_params) do
       {:ok, _} ->
         conn
         |> put_flash(:info, "Message Sent!")
@@ -25,7 +25,7 @@ defmodule PortfolioWeb.HiremeController do
   end
 
   def show(conn, _) do
-    messages = Portfolio.Hireme.list_messages()
+    messages = Portfolio.Message.list_messages()
     render(conn, "show.html", messages: messages)
   end
 end
