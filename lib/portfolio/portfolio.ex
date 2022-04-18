@@ -2,7 +2,7 @@ defmodule Portfolio.Hireme do
   alias Portfolio.Repo
   alias Portfolio.Hireme.Message
 
-  def list_rooms do
+  def list_messages do
     Repo.all(Message)
   end
 

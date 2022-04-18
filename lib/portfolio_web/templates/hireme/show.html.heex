@@ -1,0 +1,22 @@
+<section class="w-full h-full bg-[#242526] text-[#E6E6E6]">
+    
+    <h2 class="text-4xl font-semibold">Messages</h2>
+    <ul class="h-full w-[50%] bg-slate-300">
+        <%= for message <- @messages do %>
+            <li class="my-2 font-medium text-2xl">
+                <span class="">
+                    name:
+                </span>
+                <%= link message.name, to: Routes.hireme_path(@conn, :show) %>
+                <span>
+                    <br> email
+                </span>
+                <%= link message.email, to: Routes.hireme_path(@conn, :show) %>
+                <span>
+                    <br> message
+                </span>
+                <%= link message.message, to: Routes.hireme_path(@conn, :show) %>
+            </li>
+        <% end %>
+    </ul>
+</section>

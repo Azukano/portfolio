@@ -11,7 +11,7 @@ defmodule PortfolioWeb.HiremeController do
 
   def create(conn, %{"message" => message_params}) do
     case Hireme.create_message(message_params) do
-      {:ok, message} ->
+      {:ok, _} ->
         conn
         |> put_flash(:info, "Message Sent!")
         |> redirect(to: Routes.hireme_path(conn, :index))
@@ -24,4 +24,8 @@ defmodule PortfolioWeb.HiremeController do
     end
   end
 
+  def show(conn, _) do
+    messages = Portfolio.Hireme.list_messages()
+    render(conn, "show.html", messages: messages)
+  end
 end
