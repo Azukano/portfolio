@@ -25,7 +25,7 @@ defmodule PortfolioWeb.HiremeController do
   end
 
   def show(conn, _) do
-    messages = Portfolio.Message.list_messages()
+    messages = Portfolio.Pagination.page("messages", 10, 10)
     render(conn, "show.html", messages: messages)
   end
 end
