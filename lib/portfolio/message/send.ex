@@ -11,7 +11,6 @@ defmodule Portfolio.Message.Send do
     timestamps()
   end
 
-  @doc false
   def changeset(%Send{} = message, attrs) do
     message
     |> cast(attrs, [:name, :email, :message])

@@ -1,3 +1,5 @@
+
+
 # Script for populating the database. You can run it as:
 #
 #     mix run priv/repo/seeds.exs
@@ -9,28 +11,13 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-
 alias Portfolio.Repo
-alias Portfolio.Hireme.Message
+alias Portfolio.Message.Seeds
 
-
-Repo.insert! %Message{}
-  |> Message.changeset(%{
-      name: "tester 1",
-      email: "tester1@example.com",
-      message: "this is a manual input database test connection second"})
-
-
-
-Repo.insert! %Message{}
-|> Message.changeset(%{
-    name: "tester 2",
-    email: "tester2@example.com",
-    message: "this is a manual input database test connection second"})
-
-
-Repo.insert! %Message{}
-  |> Message.changeset(%{
-      name: "tester 3",
-      email: "tester3@example.com",
-      message: "this is a manual input database test connection second"})
+  for n <- 1..100 do
+    Repo.insert! %Seeds{}
+    |> Seeds.changeset(%{
+        name: "tester #{n}",
+        email: "tester#{n}@example.com",
+        message: "this is a manual seed input database test connection #{n}"})
+    end
