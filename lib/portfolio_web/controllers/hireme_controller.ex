@@ -22,11 +22,9 @@ defmodule PortfolioWeb.HiremeController do
     end
   end
 
-  def show(conn, %{"rec_perpage" => rec_perpage}) do
-    conn
-    |> assign("rec_perpage", 10)
-    messages = Portfolio.Pagination.page("messages", rec_perpage, 10)
-    render(conn, "show.html", messages: messages, rec_perpage: rec_perpage)
+  def show(conn, _params) do
+    messages = Portfolio.Pagination.page("messages", 10, 10)
+    render(conn, "show.html", messages: messages)
   end
 
 end
