@@ -23,8 +23,8 @@ defmodule PortfolioWeb.HiremeController do
   end
 
   def show(conn, pages) do
-    messages = Portfolio.Pagination.page("messages", 10, pages)
-    pages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    messages = Portfolio.Pagination.page("messages", 6, pages)
+    pages = Portfolio.Pagination.count_pages([1, ], 2)
     render(conn, "show.html", messages: messages, pages: pages)
   end
 
