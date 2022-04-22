@@ -1,5 +1,13 @@
-<p class=" bg-amber-200 text-[#242526] text-center" role="alert"><%= get_flash(@conn, :info) %></p>
-<p class=" bg-red-400 text-[#E6E6E6] text-center" role="alert"><%= get_flash(@conn, :error) %></p>
+<p class=" bg-amber-200 text-[#242526] text-center" 
+    role="alert"
+    x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"> 
+      <%= get_flash(@conn, :info) %> 
+</p>
+<p class="bg-red-400 text-[#E6E6E6] text-center"
+   role="alert"
+   x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"> 
+      <%= get_flash(@conn, :error) %> 
+</p>
 <!-- MAIN CONTENT -->
 <main class="relative w-full min-h-calc-vh2 lg:min-h-calc-vh1">
   <span class="w-full h-[2px] absolute right-0 left-0 top-[-2px] bg-repeat-x blur-[3px] shadow-sm"
