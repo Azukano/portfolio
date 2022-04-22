@@ -2,8 +2,8 @@
     
     <h2 class="text-4xl font-semibold">Messages</h2>
     <h3 class="w-[50%] text-3xl font-semibold flex flex-col">
-        <div class="w-full flex justify-between bg-gray-600">
-            <span class="bg-slate-500 pr-4">Pages:</span>
+        <div class="w-full flex justify-between bg-gray-600 rounded-tl-lg">
+            <span class="bg-slate-500 pr-4 rounded-t-lg ml-1">Pages:</span>
             <ul class="flex flex-row">
                 <span class="pr-5">by:</span>
                 <li class="mx-1">6's</li>
@@ -14,7 +14,7 @@
         <div class="w-full bg-slate-500">
             <ul class="flex flex-row flex-wrap">
             <%= for pages <- @pages do %>
-            <li class="mx-2"> <%= link to: Routes.hireme_path(@conn, :show, page: pages) do %> 
+            <li class="mx-1"> <%= link to: Routes.hireme_path(@conn, :show, page: pages) do %> 
                 <%= pages %>
                 <% end %>
             </li>

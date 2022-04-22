@@ -24,7 +24,7 @@ defmodule PortfolioWeb.HiremeController do
 
   def show(conn, pages) do
     messages = Portfolio.Pagination.page("messages", 6, pages)
-    pages = Portfolio.Pagination.count_pages([1, ], 2)
+    pages = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 2))
     render(conn, "show.html", messages: messages, pages: pages)
   end
 
