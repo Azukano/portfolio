@@ -6,17 +6,18 @@
             <span class="bg-slate-500 pr-4 rounded-t-lg ml-1">Pages:</span>
             <ul class="flex flex-row">
                 <span class="pr-5">by:</span>
-                <li class="mx-1">6's</li>
-                <li class="mx-1">10's</li>
-                <li class="mx-1">20's</li>
+                <%= for records_per_page <- @records_per_page do %>
+                    <li class="mx-1"> <%= link to: Routes.hireme_path(@conn, :show, records_per_page: records_per_page) do %> 
+                        <%= records_per_page %>'s <% end %>
+                    </li>
+                <% end %>
             </ul>
         </div>
         <div class="w-full bg-slate-500">
             <ul class="flex flex-row flex-wrap">
-            <%= for pages <- @pages do %>
-            <li class="mx-1"> <%= link to: Routes.hireme_path(@conn, :show, page: pages) do %> 
-                <%= pages %>
-                <% end %>
+            <%= for page <- @page do %>
+            <li class="mx-1"> <%= link to: Routes.hireme_path(@conn, :show, page: page) do %> 
+                <%= page %> <% end %>
             </li>
             <% end %>
             </ul>

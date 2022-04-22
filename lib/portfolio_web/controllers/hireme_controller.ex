@@ -22,12 +22,29 @@ defmodule PortfolioWeb.HiremeController do
     end
   end
 
-  def show(conn, pages) do
-    messages = Portfolio.Pagination.page("messages", 6, pages)
-    pages = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 2))
-    render(conn, "show.html", messages: messages, pages: pages)
+  def show(conn, %{"page" => page, "records_per_page" => records_per_page}) do
+    messages = Portfolio.Pagination.page("messages", 6, page)
+    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 2))
+    records_per_page = [6, 10, 20]
+    render(conn, "show.html", messages: messages, page: page, records_per_page: records_per_page)
   end
+
+  def show(conn, %{}) do
+    messages = Portfolio.Pagination.page("messages", 6, 1)
+    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 2))
+    records_per_page = [6, 10, 20]
+    render(conn, "show.html", messages: messages, page: page, records_per_page: records_per_page)
+  end
+
 
 end
 
 #%{"rec_perpage" => rec_perpage}
+#pages = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 2))
+
+  # def show(conn, %{}) do
+  #   messages = Portfolio.Pagination.page("messages", 6, 1)
+  #   page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 2))
+  #   records_per_page = [6, 10, 20]
+  #   render(conn, "show.html", messages: messages, page: page, records_per_page: records_per_page)
+  # end

@@ -2,15 +2,19 @@ defmodule Portfolio.Pagination do
   import Ecto.Query
   alias Portfolio.Repo
 
-  def fetch_records(query, rec_perpage, page_no) when is_map(page_no) do
-    page_no = Map.get(page_no, "page")
-    if is_nil(page_no) or page_no < 1 do
+  def fetch_records(query, rec_perpage, page_no) when is_bitstring(page_no) do
+    if is_nil(page_no) do
       page_no = 1
       fetch_records(query, rec_perpage, page_no)
     else
       page_no = String.to_integer(page_no)
       fetch_records(query, rec_perpage, page_no)
     end
+  end
+
+  def fetch_records(query, rec_perpage, page_no) when page_no < 1 do
+    page_no = 1
+    fetch_records(query, rec_perpage, page_no)
   end
 
   def fetch_records(query, rec_perpage, page_no) do
@@ -48,3 +52,16 @@ defmodule Portfolio.Pagination do
   end
 
 end
+
+
+  # old function for guarding the map params
+  # def fetch_records(query, rec_perpage, page_no) when is_map(page_no) do
+  #   page_no = Map.get(page_no, "page")
+  #   if is_nil(page_no) or page_no < 1 do
+  #     page_no = 1
+  #     fetch_records(query, rec_perpage, page_no)
+  #   else
+  #     page_no = String.to_integer(page_no)
+  #     fetch_records(query, rec_perpage, page_no)
+  #   end
+  # end
