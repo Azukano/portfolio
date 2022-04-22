@@ -1,18 +1,26 @@
 <section class="w-full h-full bg-[#242526] text-[#E6E6E6]">
     
     <h2 class="text-4xl font-semibold">Messages</h2>
-    <h3 class="w-[50%] text-3xl font-semibold flex justify-between">
-        <span>Pages:</span>
-        <span>
+    <h3 class="w-[50%] text-3xl font-semibold flex flex-col">
+        <div class="w-full flex justify-between bg-gray-600">
+            <span class="bg-slate-500 pr-4">Pages:</span>
             <ul class="flex flex-row">
-                <%= for pages <- @pages do %>
-                <li class="mx-2"> <%= link to: Routes.hireme_path(@conn, :show, page: pages) do %> 
-                    <%= pages %>
-                    <% end %>
-                </li>
-                <% end %>
+                <span class="pr-5">by:</span>
+                <li class="mx-1">6's</li>
+                <li class="mx-1">10's</li>
+                <li class="mx-1">20's</li>
             </ul>
-        </span>
+        </div>
+        <div class="w-full bg-slate-500">
+            <ul class="flex flex-row flex-wrap">
+            <%= for pages <- @pages do %>
+            <li class="mx-2"> <%= link to: Routes.hireme_path(@conn, :show, page: pages) do %> 
+                <%= pages %>
+                <% end %>
+            </li>
+            <% end %>
+            </ul>
+        </div>
     </h3>
     <ul class="h-full w-[50%] bg-slate-600">
         <%= for message <- @messages do %>
