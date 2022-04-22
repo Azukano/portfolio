@@ -2,6 +2,12 @@ defmodule Portfolio.Pagination do
   import Ecto.Query
   alias Portfolio.Repo
 
+  def fetch_records(query, rec_perpage, page_no) when is_bitstring(rec_perpage) do
+    rec_perpage = String.to_integer(rec_perpage)
+    IO.inspect rec_perpage
+    fetch_records(query, rec_perpage, page_no)
+  end
+
   def fetch_records(query, rec_perpage, page_no) when is_bitstring(page_no) do
     if is_nil(page_no) do
       page_no = 1
@@ -18,7 +24,6 @@ defmodule Portfolio.Pagination do
   end
 
   def fetch_records(query, rec_perpage, page_no) do
-    IO.inspect page_no
     min_id = rec_perpage*(page_no - 1) + 1
     query
       |> where([m], m.id >= ^min_id)
@@ -29,7 +34,6 @@ defmodule Portfolio.Pagination do
   end
 
   def page(query, rec_perpage, page_no) do
-    IO.inspect(fetch_records(query, rec_perpage, page_no))
     fetch_records(query, rec_perpage, page_no)
   end
 

@@ -6,6 +6,12 @@
             <span class="bg-slate-500 pr-4 rounded-t-lg ml-1">Pages:</span>
             <ul class="flex flex-row">
                 <span class="pr-5">by:</span>
+                <%= for rec_perpage <- @rec_perpage do %>
+                    <li class="mx-1"> <%= link to: Routes.hireme_path(@conn, :show, rec_perpage: rec_perpage) do %> 
+                        <%= rec_perpage %>'s
+                        <% end %>
+                    </li>
+                <% end %>
             </ul>
         </div>
         <div class="w-full bg-slate-500">
