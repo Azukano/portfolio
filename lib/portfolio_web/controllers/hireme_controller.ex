@@ -23,36 +23,33 @@ defmodule PortfolioWeb.HiremeController do
 
   #main function must all get params /messages?page=x&rec_perpage=y
   def show(conn, %{"page" => page, "rec_perpage" => rec_perpage}) do
-    IO.puts("@@@@@@@@@@@@ 1st")
-    IO.inspect conn
-    IO.inspect page
-    IO.puts("@@@@@@@@@@@@")
     messages = Portfolio.Pagination.page("messages", rec_perpage, page)
-    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 2))
-    rec_perpage = [6, 10, 20]
-    IO.inspect rec_perpage
-    render(conn, "show.html", messages: messages, page: page, rec_perpage: rec_perpage)
+    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], String.to_integer(rec_perpage)))
+    IO.inspect String.to_integer(rec_perpage)
+    render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
   end
 
   #sub function page got params, rec_perpage null /messages?page=xrec_perpage=nil
   def show(conn, %{"page" => page}) do
-    IO.puts("@@@@@@@@@@@@ 2nd")
-    IO.inspect conn
-    IO.inspect page
-    IO.puts("@@@@@@@@@@@@")
-    rec_perpage = [6, 10, 20]
     messages = Portfolio.Pagination.page("messages", 6, page)
     page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 2))
-    render(conn, "show.html", messages: messages, page: page, rec_perpage: rec_perpage)
+    render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
+  end
+
+  #sub function page got params, rec_perpage null /messages?page=xrec_perpage=nil
+  def show(conn, %{"rec_perpage" => rec_perpage}) do
+    messages = Portfolio.Pagination.page("messages", rec_perpage, 1)
+    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], String.to_integer(rec_perpage)))
+    render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
   end
 
   #sub function page got params, rec_perpage null base /messages
   def show(conn, %{}) do
-    rec_perpage = [6, 10, 20]
     messages = Portfolio.Pagination.page("messages", 6, 1)
     page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 2))
-    render(conn, "show.html", messages: messages, page: page, rec_perpage: rec_perpage)
+    render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
   end
+
 
 end
 

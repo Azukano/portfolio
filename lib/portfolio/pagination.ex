@@ -4,7 +4,6 @@ defmodule Portfolio.Pagination do
 
   def fetch_records(query, rec_perpage, page_no) when is_bitstring(rec_perpage) do
     rec_perpage = String.to_integer(rec_perpage)
-    IO.inspect rec_perpage
     fetch_records(query, rec_perpage, page_no)
   end
 
@@ -44,15 +43,19 @@ defmodule Portfolio.Pagination do
       |> Repo.aggregate(:count, :id)
   end
 
-  def count_pages([i | lists], pages) when i > pages do
+  # def count_pages([i | lists], rec_perpage) when is_bitstring(rec_perpage) do
+  #   count_pages([i | lists], String.to_integer(rec_perpage))
+  # end
+
+  def count_pages([i | lists], rec_perpage) when i > rec_perpage do
     lists = [i | lists]
+    lists
   end
 
-  #to do pages params will be
-  def count_pages([i | lists], pages) do
-    pages = div(count_records(), 6)
+  def count_pages([i | lists], rec_perpage) do
+    IO.inspect div(count_records(), rec_perpage)
     lists = [i | lists]
-    count_pages([i + 1 | lists], pages)
+    count_pages([i + 1 | lists], div(count_records(), rec_perpage))
   end
 
 end
