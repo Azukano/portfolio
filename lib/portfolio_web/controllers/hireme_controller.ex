@@ -31,7 +31,7 @@ defmodule PortfolioWeb.HiremeController do
   #sub function page got params, rec_perpage null /messages?page=x&rec_perpage=nil
   def show(conn, %{"page" => page}) do
     messages = Portfolio.Pagination.page("messages", 6, page)
-    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 1))
+    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 6))
     render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
   end
 
@@ -46,7 +46,7 @@ defmodule PortfolioWeb.HiremeController do
   #sub function page got params, rec_perpage null base /messages
   def show(conn, %{}) do
     messages = Portfolio.Pagination.page("messages", 6, 1)
-    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 2))
+    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 6))
     render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
   end
 
