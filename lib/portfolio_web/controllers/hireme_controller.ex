@@ -25,19 +25,19 @@ defmodule PortfolioWeb.HiremeController do
   def show(conn, %{"page" => page, "rec_perpage" => rec_perpage}) do
     messages = Portfolio.Pagination.page("messages", rec_perpage, page)
     page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], String.to_integer(rec_perpage)))
-    IO.inspect String.to_integer(rec_perpage)
     render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
   end
 
-  #sub function page got params, rec_perpage null /messages?page=xrec_perpage=nil
+  #sub function page got params, rec_perpage null /messages?page=x&rec_perpage=nil
   def show(conn, %{"page" => page}) do
     messages = Portfolio.Pagination.page("messages", 6, page)
-    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 2))
+    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 1))
     render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
   end
 
-  #sub function page got params, rec_perpage null /messages?page=xrec_perpage=nil
+  #sub function page got params, rec_perpage null /messages?page=x=nil&rec_perpage=y
   def show(conn, %{"rec_perpage" => rec_perpage}) do
+    IO.puts("rec_perpage")
     messages = Portfolio.Pagination.page("messages", rec_perpage, 1)
     page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], String.to_integer(rec_perpage)))
     render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])

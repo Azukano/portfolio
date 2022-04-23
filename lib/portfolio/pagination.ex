@@ -43,9 +43,15 @@ defmodule Portfolio.Pagination do
       |> Repo.aggregate(:count, :id)
   end
 
-  # def count_pages([i | lists], rec_perpage) when is_bitstring(rec_perpage) do
-  #   count_pages([i | lists], String.to_integer(rec_perpage))
-  # end
+
+  @doc """
+    guard function to count records only at first batch
+  """
+  def count_pages([i | lists], rec_perpage) when i < 2 do
+    rec_perpage = div(count_records(), rec_perpage)
+    lists = [i | lists]
+    count_pages([i + 1 | lists], rec_perpage)
+  end
 
   def count_pages([i | lists], rec_perpage) when i > rec_perpage do
     lists = [i | lists]
@@ -53,9 +59,9 @@ defmodule Portfolio.Pagination do
   end
 
   def count_pages([i | lists], rec_perpage) do
-    IO.inspect div(count_records(), rec_perpage)
+    IO.puts("rec_perpage: #{rec_perpage}    i: #{i}")
     lists = [i | lists]
-    count_pages([i + 1 | lists], div(count_records(), rec_perpage))
+    count_pages([i + 1 | lists], rec_perpage)
   end
 
 end
@@ -71,4 +77,9 @@ end
   #     page_no = String.to_integer(page_no)
   #     fetch_records(query, rec_perpage, page_no)
   #   end
+  # end
+
+
+  # def count_pages([i | lists], rec_perpage) when is_bitstring(rec_perpage) do
+  #   count_pages([i | lists], String.to_integer(rec_perpage))
   # end
