@@ -17,8 +17,8 @@
         <div class="w-full bg-slate-500">
             <ul class="flex flex-row flex-wrap">
             <%= for page <- @page do %>
-            <li class="mx-1"> <%= link to: Routes.hireme_path(@conn, :show, page: page) do %> 
-                <%= page %> <% end %>
+            <li class="ml-[5px]"> <%= link to: Routes.hireme_path(@conn, :show, page: page) do %> 
+                <%= page %>, <% end %>
             </li>
             <% end %>
             </ul>

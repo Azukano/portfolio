@@ -59,7 +59,6 @@ defmodule Portfolio.Pagination do
   end
 
   def count_pages([i | lists], rec_perpage) do
-    IO.puts("rec_perpage: #{rec_perpage}    i: #{i}")
     lists = [i | lists]
     count_pages([i + 1 | lists], rec_perpage)
   end
