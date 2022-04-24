@@ -23,8 +23,7 @@ defmodule PortfolioWeb.Router do
     get "/hireme", HiremeController, :index
     post "/hireme", HiremeController, :create
     get "/messages", HiremeController, :show
-    get "/messages/:rec_perpage", HiremeController, :show
-    get "/messages/:rec_perpage/:page", HiremeController, :show
+    get "/messages:rec_perpage/:page/", HiremeController, :show
   end
 
   # Other scopes may use custom stacks.

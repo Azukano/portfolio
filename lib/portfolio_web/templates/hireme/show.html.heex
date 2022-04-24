@@ -2,7 +2,7 @@
     
     <h2 class="text-4xl font-semibold">Messages</h2>
     <h3 class="w-[50%] text-3xl font-semibold flex flex-col">
-        <div class="w-full flex justify-between bg-gray-600 rounded-tl-lg">
+        <div class="w-full flex justify-between bg-gray-600 rounded-tl-lg" >
             <span class="bg-slate-500 pr-4 rounded-t-lg ml-1">Pages:</span>
             <ul class="flex flex-row">
                 <span class="pr-5">by:</span>
@@ -16,10 +16,14 @@
         </div>
         <div class="w-full bg-slate-500">
             <ul class="flex flex-row flex-wrap">
+            <%= for rec_perpage <- [String.to_integer(Map.get(@conn.params, "rec_perpage"))] do %>  
             <%= for page <- @page do %>
-            <li class="ml-[5px]"> <%= link to: Routes.hireme_path(@conn, :show, page: page) do %> 
-                <%= page %>, <% end %>
+            <li class="ml-[5px]"> <%= link to: Routes.hireme_path(@conn, :show, page: page, rec_perpage: rec_perpage) do %> 
+                <% #IO.puts("page: #{page}       rec_perpage: #{rec_perpage}") %>
+                <% IO.inspect(String.to_integer(Map.get(@conn.params, "rec_perpage"))) %>
+                <%= page %> <% end %>
             </li>
+            <% end %>
             <% end %>
             </ul>
         </div>
