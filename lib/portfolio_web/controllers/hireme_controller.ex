@@ -42,7 +42,7 @@ defmodule PortfolioWeb.HiremeController do
   #SHOW C sub function page got params, rec_perpage null /messages?page=x=nil&rec_perpage=y
   def show(conn, %{"rec_perpage" => rec_perpage}) do
     IO.puts("SHOW C # ")
-    IO.inspect(conn)
+    IO.inspect(conn.assigns)
     #qparams = fetch_query_params(conn)
     conn = assign(conn, :hello, :world)
     messages = Portfolio.Pagination.page("messages", rec_perpage, 1)
@@ -53,7 +53,11 @@ defmodule PortfolioWeb.HiremeController do
   #SHOW D sub function page got params, rec_perpage null base /messages
   def show(conn, %{}) do
     IO.puts("SHOW D # ")
-    IO.inspect(conn)
+    #Map.update(%{a: 1}, :a, 13, fn existing_value -> existing_value * 2 end)
+    #conn.params = %{"rec_perpage" => "6"}
+    conn = assign(conn, :rec_perpage, [6])
+    IO.inspect(conn.params)
+    #conn = Map.replace(conn.params, :params, [6])
     messages = Portfolio.Pagination.page("messages", 6, 1)
     page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 6))
     render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])

@@ -16,13 +16,26 @@
         </div>
         <div class="w-full bg-slate-500">
             <ul class="flex flex-row flex-wrap">
+            <% IO.inspect(@conn.params) %>
+            <%= if @conn.params == %{} do %>
+            <%= for rec_perpage <- [6] do %>  
+            <%= for page <- @page do %>
+            <li class="ml-[5px]"> <%= link to: Routes.hireme_path(@conn, :show, page: page, rec_perpage: rec_perpage) do %> 
+                <% #IO.puts("page: #{page}       rec_perpage: #{rec_perpage}") %>
+                <% #IO.inspect(String.to_integer(Map.get(@conn.params, "rec_perpage"))) %>
+                <%= page %> <% end %>
+            </li>
+            <% end %>
+            <% end %>
+            <% else %>
             <%= for rec_perpage <- [String.to_integer(Map.get(@conn.params, "rec_perpage"))] do %>  
             <%= for page <- @page do %>
             <li class="ml-[5px]"> <%= link to: Routes.hireme_path(@conn, :show, page: page, rec_perpage: rec_perpage) do %> 
                 <% #IO.puts("page: #{page}       rec_perpage: #{rec_perpage}") %>
-                <% IO.inspect(String.to_integer(Map.get(@conn.params, "rec_perpage"))) %>
+                <% #IO.inspect(String.to_integer(Map.get(@conn.params, "rec_perpage"))) %>
                 <%= page %> <% end %>
             </li>
+            <% end %>
             <% end %>
             <% end %>
             </ul>
