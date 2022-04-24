@@ -3,6 +3,7 @@
     <img src="/images/phx-bg.png"
        class="absolute bg-cover z-1 bottom-0 left-0 right-0">
     <div class="w-full py-[22px]">
+        <!-- PHOENIX HEADER -->
         <header class="w-[1140px] h-[62px] mx-auto flex">
             <div class="h-full flex items-center">
                 <img src="/images/phx-logo.png" alt="Phoenix Logo" class="w-[367.50px] bg-cover">
@@ -11,21 +12,69 @@
             <div class="mx-auto"></div>
             <ul class="flex items-center text-[20px] text-white">
                 <li class="m-2 p-2">
-                    Guides
+                    <a href="https://hexdocs.pm/phoenix">Guides</a>
                 </li>
                 <li class="m-2 p-2">
-                    Docs
+                    <a href="https://hexdocs.pm/phoenix/Phoenix.html">Docs</a>                    
                 </li>
                 <li class="m-2 p-2">
-                    Community
+                    <a href="https://hexdocs.pm/phoenix/community.html">Community</a>                   
                 </li>
                 <li class="m-2 p-2">
-                    Source
+                    <a href="https://github.com/phoenixframework/phoenix">Source</a>  
                 </li>
                 <li class="m-2 p-2">
-                    Blog
+                    <a href="https://phoenixframework.org/blog">Blog</a>
                 </li>
             </ul>
         </header>
+    </div>
+    <div class="w-full h-full">
+        <article class="absolute bottom-0 right-0 left-0 w-[1140px] h-full mx-auto bg-slate-600/70 text-white px-4 flex items-center">
+            <!-- PHOENIX HERO TEXT -->
+            <div class="max-w-[47%]">
+                <h2 class="text-[42px] font-semibold mb-4">
+                    Peace of mind from prototype to production
+                </h2>
+                <h3 class="text-[20px] font-regular">
+                    Build rich, interactive web applications quickly, with less code and fewer moving parts. Join our growing community of developers using Phoenix to craft APIs, HTML5 apps and more, for fun or at scale.
+                </h3>
+            </div>
+            <!-- PHOENIX HERO WINDOW -->
+            <div class="w-[586px] h-[370px] bg-green-400/10 flex items-center">
+                <!-- PHOENIX HERO LEFT WINDOW -->
+                <div class="relative max-w-[58.33333%] bg-[#3F3D56] h-full pt-6 pl-[10px] pb-[6px] pr-[6px] rounded-lg">
+                    <span class="absolute top-2 left-2 w-2 h-2 bg-[#D55359] rounded-full"></span>
+                    <span class="absolute top-2 left-5 w-2 h-2 bg-[#D8B454] rounded-full"></span>
+                    <span class="absolute top-2 left-8 w-2 h-2 bg-[#7DB24F] rounded-full"></span>
+                    <pre class="text-[12px] text-left flex flex-wrap">
+                        <span class="text-[#cf81c4]">defmodule </span><span class="text-[#00cbae]">TimelineLive </span><span class="text-[#cf81c4]">do                  </span>
+                        <span class="text-[#429ad9 ]">  use </span><span class="text-[#00cbae]">Phoenix.LiveView                      </span> <span>                                           </span>
+                        <span class="text-[#cf81c4]">  def </span><span class="text-[#dbdda4]">render</span><span>(assigns) </span><span class="text-[#cf81c4]">do</span><span>                    </span>
+                        <span>    render(</span><span class="text-[#8dc156]">"timeline.html"</span><span>, assigns)</span><span>      </span>
+                        <span class="text-[#cf81c4]">  end</span>
+                        <span>                                                                                               </span>
+                        <span class="text-[#cf81c4]">  def </span><span class="text-[#dbdda4]">mount</span><span>(_, socket) </span><span class="text-[#cf81c4]">do</span><span>                   </span>                         
+                        <span class="text-[#00cbae]">    Twitter</span><span>.subscribe(</span><span class="text-[#8dc156]">"elixirphoenix"</span><span>)</span><span>      </span>
+                        <span>    {</span><span class="text-[#8dddff]">:ok</span><span>, assign(socket, </span><span class="text-[#8dddff]">:tweets</span><span>, [])}      </span>
+                        <span class="text-[#cf81c4]">  end</span>
+                        <span>                                                                                                </span>
+                        <span class="text-[#cf81c4]">  def </span><span class="text-[#dbdda4]">handle_info</span>({<span>:new</span>, tweet}), socket) <span class="text-[#cf81c4]">do</span><span></span>
+                        <span>    {<span class="text-[#8dddff]">:noreply</span>,</span><span>                               </span>
+                        <span>     update(socket, </span><span class="text-[#8dddff]">:tweets</span>, <span>fn </span>tweets <span class="text-[#d78e73]">-></span><span> </span>  
+                        <span class="text-[#00cbae]">       Enum</span>.take([tweet <span class="text-[#d78e73]">|</span> tweets], <span>10</span><span>)</span>  
+                        <span class="text-[#cf81c4]">     <span>end</span>)}                                         </span>
+                        <span class="text-[#cf81c4]">  end</span><span>                                      </span>
+                        <span class="text-[#cf81c4]">end</span>
+                    </pre>
+                </div>
+                <!-- PHOENIX HERO RIGHT WINDOW -->
+                <div class="relative w-[230px] h-[370px] bg-slate-300 ml-auto rounded-lg">
+                    <span class="absolute top-2 left-2 w-2 h-2 bg-[#D55359] rounded-full"></span>
+                    <span class="absolute top-2 left-5 w-2 h-2 bg-[#D8B454] rounded-full"></span>
+                    <span class="absolute top-2 left-8 w-2 h-2 bg-[#7DB24F] rounded-full"></span>
+                </div>
+            </div>            
+        </article>
     </div>
 </section>
