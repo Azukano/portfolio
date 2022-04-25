@@ -1,12 +1,12 @@
 <!-- PHOENIX SECTION -->
-<section class="relative h-[632px] bg-[#ff6f61]">
-    <img src="/images/phx-bg.png"
-       class="absolute bg-cover z-1 bottom-0 left-0 right-0">
+<section class="relative h-[1260px] lg-xl:h-[632px] bg-[#ff6f61]">
+    <img src="/images/phx-section/bg.png"
+       class="absolute z-0 bg-cover bottom-0 left-0 right-0">
     <div class="w-full py-[22px]">
         <!-- PHOENIX HEADER -->
-        <header class="w-[1140px] h-[62px] mx-auto flex">
+        <header class="lg-xl:w-[1140px] h-[62px] mx-auto flex">
             <div class="h-full flex items-center">
-                <img src="/images/phx-logo.png" alt="Phoenix Logo" class="w-[367.50px] bg-cover">
+                <img src="/images/phx-section/logo.png" alt="Phoenix Logo" class="w-[367.50px] bg-cover">
             </div>
             <!-- SPACER -->
             <div class="mx-auto"></div>
@@ -29,52 +29,195 @@
             </ul>
         </header>
     </div>
-    <div class="w-full h-full">
-        <article class="absolute bottom-0 right-0 left-0 w-[1140px] h-full mx-auto bg-slate-600/70 text-white px-4 flex items-center">
-            <!-- PHOENIX HERO TEXT -->
-            <div class="max-w-[47%]">
-                <h2 class="text-[42px] font-semibold mb-4">
-                    Peace of mind from prototype to production
-                </h2>
-                <h3 class="text-[20px] font-regular">
-                    Build rich, interactive web applications quickly, with less code and fewer moving parts. Join our growing community of developers using Phoenix to craft APIs, HTML5 apps and more, for fun or at scale.
-                </h3>
-            </div>
-            <!-- PHOENIX HERO WINDOW -->
-            <div class="w-[586px] h-[370px] bg-green-400/10 flex items-center">
-                <!-- PHOENIX HERO LEFT WINDOW -->
-                <div class="relative max-w-[58.33333%] bg-[#3F3D56] h-full pt-6 pl-[10px] pb-[6px] pr-[6px] rounded-lg">
-                    <span class="absolute top-2 left-2 w-2 h-2 bg-[#D55359] rounded-full"></span>
-                    <span class="absolute top-2 left-5 w-2 h-2 bg-[#D8B454] rounded-full"></span>
-                    <span class="absolute top-2 left-8 w-2 h-2 bg-[#7DB24F] rounded-full"></span>
-                    <pre class="text-[12px] text-left flex flex-wrap">
-                        <span class="text-[#cf81c4]">defmodule </span><span class="text-[#00cbae]">TimelineLive </span><span class="text-[#cf81c4]">do                  </span>
-                        <span class="text-[#429ad9 ]">  use </span><span class="text-[#00cbae]">Phoenix.LiveView                      </span> <span>                                           </span>
-                        <span class="text-[#cf81c4]">  def </span><span class="text-[#dbdda4]">render</span><span>(assigns) </span><span class="text-[#cf81c4]">do</span><span>                    </span>
-                        <span>    render(</span><span class="text-[#8dc156]">"timeline.html"</span><span>, assigns)</span><span>      </span>
-                        <span class="text-[#cf81c4]">  end</span>
-                        <span>                                                                                               </span>
-                        <span class="text-[#cf81c4]">  def </span><span class="text-[#dbdda4]">mount</span><span>(_, socket) </span><span class="text-[#cf81c4]">do</span><span>                   </span>                         
-                        <span class="text-[#00cbae]">    Twitter</span><span>.subscribe(</span><span class="text-[#8dc156]">"elixirphoenix"</span><span>)</span><span>      </span>
-                        <span>    {</span><span class="text-[#8dddff]">:ok</span><span>, assign(socket, </span><span class="text-[#8dddff]">:tweets</span><span>, [])}      </span>
-                        <span class="text-[#cf81c4]">  end</span>
-                        <span>                                                                                                </span>
-                        <span class="text-[#cf81c4]">  def </span><span class="text-[#dbdda4]">handle_info</span>({<span>:new</span>, tweet}), socket) <span class="text-[#cf81c4]">do</span><span></span>
-                        <span>    {<span class="text-[#8dddff]">:noreply</span>,</span><span>                               </span>
-                        <span>     update(socket, </span><span class="text-[#8dddff]">:tweets</span>, <span>fn </span>tweets <span class="text-[#d78e73]">-></span><span> </span>  
-                        <span class="text-[#00cbae]">       Enum</span>.take([tweet <span class="text-[#d78e73]">|</span> tweets], <span>10</span><span>)</span>  
-                        <span class="text-[#cf81c4]">     <span>end</span>)}                                         </span>
-                        <span class="text-[#cf81c4]">  end</span><span>                                      </span>
-                        <span class="text-[#cf81c4]">end</span>
-                    </pre>
+    <div class="relative lg-xl: h-full w-full">
+        <article class="absolute z-10 lg-xl:bottom-[100px] w-full h-full flex lg-xl:items-center">
+            <div class="w-[1140px] mx-auto mt-14  text-white flex flex-col lg-xl:flex-row items-center">
+                <!-- PHOENIX HERO TEXT -->
+                <div class="lg-xl:w-[507px] mx-auto lg-xl:mr-auto flex flex-col">
+                    <h2 class="w-full text-[42px] font-semibold mb-4">
+                        Peace of mind from <br> prototype to production
+                    </h2>
+                    <h3 class="w-full text-[20px] font-regular">
+                        Build rich, interactive web applications quickly,<br> 
+                        with less code and fewer moving parts. Join our growing<br>
+                        community of developers using Phoenix<br>
+                        to craft APIs, HTML5 apps and more, for fun or at scale.
+                    </h3>
                 </div>
-                <!-- PHOENIX HERO RIGHT WINDOW -->
-                <div class="relative w-[230px] h-[370px] bg-slate-300 ml-auto rounded-lg">
-                    <span class="absolute top-2 left-2 w-2 h-2 bg-[#D55359] rounded-full"></span>
-                    <span class="absolute top-2 left-5 w-2 h-2 bg-[#D8B454] rounded-full"></span>
-                    <span class="absolute top-2 left-8 w-2 h-2 bg-[#7DB24F] rounded-full"></span>
+                <!-- PHOENIX HERO WINDOW -->
+                <div class="w-full h-full lg-xl:w-[586px] lg-xl:h-[372px] flex flex-col lg-xl:flex-row items-center lg-xl:ml-auto">
+                    <!-- PHOENIX HERO LEFT WINDOW -->
+                    <div class="relative w-[506px] lg-xl:w-[346px] h-[372px] bg-[#3F3D56] pt-6 pl-[10px] pb-[6px] mt-[20px] lg-xl:mt-0 pr-[6px] mb-[9px] lg-xl:mb-0 lg-xl:mr-auto rounded-lg ">
+                        <span class="absolute top-2 left-2 w-2 h-2 bg-[#D55359] rounded-full"></span>
+                        <span class="absolute top-2 left-5 w-2 h-2 bg-[#D8B454] rounded-full"></span>
+                        <span class="absolute top-2 left-8 w-2 h-2 bg-[#7DB24F] rounded-full"></span>
+                        <div class="w-[326px]">
+                            <pre class="w-full text-[12px] text-left flex flex-wrap">
+                                <span class="text-[#cf81c4]">defmodule </span><span class="text-[#00cbae]">TimelineLive </span><span class="text-[#cf81c4]">do                  </span>
+                                <span class="text-[#429ad9]">  use </span><span class="text-[#00cbae]">Phoenix.LiveView                      </span> <span>                                           </span>
+                                <span class="text-[#cf81c4]">  def </span><span class="text-[#dbdda4]">render</span><span>(assigns) </span><span class="text-[#cf81c4]">do</span><span>                    </span>
+                                <span>    render(</span><span class="text-[#8dc156]">"timeline.html"</span><span>, assigns)</span><span>      </span>
+                                <span class="text-[#cf81c4]">  end</span>
+                                <span>                                             </span>
+                                <span class="text-[#cf81c4]">  def </span><span class="text-[#dbdda4]">mount</span><span>(_, socket) </span><span class="text-[#cf81c4]">do</span><span>                   </span>                         
+                                <span class="text-[#00cbae]">    Twitter</span><span>.subscribe(</span><span class="text-[#8dc156]">"elixirphoenix"</span><span>)</span><span>      </span>
+                                <span>    {</span><span class="text-[#8dddff]">:ok</span><span>, assign(socket, </span><span class="text-[#8dddff]">:tweets</span><span>, [])}      </span>
+                                <span class="text-[#cf81c4]">  end</span>
+                                <span>                                             </span>
+                                <span class="text-[#cf81c4]">  def </span><span class="text-[#dbdda4]">handle_info</span>({<span class="text-[#8dddff]">:new</span>, tweet}), socket) <span class="text-[#cf81c4]">do</span><span></span>
+                                <span>    {<span class="text-[#8dddff]">:noreply</span>,</span><span>                               </span>
+                                <span>     update(socket, </span><span class="text-[#8dddff]">:tweets</span>, <span class="text-[#cf81c4]">fn </span>tweets <span class="text-[#d78e73]">-></span><span> </span>  
+                                <span class="text-[#00cbae]">       Enum</span>.take([tweet <span class="text-[#d78e73]">|</span> tweets], <span class="text-[#afd0a4]">10</span><span>)</span>  
+                                <span>     <span class="text-[#cf81c4]">end</span>)}                                 </span>
+                                <span class="text-[#cf81c4]">  end</span><span>                                      </span>
+                                <span class="text-[#cf81c4]">end</span>
+                            </pre>
+                        </div>
+
+                    </div>
+                    <!-- PHOENIX HERO RIGHT WINDOW -->
+                    <div class="w-[506px] lg-xl:w-[234px] h-[370px] bg-[#3F3D56] lg-xl:ml-auto rounded-lg">
+                        <!-- PHOENIX HERO RIGHT WINDOW TOPBAR -->
+                        <div class="relative w-full h-6">
+                            <span class="absolute top-2 left-2 w-2 h-2 bg-[#D55359] rounded-full"></span>
+                            <span class="absolute top-2 left-5 w-2 h-2 bg-[#D8B454] rounded-full"></span>
+                            <span class="absolute top-2 left-8 w-2 h-2 bg-[#7DB24F] rounded-full"></span>
+                            <!-- PHOENIX HERO RIGHT WINDOW TOPBAR TITLE -->
+                            <div class="absolute h-full top-1 left-14 flex">
+                                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.625 5.00001H10V3.81876C10 3.15571 9.73661 2.51983 9.26777 2.05099C8.79893 1.58215 8.16304 1.31876 7.5 1.31876C6.83696 1.31876 6.20107 1.58215 5.73223 2.05099C5.26339 2.51983 5 3.15571 5 3.81876V5.00001H4.375C3.87772 5.00001 3.40081 5.19755 3.04917 5.54918C2.69754 5.90081 2.5 6.37773 2.5 6.87501V11.875C2.5 12.3723 2.69754 12.8492 3.04917 13.2008C3.40081 13.5525 3.87772 13.75 4.375 13.75H10.625C11.1223 13.75 11.5992 13.5525 11.9508 13.2008C12.3025 12.8492 12.5 12.3723 12.5 11.875V6.87501C12.5 6.37773 12.3025 5.90081 11.9508 5.54918C11.5992 5.19755 11.1223 5.00001 10.625 5.00001ZM6.25 3.81876C6.24159 3.47832 6.3684 3.14841 6.60268 2.90125C6.83695 2.6541 7.1596 2.50982 7.5 2.50001C7.8404 2.50982 8.16305 2.6541 8.39732 2.90125C8.6316 3.14841 8.75841 3.47832 8.75 3.81876V5.00001H6.25V3.81876ZM11.25 11.875C11.25 12.0408 11.1842 12.1997 11.0669 12.3169C10.9497 12.4342 10.7908 12.5 10.625 12.5H4.375C4.20924 12.5 4.05027 12.4342 3.93306 12.3169C3.81585 12.1997 3.75 12.0408 3.75 11.875V6.87501C3.75 6.70925 3.81585 6.55028 3.93306 6.43307C4.05027 6.31586 4.20924 6.25001 4.375 6.25001H10.625C10.7908 6.25001 10.9497 6.31586 11.0669 6.43307C11.1842 6.55028 11.25 6.70925 11.25 6.87501V11.875Z" fill="white"/>
+                                    <path d="M7.5 7.5C7.12916 7.5 6.76665 7.60997 6.45831 7.81599C6.14996 8.02202 5.90964 8.31486 5.76773 8.65747C5.62581 9.00008 5.58868 9.37708 5.66103 9.74079C5.73338 10.1045 5.91195 10.4386 6.17418 10.7008C6.4364 10.963 6.77049 11.1416 7.13421 11.214C7.49792 11.2863 7.87492 11.2492 8.21753 11.1073C8.56014 10.9654 8.85298 10.725 9.05901 10.4167C9.26503 10.1084 9.375 9.74584 9.375 9.375C9.375 8.87772 9.17746 8.40081 8.82583 8.04917C8.4742 7.69754 7.99728 7.5 7.5 7.5ZM7.5 10C7.37639 10 7.25555 9.96334 7.15277 9.89467C7.04999 9.82599 6.96988 9.72838 6.92258 9.61418C6.87527 9.49997 6.86289 9.37431 6.88701 9.25307C6.91113 9.13183 6.97065 9.02047 7.05806 8.93306C7.14547 8.84565 7.25683 8.78612 7.37807 8.76201C7.49931 8.73789 7.62497 8.75027 7.73918 8.79758C7.85338 8.84488 7.95099 8.92499 8.01967 9.02777C8.08835 9.13055 8.125 9.25139 8.125 9.375C8.125 9.54076 8.05915 9.69973 7.94194 9.81694C7.82473 9.93415 7.66576 10 7.5 10Z" fill="white"/>
+                                </svg>
+                                <span class="ml-1 text-[12px]">https://my-phx-app.com</span>
+                            </div>
+                        </div>
+                        <!-- PHOENIX HERO RIGHT WINDOW TWEETS -->
+                        <div class="w-[96%] h-[92%] bg-[#3F3D56] flex flex-col mx-auto overflow-hidden round">
+                            <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS-->
+                            <div class="bg-white space-y-[0.4rem] overflow-y-auto text-black text-[11px]">                        
+                                <div class="w-full bg-[#e8e8e8] flex">
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS PROFILE SIDE-->
+                                    <div class="w-[33.3px]">
+                                    <img src="/images/phx-section/elixirconf.jpg" alt="">
+                                    </div>
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS TWEET SIDE-->
+                                    <div class="ml-2 max-w-[80%] mt-1 mb-2">
+                                    <p><span class="font-medium">@elixirconf</span><br>
+                                        Do you want to be appreciated? If you
+                                        know and use Elixir 1) I bet you know
+                                        more than you think you do and 2) I'm
+                                        certain others can benefit from your
+                                        knowledge! Submit your CFP for
+                                        @ElixirConfEU at
+                                        https://eventil.com/events/elixir<br>
+                                        confeu2020/cfp Many will be grateful that you
+                                        did. #MyElixirStatus
+                                    </p>
+                                    </div>
+                                </div>
+                                <div class="w-full bg-[#e8e8e8] flex text-[11px]">
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS PROFILE SIDE-->
+                                    <div class="w-[33.3px] ">
+                                    <img src="/images/phx-section/theadamconrad.jpg" alt="">
+                                    </div>
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS TWEET SIDE-->
+                                    <div class="ml-2 max-w-[80%] mt-1 mb-2">
+                                    <p><span class="font-medium">@theadamconrad</span><br>
+                                        Psyched to have spoken with
+                                        @chris_mccord on my first podcast
+                                        with @seradio on #elixirlang
+                                        #phoenix latest and greatest
+                                        LiveView framework
+                                    </p>
+                                    </div>
+                                </div>
+                                <div class="w-full bg-[#e8e8e8] flex text-[11px]">
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS PROFILE SIDE-->
+                                    <div class="w-[33.3px] ">
+                                        <img src="/images/phx-section/sprsmpl.jpg" alt="">
+                                    </div>
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS TWEET SIDE-->
+                                    <div class="ml-2 max-w-[80%] mt-1 mb-2">
+                                        <p><span class="font-medium">@sprsmpl</span><br>
+                                            My smart mirror has been running for
+                                            weeks without a restart. Phoenix
+                                            liveview updates every second, hasn't
+                                            missed one yet. #myelixirstatus
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="w-full bg-[#e8e8e8] flex text-[11px]">
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS PROFILE SIDE-->
+                                    <div class="w-[33.3px] ">
+                                        <img src="/images/phx-section/shritesh.jpg" alt="">
+                                    </div>
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS TWEET SIDE-->
+                                    <div class="ml-2 max-w-[80%] mt-1 mb-2">
+                                        <p><span class="font-medium">@shritesh</span><br>
+                                            I implemented a shopping cart
+                                            using Phoenix Live View and then
+                                            realized that it syncs automatically
+                                            across multiple tabs and always
+                                            displays the correct state. I wasn’t
+                                            even trying to make any of that
+                                            work. #myelixirstatus
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="w-full bg-[#e8e8e8] flex text-[11px]">
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS PROFILE SIDE-->
+                                    <div class="w-[33.3px] ">
+                                        <img src="/images/phx-section/seradio.jpg" alt="">
+                                    </div>
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS TWEET SIDE-->
+                                    <div class="ml-2 max-w-[80%] mt-1 mb-2">
+                                        <p><span class="font-medium">@seradio</span><br>
+                                            Episode 394: Chris McCord on
+                                            Phoenix LiveView
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="w-full bg-[#e8e8e8] flex text-[11px]">
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS PROFILE SIDE-->
+                                    <div class="w-[33.3px] ">
+                                        <img src="/images/phx-section/nathanwilson.jpg" alt="">
+                                    </div>
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS TWEET SIDE-->
+                                    <div class="ml-2 max-w-[80%] mt-1 mb-2">
+                                        <p><span class="font-medium">@nathanwilson</span><br>
+                                            Using @elixirphoenix's LiveView to
+                                            filter over 800 tree species
+                                            (https://treelib.ca/species). I'm so
+                                            impressed with how fast it is and how
+                                            easy it was to write. #myelixirstatus
+                                            #phoenixframework 🌲🌳🌲
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="w-full bg-[#e8e8e8] flex text-[11px]">
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS PROFILE SIDE-->
+                                    <div class="w-[33.3px] ">
+                                        <img src="/images/phx-section/josevalim.jpg" alt="">
+                                    </div>
+                                    <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS TWEET SIDE-->
+                                    <div class="ml-2 max-w-[80%] mt-1 mb-2">
+                                        <p><span class="font-medium">@josevalim</span><br>
+                                            If you want to learn more why Phoenix
+                                            LiveView is such a game changer for
+                                            writing interactive and real-time
+                                            applications, the @pragmaticstudio
+                                            folks put together a short and sweet
+                                            4-min video on it:
+                                            https://pragmaticstudio.com/<br>
+                                            phoenix-liveview… (scroll to mid-page)
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>            
+            </div>          
         </article>
     </div>
 </section>
