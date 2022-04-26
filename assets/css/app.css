@@ -12,6 +12,11 @@
 }
 
 /* hidden on mobile/smaller screens */
+@media screen and (max-width: 960px) {
+    [x-cloak="medium"] { display: none; }
+}
+
+/* hidden on mobile/smaller screens */
 @media screen and (max-width: 540px) {
     [x-cloak="sm-mobile"] { display: none; }
 }
