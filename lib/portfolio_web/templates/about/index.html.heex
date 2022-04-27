@@ -7,12 +7,7 @@
                 <img src="/images/phx-section/logo.png" alt="Phoenix Logo" class="w-[367.50px] bg-cover">
             </div>
             <!-- SPACER -->
-            <div class="mx-auto min-w-[80px]"></div>
-            <div class="w-[90px] flex flex-col space-y-[3px] items-center justify-center">
-                <div class="w-[25%] h-[1px] bg-white"></div>
-                <div class="w-[25%] h-[1px] bg-white"></div>
-                <div class="w-[25%] h-[1px] bg-white"></div>
-            </div>
+            <div class="mx-auto min-w-[80px]"></div> 
             <ul x-cloak="medium" class="flex items-center text-[20px] text-white">
                 <a href="https://hexdocs.pm/phoenix"><li class="m-2 p-2 hover:bg-[#e26a79]">
                     Guides
@@ -29,7 +24,32 @@
                 <a href="https://phoenixframework.org/blog"><li class="m-2 p-2 hover:bg-[#e26a79]">
                     Blog
                 </li></a>
-            </ul>
+            </ul>       
+            <div x-data="{ show: false }" class="relative flex items-center md-lg:hidden">
+                <button @click="show = !show" class="w-[90px] flex flex-col space-y-[3px] items-center justify-center md-lg:hidden">
+                    <div class="w-[25%] h-[1px] bg-white"></div>
+                    <div class="w-[25%] h-[1px] bg-white"></div>
+                    <div class="w-[25%] h-[1px] bg-white"></div>
+                </button>
+                <ul x-show="show" class="w-[500px] absolute bottom-[-62px] left-[-410px] flex items-center text-[20px] text-white">
+                    <a href="https://hexdocs.pm/phoenix"><li class="m-2 p-2 hover:bg-[#e26a79]">
+                        Guides
+                    </li></a>
+                    <a href="https://hexdocs.pm/phoenix/Phoenix.html"><li class="m-2 p-2 hover:bg-[#e26a79]">
+                        Docs                 
+                    </li></a>   
+                    <a href="https://hexdocs.pm/phoenix/community.html"><li class="m-2 p-2 hover:bg-[#e26a79]">
+                        Community                 
+                    </li></a>
+                    <a href="https://github.com/phoenixframework/phoenix"><li class="m-2 p-2 hover:bg-[#e26a79]">
+                        Source  
+                    </li></a>
+                    <a href="https://phoenixframework.org/blog"><li class="m-2 p-2 hover:bg-[#e26a79]">
+                        Blog
+                    </li></a>
+                </ul>
+
+            </div>  
         </header>
     </div>
     <!-- PHOENIX HERO -->
@@ -37,11 +57,11 @@
         <article class="relative w-full h-full flex lg-xl:items-center">
             <div class="w-[1140px] mx-auto mt-14  text-white flex flex-col lg-xl:flex-row items-center">
                 <!-- PHOENIX HERO TEXT -->
-                <div class="lg-xl:w-[506px] mx-auto lg-xl:mr-auto flex flex-col">
-                    <h2 class="w-full text-[42px] font-semibold mb-4">
+                <div class="w-[95%] md:w-[586px] lg-xl:w-[520px] mx-auto pl-1 lg-xl:mr-auto flex flex-col">
+                    <h2 class="mx-2 sm:m-0 w-full text-[34px] sm:text-[42px] font-semibold mb-4">
                         Peace of mind from <br> prototype to production
                     </h2>
-                    <h3 class="w-full text-[20px] font-regular">
+                    <h3 class="mx-2 sm:m-0 w-full text-[16px] sm:text-[20px] font-regular">
                         Build rich, interactive web applications quickly,<br> 
                         with less code and fewer moving parts. Join our growing<br>
                         community of developers using Phoenix<br>
@@ -322,214 +342,224 @@
             </div>
         </header>
         <div class="relative max-w-5xl mx-auto pt-20 sm:pt-24 lg:pt-32">
-            <h1 class="text-slate-900 font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-center dark:text-white">
+            <h1
+                class="text-slate-900 font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-center dark:text-white">
                 Rapidly build modern websites without ever leaving your HTML.
             </h1>
             <p class="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
-                A utility-first CSS framework packed with classes like 
-            <code class="font-mono font-medium text-sky-500 dark:text-sky-400">flex</code>, 
-            <code class="font-mono font-medium text-sky-500 dark:text-sky-400">pt-4</code>, 
-            <code class="font-mono font-medium text-sky-500 dark:text-sky-400">text-center</code> and 
-            <code class="font-mono font-medium text-sky-500 dark:text-sky-400">rotate-90</code> that can be composed to build any design, directly in your markup.
+                A utility-first CSS framework packed with classes like
+                <code class="font-mono font-medium text-sky-500 dark:text-sky-400">flex</code>,
+                <code class="font-mono font-medium text-sky-500 dark:text-sky-400">pt-4</code>,
+                <code class="font-mono font-medium text-sky-500 dark:text-sky-400">text-center</code> and
+                <code class="font-mono font-medium text-sky-500 dark:text-sky-400">rotate-90</code> that can be composed to
+                build any design, directly in your markup.
             </p>
         </div>
         <div class="mt-6 sm:mt-10 flex justify-center space-x-6 text-sm bg-red-300 h-[48px]"></div>
-    </div>
-
-    <!-- TAILWIND HERO WINDOW -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-20 sm:mt-24 lg:mt-32 lg:grid lg:gap-8 lg:grid-cols-12 lg:items-center">
-        <div class="relative row-start-1 col-start-6 xl:col-start-7 col-span-7 xl:col-span-6">
-            <div class="-mx-4 sm:mx-0">
-                <div class="relative overflow-hidden shadow-xl flex bg-slate-800 h-[31.625rem] max-h-[60vh] sm:max-h-[none] sm:rounded-xl lg:h-[34.6875rem] xl:h-[31.625rem] dark:bg-slate-900/70 dark:backdrop-blur dark:ring-1 dark:ring-inset dark:ring-white/10 !h-auto max-h-[none]">
-                    <div class="relative w-full flex flex-col">
-                        <div class="flex-none border-b border-slate-500/30">
-                            <div class="flex items-center h-8 space-x-1.5 px-3">
-                                <div class="w-2.5 h-2.5 bg-slate-600 rounded-full"></div>
-                                <div class="w-2.5 h-2.5 bg-slate-600 rounded-full"></div>
-                                <div class="w-2.5 h-2.5 bg-slate-600 rounded-full"></div>
+        </div>
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-20 sm:mt-24 lg:mt-32 lg:grid lg:gap-8 lg:grid-cols-12 lg:items-center">
+            <div class="relative row-start-1 col-start-6 xl:col-start-7 col-span-7 xl:col-span-6">
+                <div class="-mx-4 sm:mx-0">
+                    <div
+                        class="relative overflow-hidden shadow-xl flex bg-slate-800 h-[31.625rem] max-h-[60vh] sm:max-h-[none] sm:rounded-xl lg:h-[34.6875rem] xl:h-[31.625rem] dark:bg-slate-900/70 dark:backdrop-blur dark:ring-1 dark:ring-inset dark:ring-white/10 !h-auto max-h-[none]">
+                        <div class="relative w-full flex flex-col">
+                            <div class="flex-none border-b border-slate-500/30">
+                                <div class="flex items-center h-8 space-x-1.5 px-3">
+                                    <div class="w-2.5 h-2.5 bg-slate-600 rounded-full"></div>
+                                    <div class="w-2.5 h-2.5 bg-slate-600 rounded-full"></div>
+                                    <div class="w-2.5 h-2.5 bg-slate-600 rounded-full"></div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="relative min-h-0 flex-auto flex flex-col">
-                            <div class="w-full flex-auto flex min-h-0 overflow-auto">
-                                <div class="w-full relative flex-auto">
-                                    <pre class="flex min-h-full text-sm leading-6">
-                                        <div aria-hidden="true" class="hidden md:block text-slate-600 flex-none py-4 pr-4 text-right select-none" style="width:50px">        1
-            2
-            3
-            4
-            5
-            6
-            7
-            8
-            9
-            10
-            11
-            12
-            13
-            14
-            15
-            16
-            17
-            18
-            19
-            20
-            21
-                                        </div>
-                                        <code class="flex-auto relative block text-slate-50 pt-4 pb-4 px-4 overflow-auto"><span class="token tag"><span class="token punctuation">        &lt;</span>figure<!-- --> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span><span>m</span><span>d</span><span>:</span><span>f</span><span>l</span><span>e</span><span>x</span><span> </span>bg-slate-100 rounded-xl<span> </span><span>p</span><span>-</span><span>8</span><span> </span><span>m</span><span>d</span><span>:</span><span>p</span><span>-</span><span>0</span> dark:bg-slate-800<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
-            <span class="token tag"><span class="token punctuation">&lt;</span>img<!-- --> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>w-24 h-24<span> </span><span>m</span><span>d</span><span>:</span><span>w</span><span>-</span><span>4</span><span>8</span><span> </span><span>m</span><span>d</span><span>:</span><span>h</span><span>-</span><span>a</span><span>u</span><span>t</span><span>o</span><span> </span><span>m</span><span>d</span><span>:</span><span>r</span><span>o</span><span>u</span><span>n</span><span>d</span><span>e</span><span>d</span><span>-</span><span>n</span><span>o</span><span>n</span><span>e</span><span> </span><span>r</span><span>o</span><span>u</span><span>n</span><span>d</span><span>e</span><span>d</span><span>-</span><span>f</span><span>u</span><span>l</span><span>l</span><span> </span><span>m</span><span>x</span><span>-</span><span>a</span><span>u</span><span>t</span><span>o</span><span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/sarah-dayan.jpg<span class="token punctuation">"</span></span> <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span> <span class="token attr-name">width</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>384<span class="token punctuation">"</span></span> <span class="token attr-name">height</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>512<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
-            <span class="token tag"><span class="token punctuation">&lt;</span>div<!-- --> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>pt-6<span> </span><span>m</span><span>d</span><span>:</span><span>p</span><span>-</span><span>8</span><span> </span><span>t</span><span>e</span><span>x</span><span>t</span><span>-</span><span>c</span><span>e</span><span>n</span><span>t</span><span>e</span><span>r</span><span> </span><span>m</span><span>d</span><span>:</span><span>t</span><span>e</span><span>x</span><span>t</span><span>-</span><span>l</span><span>e</span><span>f</span><span>t</span> space-y-4<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
-                <span class="token tag"><span class="token punctuation">&lt;</span>blockquote<span class="token punctuation">&gt;</span></span>
-                <span class="token tag"><span class="token punctuation">&lt;</span>p<!-- --> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text-lg<span> </span><span>f</span><span>o</span><span>n</span><span>t</span><span>-</span><span>m</span><span>e</span><span>d</span><span>i</span><span>u</span><span>m</span><span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
-                    “Tailwind CSS is the only framework that I've seen scale
-                    on large teams. It’s easy to customize, adapts to any design,
-                    and the build size is tiny.”
-                <span class="token tag"><span class="token punctuation">&lt;/</span>p<span class="token punctuation">&gt;</span></span>
-                <span class="token tag"><span class="token punctuation">&lt;/</span>blockquote<span class="token punctuation">&gt;</span></span>
-                <span class="token tag"><span class="token punctuation">&lt;</span>figcaption<span> </span><span class="token attr-name"><span>c</span><span>l</span><span>a</span><span>s</span><span>s</span></span><span class="token attr-value"><span class="token punctuation"><span>=</span></span><span class="token punctuation"><span>"</span></span><span>f</span><span>o</span><span>n</span><span>t</span><span>-</span><span>m</span><span>e</span><span>d</span><span>i</span><span>u</span><span>m</span><span class="token punctuation"><span>"</span></span></span><span class="token punctuation">&gt;</span></span>
-                <span class="token tag"><span class="token punctuation">&lt;</span>div<span> </span><span class="token attr-name"><span>c</span><span>l</span><span>a</span><span>s</span><span>s</span></span><span class="token attr-value"><span class="token punctuation"><span>=</span></span><span class="token punctuation"><span>"</span></span><span>t</span><span>e</span><span>x</span><span>t</span><span>-</span><span>s</span><span>k</span><span>y</span><span>-</span><span>5</span><span>0</span><span>0</span><span> </span><span>d</span><span>a</span><span>r</span><span>k</span><span>:</span><span>t</span><span>e</span><span>x</span><span>t</span><span>-</span><span>s</span><span>k</span><span>y</span><span>-</span><span>4</span><span>0</span><span>0</span><span class="token punctuation"><span>"</span></span></span><span class="token punctuation">&gt;</span></span>
-                    Sarah Dayan
-                <span class="token tag"><span class="token punctuation">&lt;/</span>div<span class="token punctuation">&gt;</span></span>
-                <span class="token tag"><span class="token punctuation">&lt;</span>div<span> </span><span class="token attr-name"><span>c</span><span>l</span><span>a</span><span>s</span><span>s</span></span><span class="token attr-value"><span class="token punctuation"><span>=</span></span><span class="token punctuation"><span>"</span></span><span>t</span><span>e</span><span>x</span><span>t</span><span>-</span><span>s</span><span>l</span><span>a</span><span>t</span><span>e</span><span>-</span><span>7</span><span>0</span><span>0</span><span> </span><span>d</span><span>a</span><span>r</span><span>k</span><span>:</span><span>t</span><span>e</span><span>x</span><span>t</span><span>-</span><span>s</span><span>l</span><span>a</span><span>t</span><span>e</span><span>-</span><span>5</span><span>0</span><span>0</span><span class="token punctuation"><span>"</span></span></span><span class="token punctuation">&gt;</span></span>
-                    Staff Engineer, Algolia
-                <span class="token tag"><span class="token punctuation">&lt;/</span>div<span class="token punctuation">&gt;</span></span>
-                <span class="token tag"><span class="token punctuation">&lt;/</span>figcaption<span class="token punctuation">&gt;</span></span>
-            <span class="token tag"><span class="token punctuation">&lt;/</span>div<span class="token punctuation">&gt;</span></span>
-            <span class="token tag"><span class="token punctuation">&lt;/</span>figure<span class="token punctuation">&gt;</span></span>
-            </code></pre></div></div></div></div></div></div></div>
-
-    <!-- TAILWIND HERO STATEMENT -->
-    <div class="h-[24.25rem] max-w-xl mx-auto lg:max-w-none flex items-center justify-center">
-        <div class="w-full flex-none">
-            <div class="lg:-mr-18">
-                <div class="relative z-10 rounded-lg shadow-xl text-slate-900 mx-auto sm:w-[23.4375rem] dark:text-slate-300" style="transform-origin: 50% 50% 0px; width: 100%;">
-                    <div class="bg-white rounded-lg overflow-hidden ring-1 ring-slate-900/5 dark:bg-slate-800 dark:highlight-white/5 dark:ring-0 flex p-8" style="transform-origin: 50% 50% 0px;">
-                        <div class="relative z-10 overflow-hidden flex-none -m-8 mr-8 w-48 h-auto" style="transform-origin: 50% 50% 0px; border-radius: 0%;">
-                            <img src="/images/tailwind-section/sarah.jpg" alt="" class="absolute max-w-none object-cover bg-slate-100" style="width: 100%; height: 100%; left: 0px; top: 0px; transform-origin: 50% 50% 0px;">
-                        </div>
-                        <div class="" style="transform-origin: 50% 50% 0px;">
-                            <div class="mb-4" style="transform-origin: 50% 50% 0px;">
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">“Tailwind </span>
-                                    <span style="opacity: 0; font-weight: 500;">“Tailwind </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">CSS </span>
-                                    <span style="opacity: 0; font-weight: 500;">CSS </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">is </span>
-                                    <span style="opacity: 0; font-weight: 500;">is </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">the </span>
-                                    <span style="opacity: 0; font-weight: 500;">the </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">only </span>
-                                    <span style="opacity: 0; font-weight: 500;">only </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">framework </span>
-                                    <span style="opacity: 0; font-weight: 500;">framework </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">that </span>
-                                    <span style="opacity: 0; font-weight: 500;">that </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">I've </span>
-                                    <span style="opacity: 0; font-weight: 500;">I've </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">seen </span>
-                                    <span style="opacity: 0; font-weight: 500;">seen </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">scale </span>
-                                    <span style="opacity: 0; font-weight: 500;">scale </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">on </span>
-                                    <span style="opacity: 0; font-weight: 500;">on </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">large </span>
-                                    <span style="opacity: 0; font-weight: 500;">large </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">teams. </span>
-                                    <span style="opacity: 0; font-weight: 500;">teams. </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">It’s </span>
-                                    <span style="opacity: 0; font-weight: 500;">It’s </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">easy </span>
-                                    <span style="opacity: 0; font-weight: 500;">easy </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">to </span>
-                                    <span style="opacity: 0; font-weight: 500;">to </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">customize, </span>
-                                    <span style="opacity: 0; font-weight: 500;">customize, </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">adapts </span>
-                                    <span style="opacity: 0; font-weight: 500;">adapts </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">to </span>
-                                    <span style="opacity: 0; font-weight: 500;">to </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">any </span>
-                                    <span style="opacity: 0; font-weight: 500;">any </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">design, </span>
-                                    <span style="opacity: 0; font-weight: 500;">design, </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">and </span>
-                                    <span style="opacity: 0; font-weight: 500;">and </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">the </span>
-                                    <span style="opacity: 0; font-weight: 500;">the </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">build </span>
-                                    <span style="opacity: 0; font-weight: 500;">build </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">size </span>
-                                    <span style="opacity: 0; font-weight: 500;">size </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">is </span>
-                                    <span style="opacity: 0; font-weight: 500;">is </span>
-                                </span>
-                                <span class="relative inline-flex whitespace-pre text-lg" style="transform-origin: 50% 50% 0px;">
-                                    <span class="absolute top-0 left-0" style="font-weight: 500;">tiny.” </span>
-                                    <span style="opacity: 0; font-weight: 500;">tiny.” </span>
-                                </span>
-                            </div>
-                            <div class="flex flex-col items-start" style="font-weight: 500;">
-                                    <p class="transition-colors duration-500 text-sky-500 dark:text-sky-400" style="transform-origin: 50% 50% 0px;">Sarah Dayan</p>
-                                    <p class="transition-colors duration-500 text-slate-700 dark:text-slate-500" style="transform-origin: 50% 50% 0px;">Staff Engineer, Algolia</p>
+                            <div class="relative min-h-0 flex-auto flex flex-col">
+                                <div class="w-full flex-auto flex min-h-0 overflow-auto">
+                                    <div class="w-full relative flex-auto">
+                                        <pre class="flex min-h-full text-sm leading-6"><div aria-hidden="true" class="hidden md:block text-slate-600 flex-none py-4 pr-4 text-right select-none" style="width: 50px;">1
+                2
+                3
+                4
+                5
+                6
+                7
+                8
+                9
+                10
+                11
+                12
+                13
+                14
+                15
+                16
+                17
+                18
+                19
+                20
+                21
+                </div><code class="flex-auto relative block text-slate-50 pt-4 pb-4 px-4 overflow-auto"><span class="token tag"><span class="token punctuation">&lt;</span>figure <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span><span>m</span><span>d</span><span>:</span><span>f</span><span>l</span><span>e</span><span>x</span><span> </span>bg-slate-100 rounded-xl<span> </span><span>p</span><span>-</span><span>8</span><span class="hidden"> </span><span class="border -mx-px" style="height: 1.125rem;"></span><span class="hidden">m</span><span class="hidden">d</span><span class="hidden">:</span><span class="hidden">p</span><span class="hidden">-</span><span class="hidden">0</span> dark:bg-slate-800<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+                  <span class="token tag"><span class="token punctuation">&lt;</span>img <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>w-24 h-24<span class="hidden"> </span><span class="hidden">m</span><span class="hidden">d</span><span class="hidden">:</span><span class="hidden">w</span><span class="hidden">-</span><span class="hidden">4</span><span class="hidden">8</span><span class="hidden"> </span><span class="hidden">m</span><span class="hidden">d</span><span class="hidden">:</span><span class="hidden">h</span><span class="hidden">-</span><span class="hidden">a</span><span class="hidden">u</span><span class="hidden">t</span><span class="hidden">o</span><span class="hidden"> </span><span class="hidden">m</span><span class="hidden">d</span><span class="hidden">:</span><span class="hidden">r</span><span class="hidden">o</span><span class="hidden">u</span><span class="hidden">n</span><span class="hidden">d</span><span class="hidden">e</span><span class="hidden">d</span><span class="hidden">-</span><span class="hidden">n</span><span class="hidden">o</span><span class="hidden">n</span><span class="hidden">e</span><span> </span><span>r</span><span>o</span><span>u</span><span>n</span><span>d</span><span>e</span><span>d</span><span>-</span><span>f</span><span>u</span><span>l</span><span>l</span><span> </span><span>m</span><span>x</span><span>-</span><span>a</span><span>u</span><span>t</span><span>o</span><span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/sarah-dayan.jpg<span class="token punctuation">"</span></span> <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span> <span class="token attr-name">width</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>384<span class="token punctuation">"</span></span> <span class="token attr-name">height</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>512<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+                  <span class="token tag"><span class="token punctuation">&lt;</span>div <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>pt-6<span class="hidden"> </span><span class="hidden">m</span><span class="hidden">d</span><span class="hidden">:</span><span class="hidden">p</span><span class="hidden">-</span><span class="hidden">8</span><span> </span><span>t</span><span>e</span><span>x</span><span>t</span><span>-</span><span>c</span><span>e</span><span>n</span><span>t</span><span>e</span><span>r</span><span class="hidden"> </span><span class="hidden">m</span><span class="hidden">d</span><span class="hidden">:</span><span class="hidden">t</span><span class="hidden">e</span><span class="hidden">x</span><span class="hidden">t</span><span class="hidden">-</span><span class="hidden">l</span><span class="hidden">e</span><span class="hidden">f</span><span class="hidden">t</span> space-y-4<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+                    <span class="token tag"><span class="token punctuation">&lt;</span>blockquote<span class="token punctuation">&gt;</span></span>
+                      <span class="token tag"><span class="token punctuation">&lt;</span>p <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text-lg<span> </span><span>f</span><span>o</span><span>n</span><span>t</span><span>-</span><span>m</span><span>e</span><span>d</span><span>i</span><span>u</span><span>m</span><span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+                        “Tailwind CSS is the only framework that I've seen scale
+                        on large teams. It’s easy to customize, adapts to any design,
+                        and the build size is tiny.”
+                      <span class="token tag"><span class="token punctuation">&lt;/</span>p<span class="token punctuation">&gt;</span></span>
+                    <span class="token tag"><span class="token punctuation">&lt;/</span>blockquote<span class="token punctuation">&gt;</span></span>
+                    <span class="token tag"><span class="token punctuation">&lt;</span>figcaption<span> </span><span class="token attr-name"><span>c</span><span>l</span><span>a</span><span>s</span><span>s</span></span><span class="token attr-value"><span class="token punctuation"><span>=</span></span><span class="token punctuation"><span>"</span></span><span>f</span><span>o</span><span>n</span><span>t</span><span>-</span><span>m</span><span>e</span><span>d</span><span>i</span><span>u</span><span>m</span><span class="token punctuation"><span>"</span></span></span><span class="token punctuation">&gt;</span></span>
+                      <span class="token tag"><span class="token punctuation">&lt;</span>div<span> </span><span class="token attr-name"><span>c</span><span>l</span><span>a</span><span>s</span><span>s</span></span><span class="token attr-value"><span class="token punctuation"><span>=</span></span><span class="token punctuation"><span>"</span></span><span>t</span><span>e</span><span>x</span><span>t</span><span>-</span><span>s</span><span>k</span><span>y</span><span>-</span><span>5</span><span>0</span><span>0</span><span> </span><span>d</span><span>a</span><span>r</span><span>k</span><span>:</span><span>t</span><span>e</span><span>x</span><span>t</span><span>-</span><span>s</span><span>k</span><span>y</span><span>-</span><span>4</span><span>0</span><span>0</span><span class="token punctuation"><span>"</span></span></span><span class="token punctuation">&gt;</span></span>
+                        Sarah Dayan
+                      <span class="token tag"><span class="token punctuation">&lt;/</span>div<span class="token punctuation">&gt;</span></span>
+                      <span class="token tag"><span class="token punctuation">&lt;</span>div<span> </span><span class="token attr-name"><span>c</span><span>l</span><span>a</span><span>s</span><span>s</span></span><span class="token attr-value"><span class="token punctuation"><span>=</span></span><span class="token punctuation"><span>"</span></span><span>t</span><span>e</span><span>x</span><span>t</span><span>-</span><span>s</span><span>l</span><span>a</span><span>t</span><span>e</span><span>-</span><span>7</span><span>0</span><span>0</span><span> </span><span>d</span><span>a</span><span>r</span><span>k</span><span>:</span><span>t</span><span>e</span><span>x</span><span>t</span><span>-</span><span>s</span><span>l</span><span>a</span><span>t</span><span>e</span><span>-</span><span>5</span><span>0</span><span>0</span><span class="token punctuation"><span>"</span></span></span><span class="token punctuation">&gt;</span></span>
+                        Staff Engineer, Algolia
+                      <span class="token tag"><span class="token punctuation">&lt;/</span>div<span class="token punctuation">&gt;</span></span>
+                    <span class="token tag"><span class="token punctuation">&lt;/</span>figcaption<span class="token punctuation">&gt;</span></span>
+                  <span class="token tag"><span class="token punctuation">&lt;/</span>div<span class="token punctuation">&gt;</span></span>
+                <span class="token tag"><span class="token punctuation">&lt;/</span>figure<span class="token punctuation">&gt;</span></span>
+                </code></pre>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-        
             </div>
-    
+            <div class="relative row-start-1 col-start-1 col-span-5 xl:col-span-6 -mt-10">
+                <div class="h-[28rem] max-w-xl mx-auto lg:max-w-none flex items-center justify-center">
+                    <div class="w-full h-full md:h-[50%] flex-none">
+                        <div class="lg:-mr-18">
+                            <div class=" w-[23.4375rem] md:w-[600px] h-full relative z-10 rounded-lg shadow-xl text-slate-900 mx-auto  dark:text-slate-300">
+                                <div class="w-full h-full bg-white rounded-lg overflow-hidden ring-1 ring-slate-900/5 dark:bg-slate-800 dark:highlight-white/5 dark:ring-0 flex p-8 text-center"
+                                    style="transform-origin: 50% 50% 0px;">
+                                    <div class="relative z-10 overflow-hidden flex-none mx-auto w-24 h-24"
+                                        style="transform-origin: 50% 50% 0px; border-radius: 50%;"><img
+                                            src="/images/tailwind-section/sarah.jpg" alt=""
+                                            class="absolute max-w-none object-cover bg-slate-100"
+                                            style="height: 128px; left: 0px; top: -16px; transform-origin: 50% 50% 0px;">
+                                    </div>
+                                    <div class="pt-6" style="transform-origin: 50% 50% 0px;">
+                                        <div class="mb-4" style="transform-origin: 50% 50% 0px;"><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">“Tailwind </span><span
+                                                    style="opacity: 0; font-weight: 500;">“Tailwind </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">CSS </span><span
+                                                    style="opacity: 0; font-weight: 500;">CSS </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">is </span><span
+                                                    style="opacity: 0; font-weight: 500;">is </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">the </span><span
+                                                    style="opacity: 0; font-weight: 500;">the </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">only </span><span
+                                                    style="opacity: 0; font-weight: 500;">only </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">framework </span><span
+                                                    style="opacity: 0; font-weight: 500;">framework </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">that </span><span
+                                                    style="opacity: 0; font-weight: 500;">that </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">I've </span><span
+                                                    style="opacity: 0; font-weight: 500;">I've </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">seen </span><span
+                                                    style="opacity: 0; font-weight: 500;">seen </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">scale </span><span
+                                                    style="opacity: 0; font-weight: 500;">scale </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">on </span><span
+                                                    style="opacity: 0; font-weight: 500;">on </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">large </span><span
+                                                    style="opacity: 0; font-weight: 500;">large </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">teams. </span><span
+                                                    style="opacity: 0; font-weight: 500;">teams. </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">It’s </span><span
+                                                    style="opacity: 0; font-weight: 500;">It’s </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">easy </span><span
+                                                    style="opacity: 0; font-weight: 500;">easy </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">to </span><span
+                                                    style="opacity: 0; font-weight: 500;">to </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">customize, </span><span
+                                                    style="opacity: 0; font-weight: 500;">customize, </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">adapts </span><span
+                                                    style="opacity: 0; font-weight: 500;">adapts </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">to </span><span
+                                                    style="opacity: 0; font-weight: 500;">to </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">any </span><span
+                                                    style="opacity: 0; font-weight: 500;">any </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">design, </span><span
+                                                    style="opacity: 0; font-weight: 500;">design, </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">and </span><span
+                                                    style="opacity: 0; font-weight: 500;">and </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">the </span><span
+                                                    style="opacity: 0; font-weight: 500;">the </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">build </span><span
+                                                    style="opacity: 0; font-weight: 500;">build </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">size </span><span
+                                                    style="opacity: 0; font-weight: 500;">size </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">is </span><span
+                                                    style="opacity: 0; font-weight: 500;">is </span></span><span
+                                                class="relative inline-flex whitespace-pre text-lg"
+                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                    style="font-weight: 500;">tiny.” </span><span
+                                                    style="opacity: 0; font-weight: 500;">tiny.” </span></span></div>
+                                        <div class="flex flex-col items-center" style="font-weight: 500;">
+                                            <p class="transition-colors duration-500 text-sky-500 dark:text-sky-400"
+                                                style="transform-origin: 50% 50% 0px;">Sarah Dayan</p>
+                                            <p class="transition-colors duration-500 text-slate-700 dark:text-slate-500"
+                                                style="transform-origin: 50% 50% 0px;">Staff Engineer, Algolia</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    </div>
-</section>
+        </section>
 <!-- FIGMA SECTION -->
 <section class="relative lg-xl:h-[632px] bg-[#ff6f61] pb-10"></section>
