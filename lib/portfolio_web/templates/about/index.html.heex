@@ -1,13 +1,14 @@
 <!-- PHOENIX SECTION -->
 <section class="relative lg-xl:h-[632px] bg-[#ff6f61] pb-10">
     <!-- PHOENIX HEADER -->
-    <div class="w-full py-[22px]">
+    <div class="relative w-full py-[22px]">
         <header class="lg-xl:w-[1140px] h-[62px] mx-auto flex">
             <div class="h-full flex items-center">
-                <img src="/images/phx-section/logo.png" alt="Phoenix Logo" class="w-[367.50px] bg-cover">
+                <img src="/images/phx-section/logo.png" alt="Phoenix Logo" class="w-[367.50px] bg-cover z-0">
             </div>
             <!-- SPACER -->
             <div class="mx-auto min-w-[80px]"></div> 
+            <!-- PHOENIX NAV BAR -->
             <ul x-cloak="medium" class="flex items-center text-[20px] text-white">
                 <a href="https://hexdocs.pm/phoenix"><li class="m-2 p-2 hover:bg-[#e26a79]">
                     Guides
@@ -25,35 +26,34 @@
                     Blog
                 </li></a>
             </ul>       
-            <div x-data="{ show: false }" class="relative flex items-center md-lg:hidden">
+            <div x-data="{ show: false }" class="flex items-center md-lg:hidden">
                 <button @click="show = !show" class="w-[90px] flex flex-col space-y-[3px] items-center justify-center md-lg:hidden">
                     <div class="w-[25%] h-[1px] bg-white"></div>
                     <div class="w-[25%] h-[1px] bg-white"></div>
                     <div class="w-[25%] h-[1px] bg-white"></div>
                 </button>
-                <ul x-show="show" class="w-[500px] absolute bottom-[-62px] left-[-410px] flex items-center text-[20px] text-white">
-                    <a href="https://hexdocs.pm/phoenix"><li class="m-2 p-2 hover:bg-[#e26a79]">
-                        Guides
-                    </li></a>
-                    <a href="https://hexdocs.pm/phoenix/Phoenix.html"><li class="m-2 p-2 hover:bg-[#e26a79]">
+                <ul x-show="show" class="absolute w-full z-10 bottom-[-310px] right-0 flex flex-col items-center text-[20px] bg-[#ff6f61] text-white">
+                    <li class="w-[369px] h-full text-center m-2 p-2 group">
+                        <a href="https://hexdocs.pm/phoenix" style="width: 100%">Guides</a>
+                    </li>
+                    <a href="https://hexdocs.pm/phoenix/Phoenix.html"><li class="m-2 p-2">
                         Docs                 
-                    </li></a>   
-                    <a href="https://hexdocs.pm/phoenix/community.html"><li class="m-2 p-2 hover:bg-[#e26a79]">
+                    </li></a>  
+                    <a href="https://hexdocs.pm/phoenix/community.html"><li class="m-2 p-2">
                         Community                 
                     </li></a>
-                    <a href="https://github.com/phoenixframework/phoenix"><li class="m-2 p-2 hover:bg-[#e26a79]">
+                    <a href="https://github.com/phoenixframework/phoenix"><li class="m-2 p-2">
                         Source  
                     </li></a>
-                    <a href="https://phoenixframework.org/blog"><li class="m-2 p-2 hover:bg-[#e26a79]">
+                    <a href="https://phoenixframework.org/blog"><li class="m-2 p-2">
                         Blog
                     </li></a>
                 </ul>
-
             </div>  
         </header>
     </div>
     <!-- PHOENIX HERO -->
-    <div class="w-full">
+    <div class="w-full z-10">
         <article class="relative w-full h-full flex lg-xl:items-center">
             <div class="w-[1140px] mx-auto mt-14  text-white flex flex-col lg-xl:flex-row items-center">
                 <!-- PHOENIX HERO TEXT -->
