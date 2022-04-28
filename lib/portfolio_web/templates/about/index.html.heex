@@ -7,49 +7,69 @@
                 <img src="/images/phx-section/logo.png" alt="Phoenix Logo" class="w-[367.50px] bg-cover z-0">
             </div>
             <!-- SPACER -->
-            <div class="mx-auto min-w-[80px]"></div> 
+            <div class="mx-auto min-w-[80px]"></div>
             <!-- PHOENIX NAV BAR -->
             <ul x-cloak="medium" class="flex items-center text-[20px] text-white">
-                <a href="https://hexdocs.pm/phoenix"><li class="m-2 p-2 hover:bg-[#e26a79]">
-                    Guides
-                </li></a>
-                <a href="https://hexdocs.pm/phoenix/Phoenix.html"><li class="m-2 p-2 hover:bg-[#e26a79]">
-                    Docs                 
-                </li></a>   
-                <a href="https://hexdocs.pm/phoenix/community.html"><li class="m-2 p-2 hover:bg-[#e26a79]">
-                    Community                 
-                </li></a>
-                <a href="https://github.com/phoenixframework/phoenix"><li class="m-2 p-2 hover:bg-[#e26a79]">
-                    Source  
-                </li></a>
-                <a href="https://phoenixframework.org/blog"><li class="m-2 p-2 hover:bg-[#e26a79]">
-                    Blog
-                </li></a>
-            </ul>       
+                <a href="https://hexdocs.pm/phoenix">
+                    <li class="m-2 p-2 hover:bg-[#e26a79]">
+                        Guides
+                    </li>
+                </a>
+                <a href="https://hexdocs.pm/phoenix/Phoenix.html">
+                    <li class="m-2 p-2 hover:bg-[#e26a79]">
+                        Docs
+                    </li>
+                </a>
+                <a href="https://hexdocs.pm/phoenix/community.html">
+                    <li class="m-2 p-2 hover:bg-[#e26a79]">
+                        Community
+                    </li>
+                </a>
+                <a href="https://github.com/phoenixframework/phoenix">
+                    <li class="m-2 p-2 hover:bg-[#e26a79]">
+                        Source
+                    </li>
+                </a>
+                <a href="https://phoenixframework.org/blog">
+                    <li class="m-2 p-2 hover:bg-[#e26a79]">
+                        Blog
+                    </li>
+                </a>
+            </ul>
             <div x-data="{ show: false }" class="flex items-center md-lg:hidden">
-                <button @click="show = !show" class="w-[90px] flex flex-col space-y-[3px] items-center justify-center md-lg:hidden">
+                <button @click="show = !show"
+                    class="w-[90px] flex flex-col space-y-[3px] items-center justify-center md-lg:hidden">
                     <div class="w-[25%] h-[1px] bg-white"></div>
                     <div class="w-[25%] h-[1px] bg-white"></div>
                     <div class="w-[25%] h-[1px] bg-white"></div>
                 </button>
-                <ul x-show="show" class="absolute w-full z-10 bottom-[-310px] right-0 flex flex-col items-center text-[20px] bg-[#ff6f61] text-white">
+                <ul x-show="show"
+                    class="absolute w-full z-10 bottom-[-310px] right-0 flex flex-col items-center text-[20px] bg-[#ff6f61] text-white">
                     <li class="w-[369px] h-full text-center m-2 p-2 group">
                         <a href="https://hexdocs.pm/phoenix" style="width: 100%">Guides</a>
                     </li>
-                    <a href="https://hexdocs.pm/phoenix/Phoenix.html"><li class="m-2 p-2">
-                        Docs                 
-                    </li></a>  
-                    <a href="https://hexdocs.pm/phoenix/community.html"><li class="m-2 p-2">
-                        Community                 
-                    </li></a>
-                    <a href="https://github.com/phoenixframework/phoenix"><li class="m-2 p-2">
-                        Source  
-                    </li></a>
-                    <a href="https://phoenixframework.org/blog"><li class="m-2 p-2">
-                        Blog
-                    </li></a>
+                    <a href="https://hexdocs.pm/phoenix/Phoenix.html">
+                        <li class="m-2 p-2">
+                            Docs
+                        </li>
+                    </a>
+                    <a href="https://hexdocs.pm/phoenix/community.html">
+                        <li class="m-2 p-2">
+                            Community
+                        </li>
+                    </a>
+                    <a href="https://github.com/phoenixframework/phoenix">
+                        <li class="m-2 p-2">
+                            Source
+                        </li>
+                    </a>
+                    <a href="https://phoenixframework.org/blog">
+                        <li class="m-2 p-2">
+                            Blog
+                        </li>
+                    </a>
                 </ul>
-            </div>  
+            </div>
         </header>
     </div>
     <!-- PHOENIX HERO -->
@@ -62,16 +82,18 @@
                         Peace of mind from <br> prototype to production
                     </h2>
                     <h3 class="mx-2 sm:m-0 w-full text-[16px] sm:text-[20px] font-regular">
-                        Build rich, interactive web applications quickly,<br> 
+                        Build rich, interactive web applications quickly,<br>
                         with less code and fewer moving parts. Join our growing<br>
                         community of developers using Phoenix<br>
                         to craft APIs, HTML5 apps and more, for fun or at scale.
                     </h3>
                 </div>
                 <!-- PHOENIX HERO WINDOW -->
-                <div class="z-10 w-full h-full lg-xl:w-[586px] lg-xl:h-[372px] flex flex-col lg-xl:flex-row items-center lg-xl:ml-auto">
+                <div
+                    class="z-10 w-full h-full lg-xl:w-[586px] lg-xl:h-[372px] flex flex-col lg-xl:flex-row items-center lg-xl:ml-auto">
                     <!-- PHOENIX HERO LEFT WINDOW -->
-                    <div class="relative w-[95%]  md:w-[586px] lg-xl:w-[346px] h-[372px] bg-[#3F3D56] pt-6 pl-[10px] pb-[6px] mt-[20px] lg-xl:mt-0 pr-[6px] mb-[9px] lg-xl:mb-0 lg-xl:mr-auto rounded-lg ">
+                    <div
+                        class="relative w-[95%]  md:w-[586px] lg-xl:w-[346px] h-[372px] bg-[#3F3D56] pt-6 pl-[10px] pb-[6px] mt-[20px] lg-xl:mt-0 pr-[6px] mb-[9px] lg-xl:mb-0 lg-xl:mr-auto rounded-lg ">
                         <span class="absolute top-2 left-2 w-2 h-2 bg-[#D55359] rounded-full"></span>
                         <span class="absolute top-2 left-5 w-2 h-2 bg-[#D8B454] rounded-full"></span>
                         <span class="absolute top-2 left-8 w-2 h-2 bg-[#7DB24F] rounded-full"></span>
@@ -108,9 +130,14 @@
                             <span class="absolute top-2 left-8 w-2 h-2 bg-[#7DB24F] rounded-full"></span>
                             <!-- PHOENIX HERO RIGHT WINDOW TOPBAR TITLE -->
                             <div class="absolute h-full top-1 left-14 flex">
-                                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M10.625 5.00001H10V3.81876C10 3.15571 9.73661 2.51983 9.26777 2.05099C8.79893 1.58215 8.16304 1.31876 7.5 1.31876C6.83696 1.31876 6.20107 1.58215 5.73223 2.05099C5.26339 2.51983 5 3.15571 5 3.81876V5.00001H4.375C3.87772 5.00001 3.40081 5.19755 3.04917 5.54918C2.69754 5.90081 2.5 6.37773 2.5 6.87501V11.875C2.5 12.3723 2.69754 12.8492 3.04917 13.2008C3.40081 13.5525 3.87772 13.75 4.375 13.75H10.625C11.1223 13.75 11.5992 13.5525 11.9508 13.2008C12.3025 12.8492 12.5 12.3723 12.5 11.875V6.87501C12.5 6.37773 12.3025 5.90081 11.9508 5.54918C11.5992 5.19755 11.1223 5.00001 10.625 5.00001ZM6.25 3.81876C6.24159 3.47832 6.3684 3.14841 6.60268 2.90125C6.83695 2.6541 7.1596 2.50982 7.5 2.50001C7.8404 2.50982 8.16305 2.6541 8.39732 2.90125C8.6316 3.14841 8.75841 3.47832 8.75 3.81876V5.00001H6.25V3.81876ZM11.25 11.875C11.25 12.0408 11.1842 12.1997 11.0669 12.3169C10.9497 12.4342 10.7908 12.5 10.625 12.5H4.375C4.20924 12.5 4.05027 12.4342 3.93306 12.3169C3.81585 12.1997 3.75 12.0408 3.75 11.875V6.87501C3.75 6.70925 3.81585 6.55028 3.93306 6.43307C4.05027 6.31586 4.20924 6.25001 4.375 6.25001H10.625C10.7908 6.25001 10.9497 6.31586 11.0669 6.43307C11.1842 6.55028 11.25 6.70925 11.25 6.87501V11.875Z" fill="white"/>
-                                    <path d="M7.5 7.5C7.12916 7.5 6.76665 7.60997 6.45831 7.81599C6.14996 8.02202 5.90964 8.31486 5.76773 8.65747C5.62581 9.00008 5.58868 9.37708 5.66103 9.74079C5.73338 10.1045 5.91195 10.4386 6.17418 10.7008C6.4364 10.963 6.77049 11.1416 7.13421 11.214C7.49792 11.2863 7.87492 11.2492 8.21753 11.1073C8.56014 10.9654 8.85298 10.725 9.05901 10.4167C9.26503 10.1084 9.375 9.74584 9.375 9.375C9.375 8.87772 9.17746 8.40081 8.82583 8.04917C8.4742 7.69754 7.99728 7.5 7.5 7.5ZM7.5 10C7.37639 10 7.25555 9.96334 7.15277 9.89467C7.04999 9.82599 6.96988 9.72838 6.92258 9.61418C6.87527 9.49997 6.86289 9.37431 6.88701 9.25307C6.91113 9.13183 6.97065 9.02047 7.05806 8.93306C7.14547 8.84565 7.25683 8.78612 7.37807 8.76201C7.49931 8.73789 7.62497 8.75027 7.73918 8.79758C7.85338 8.84488 7.95099 8.92499 8.01967 9.02777C8.08835 9.13055 8.125 9.25139 8.125 9.375C8.125 9.54076 8.05915 9.69973 7.94194 9.81694C7.82473 9.93415 7.66576 10 7.5 10Z" fill="white"/>
+                                <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M10.625 5.00001H10V3.81876C10 3.15571 9.73661 2.51983 9.26777 2.05099C8.79893 1.58215 8.16304 1.31876 7.5 1.31876C6.83696 1.31876 6.20107 1.58215 5.73223 2.05099C5.26339 2.51983 5 3.15571 5 3.81876V5.00001H4.375C3.87772 5.00001 3.40081 5.19755 3.04917 5.54918C2.69754 5.90081 2.5 6.37773 2.5 6.87501V11.875C2.5 12.3723 2.69754 12.8492 3.04917 13.2008C3.40081 13.5525 3.87772 13.75 4.375 13.75H10.625C11.1223 13.75 11.5992 13.5525 11.9508 13.2008C12.3025 12.8492 12.5 12.3723 12.5 11.875V6.87501C12.5 6.37773 12.3025 5.90081 11.9508 5.54918C11.5992 5.19755 11.1223 5.00001 10.625 5.00001ZM6.25 3.81876C6.24159 3.47832 6.3684 3.14841 6.60268 2.90125C6.83695 2.6541 7.1596 2.50982 7.5 2.50001C7.8404 2.50982 8.16305 2.6541 8.39732 2.90125C8.6316 3.14841 8.75841 3.47832 8.75 3.81876V5.00001H6.25V3.81876ZM11.25 11.875C11.25 12.0408 11.1842 12.1997 11.0669 12.3169C10.9497 12.4342 10.7908 12.5 10.625 12.5H4.375C4.20924 12.5 4.05027 12.4342 3.93306 12.3169C3.81585 12.1997 3.75 12.0408 3.75 11.875V6.87501C3.75 6.70925 3.81585 6.55028 3.93306 6.43307C4.05027 6.31586 4.20924 6.25001 4.375 6.25001H10.625C10.7908 6.25001 10.9497 6.31586 11.0669 6.43307C11.1842 6.55028 11.25 6.70925 11.25 6.87501V11.875Z"
+                                        fill="white" />
+                                    <path
+                                        d="M7.5 7.5C7.12916 7.5 6.76665 7.60997 6.45831 7.81599C6.14996 8.02202 5.90964 8.31486 5.76773 8.65747C5.62581 9.00008 5.58868 9.37708 5.66103 9.74079C5.73338 10.1045 5.91195 10.4386 6.17418 10.7008C6.4364 10.963 6.77049 11.1416 7.13421 11.214C7.49792 11.2863 7.87492 11.2492 8.21753 11.1073C8.56014 10.9654 8.85298 10.725 9.05901 10.4167C9.26503 10.1084 9.375 9.74584 9.375 9.375C9.375 8.87772 9.17746 8.40081 8.82583 8.04917C8.4742 7.69754 7.99728 7.5 7.5 7.5ZM7.5 10C7.37639 10 7.25555 9.96334 7.15277 9.89467C7.04999 9.82599 6.96988 9.72838 6.92258 9.61418C6.87527 9.49997 6.86289 9.37431 6.88701 9.25307C6.91113 9.13183 6.97065 9.02047 7.05806 8.93306C7.14547 8.84565 7.25683 8.78612 7.37807 8.76201C7.49931 8.73789 7.62497 8.75027 7.73918 8.79758C7.85338 8.84488 7.95099 8.92499 8.01967 9.02777C8.08835 9.13055 8.125 9.25139 8.125 9.375C8.125 9.54076 8.05915 9.69973 7.94194 9.81694C7.82473 9.93415 7.66576 10 7.5 10Z"
+                                        fill="white" />
                                 </svg>
                                 <span class="ml-1 text-[12px]">https://my-phx-app.com</span>
                             </div>
@@ -118,41 +145,41 @@
                         <!-- PHOENIX HERO RIGHT WINDOW TWEETS -->
                         <div class="w-[96%] h-[92%] bg-[#3F3D56] flex flex-col mx-auto overflow-hidden round">
                             <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS-->
-                            <div class="bg-white space-y-[0.4rem] overflow-y-auto text-black text-[11px]">                        
+                            <div class="bg-white space-y-[0.4rem] overflow-y-auto text-black text-[11px]">
                                 <div class="w-full bg-[#e8e8e8] flex">
                                     <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS PROFILE SIDE-->
                                     <div class="w-[33.3px]">
-                                    <img src="/images/phx-section/elixirconf.jpg" alt="">
+                                        <img src="/images/phx-section/elixirconf.jpg" alt="">
                                     </div>
                                     <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS TWEET SIDE-->
                                     <div class="ml-2 max-w-[80%] mt-1 mb-2">
-                                    <p><span class="font-medium">@elixirconf</span><br>
-                                        Do you want to be appreciated? If you
-                                        know and use Elixir 1) I bet you know
-                                        more than you think you do and 2) I'm
-                                        certain others can benefit from your
-                                        knowledge! Submit your CFP for
-                                        @ElixirConfEU at
-                                        https://eventil.com/events/elixir<br>
-                                        confeu2020/cfp Many will be grateful that you
-                                        did. #MyElixirStatus
-                                    </p>
+                                        <p><span class="font-medium">@elixirconf</span><br>
+                                            Do you want to be appreciated? If you
+                                            know and use Elixir 1) I bet you know
+                                            more than you think you do and 2) I'm
+                                            certain others can benefit from your
+                                            knowledge! Submit your CFP for
+                                            @ElixirConfEU at
+                                            https://eventil.com/events/elixir<br>
+                                            confeu2020/cfp Many will be grateful that you
+                                            did. #MyElixirStatus
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="w-full bg-[#e8e8e8] flex text-[11px]">
                                     <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS PROFILE SIDE-->
                                     <div class="w-[33.3px] ">
-                                    <img src="/images/phx-section/theadamconrad.jpg" alt="">
+                                        <img src="/images/phx-section/theadamconrad.jpg" alt="">
                                     </div>
                                     <!-- PHOENIX HERO RIGHT WINDOW TWEETS CARDS TWEET SIDE-->
                                     <div class="ml-2 max-w-[80%] mt-1 mb-2">
-                                    <p><span class="font-medium">@theadamconrad</span><br>
-                                        Psyched to have spoken with
-                                        @chris_mccord on my first podcast
-                                        with @seradio on #elixirlang
-                                        #phoenix latest and greatest
-                                        LiveView framework
-                                    </p>
+                                        <p><span class="font-medium">@theadamconrad</span><br>
+                                            Psyched to have spoken with
+                                            @chris_mccord on my first podcast
+                                            with @seradio on #elixirlang
+                                            #phoenix latest and greatest
+                                            LiveView framework
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="w-full bg-[#e8e8e8] flex text-[11px]">
@@ -241,43 +268,48 @@
                         </div>
                     </div>
                 </div>
-            </div>    
+            </div>
             <img src="/images/phx-section/bg.png"
-            class="absolute bg-cover lg-xl:bottom-[-150px] bottom-[-40px] left-0 right-0 lg-xl:h-[592px] h-[800px] w-full">      
+                class="absolute bg-cover lg-xl:bottom-[-150px] bottom-[-40px] left-0 right-0 lg-xl:h-[592px] h-[800px] w-full">
         </article>
     </div>
 </section>
 <!-- TAILWIND SECTION -->
-<section class="relative bg-white pb-16"  style="background-image: url(/images/tailwind-section/tailwind-bg.jpg)" >
+<section class="relative bg-white pb-16" style="background-image: url(/images/tailwind-section/tailwind-bg.jpg)">
     <div class="px-4 sm:px-6 md:px-8">
-        <header class="relative pt-6 lg:pt-8 flex items-center justify-between text-slate-700 font-semibold text-sm leading-6 dark:text-slate-200">
+        <header
+            class="relative pt-6 lg:pt-8 flex items-center justify-between text-slate-700 font-semibold text-sm leading-6 dark:text-slate-200">
             <!-- TAILWIND LOGO -->
-            <svg viewBox="0 0 248 31" 
-                class="text-slate-900 dark:text-white w-auto h-5">
-                <path fill-rule="evenodd" clip-rule="evenodd" 
-                            d="M25.517 0C18.712 0 14.46 3.382 12.758 10.146c2.552-3.382 5.529-4.65 8.931-3.805 1.941.482 3.329 1.882 4.864 3.432 2.502 2.524 5.398 5.445 11.722 5.445 6.804 0 11.057-3.382 12.758-10.145-2.551 3.382-5.528 4.65-8.93 3.804-1.942-.482-3.33-1.882-4.865-3.431C34.736 2.92 31.841 0 25.517 0zM12.758 15.218C5.954 15.218 1.701 18.6 0 25.364c2.552-3.382 5.529-4.65 8.93-3.805 1.942.482 3.33 1.882 4.865 3.432 2.502 2.524 5.397 5.445 11.722 5.445 6.804 0 11.057-3.381 12.758-10.145-2.552 3.382-5.529 4.65-8.931 3.805-1.941-.483-3.329-1.883-4.864-3.432-2.502-2.524-5.398-5.446-11.722-5.446z" 
-                        fill="#38bdf8">
+            <svg viewBox="0 0 248 31" class="text-slate-900 dark:text-white w-auto h-5">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M25.517 0C18.712 0 14.46 3.382 12.758 10.146c2.552-3.382 5.529-4.65 8.931-3.805 1.941.482 3.329 1.882 4.864 3.432 2.502 2.524 5.398 5.445 11.722 5.445 6.804 0 11.057-3.382 12.758-10.145-2.551 3.382-5.528 4.65-8.93 3.804-1.942-.482-3.33-1.882-4.865-3.431C34.736 2.92 31.841 0 25.517 0zM12.758 15.218C5.954 15.218 1.701 18.6 0 25.364c2.552-3.382 5.529-4.65 8.93-3.805 1.942.482 3.33 1.882 4.865 3.432 2.502 2.524 5.397 5.445 11.722 5.445 6.804 0 11.057-3.381 12.758-10.145-2.552 3.382-5.529 4.65-8.931 3.805-1.941-.483-3.329-1.883-4.864-3.432-2.502-2.524-5.398-5.446-11.722-5.446z"
+                    fill="#38bdf8">
                 </path>
-                <path 
-                    fill-rule="evenodd" 
-                    clip-rule="evenodd" 
-                            d="M76.546 12.825h-4.453v8.567c0 2.285 1.508 2.249 4.453 2.106v3.463c-5.962.714-8.332-.928-8.332-5.569v-8.567H64.91V9.112h3.304V4.318l3.879-1.143v5.937h4.453v3.713zM93.52 9.112h3.878v17.849h-3.878v-2.57c-1.365 1.891-3.484 3.034-6.285 3.034-4.884 0-8.942-4.105-8.942-9.389 0-5.318 4.058-9.388 8.942-9.388 2.801 0 4.92 1.142 6.285 2.999V9.112zm-5.674 14.636c3.232 0 5.674-2.392 5.674-5.712s-2.442-5.711-5.674-5.711-5.674 2.392-5.674 5.711c0 3.32 2.442 5.712 5.674 5.712zm16.016-17.313c-1.364 0-2.477-1.142-2.477-2.463a2.475 2.475 0 012.477-2.463 2.475 2.475 0 012.478 2.463c0 1.32-1.113 2.463-2.478 2.463zm-1.939 20.526V9.112h3.879v17.849h-3.879zm8.368 0V.9h3.878v26.06h-3.878zm29.053-17.849h4.094l-5.638 17.849h-3.807l-3.735-12.03-3.771 12.03h-3.806l-5.639-17.849h4.094l3.484 12.315 3.771-12.315h3.699l3.734 12.315 3.52-12.315zm8.906-2.677c-1.365 0-2.478-1.142-2.478-2.463a2.475 2.475 0 012.478-2.463 2.475 2.475 0 012.478 2.463c0 1.32-1.113 2.463-2.478 2.463zm-1.939 20.526V9.112h3.878v17.849h-3.878zm17.812-18.313c4.022 0 6.895 2.713 6.895 7.354V26.96h-3.878V16.394c0-2.713-1.58-4.14-4.022-4.14-2.55 0-4.561 1.499-4.561 5.14v9.567h-3.879V9.112h3.879v2.285c1.185-1.856 3.124-2.749 5.566-2.749zm25.282-6.675h3.879V26.96h-3.879v-2.57c-1.364 1.892-3.483 3.034-6.284 3.034-4.884 0-8.942-4.105-8.942-9.389 0-5.318 4.058-9.388 8.942-9.388 2.801 0 4.92 1.142 6.284 2.999V1.973zm-5.674 21.775c3.232 0 5.674-2.392 5.674-5.712s-2.442-5.711-5.674-5.711-5.674 2.392-5.674 5.711c0 3.32 2.442 5.712 5.674 5.712zm22.553 3.677c-5.423 0-9.481-4.105-9.481-9.389 0-5.318 4.058-9.388 9.481-9.388 3.519 0 6.572 1.82 8.008 4.605l-3.34 1.928c-.79-1.678-2.549-2.749-4.704-2.749-3.16 0-5.566 2.392-5.566 5.604 0 3.213 2.406 5.605 5.566 5.605 2.155 0 3.914-1.107 4.776-2.749l3.34 1.892c-1.508 2.82-4.561 4.64-8.08 4.64zm14.472-13.387c0 3.249 9.661 1.285 9.661 7.89 0 3.57-3.125 5.497-7.003 5.497-3.591 0-6.177-1.607-7.326-4.177l3.34-1.927c.574 1.606 2.011 2.57 3.986 2.57 1.724 0 3.052-.571 3.052-2 0-3.176-9.66-1.391-9.66-7.781 0-3.356 2.909-5.462 6.572-5.462 2.945 0 5.387 1.357 6.644 3.713l-3.268 1.82c-.647-1.392-1.904-2.035-3.376-2.035-1.401 0-2.622.607-2.622 1.892zm16.556 0c0 3.249 9.66 1.285 9.66 7.89 0 3.57-3.124 5.497-7.003 5.497-3.591 0-6.176-1.607-7.326-4.177l3.34-1.927c.575 1.606 2.011 2.57 3.986 2.57 1.724 0 3.053-.571 3.053-2 0-3.176-9.66-1.391-9.66-7.781 0-3.356 2.908-5.462 6.572-5.462 2.944 0 5.386 1.357 6.643 3.713l-3.268 1.82c-.646-1.392-1.903-2.035-3.375-2.035-1.401 0-2.622.607-2.622 1.892z" 
-                        fill="currentColor">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M76.546 12.825h-4.453v8.567c0 2.285 1.508 2.249 4.453 2.106v3.463c-5.962.714-8.332-.928-8.332-5.569v-8.567H64.91V9.112h3.304V4.318l3.879-1.143v5.937h4.453v3.713zM93.52 9.112h3.878v17.849h-3.878v-2.57c-1.365 1.891-3.484 3.034-6.285 3.034-4.884 0-8.942-4.105-8.942-9.389 0-5.318 4.058-9.388 8.942-9.388 2.801 0 4.92 1.142 6.285 2.999V9.112zm-5.674 14.636c3.232 0 5.674-2.392 5.674-5.712s-2.442-5.711-5.674-5.711-5.674 2.392-5.674 5.711c0 3.32 2.442 5.712 5.674 5.712zm16.016-17.313c-1.364 0-2.477-1.142-2.477-2.463a2.475 2.475 0 012.477-2.463 2.475 2.475 0 012.478 2.463c0 1.32-1.113 2.463-2.478 2.463zm-1.939 20.526V9.112h3.879v17.849h-3.879zm8.368 0V.9h3.878v26.06h-3.878zm29.053-17.849h4.094l-5.638 17.849h-3.807l-3.735-12.03-3.771 12.03h-3.806l-5.639-17.849h4.094l3.484 12.315 3.771-12.315h3.699l3.734 12.315 3.52-12.315zm8.906-2.677c-1.365 0-2.478-1.142-2.478-2.463a2.475 2.475 0 012.478-2.463 2.475 2.475 0 012.478 2.463c0 1.32-1.113 2.463-2.478 2.463zm-1.939 20.526V9.112h3.878v17.849h-3.878zm17.812-18.313c4.022 0 6.895 2.713 6.895 7.354V26.96h-3.878V16.394c0-2.713-1.58-4.14-4.022-4.14-2.55 0-4.561 1.499-4.561 5.14v9.567h-3.879V9.112h3.879v2.285c1.185-1.856 3.124-2.749 5.566-2.749zm25.282-6.675h3.879V26.96h-3.879v-2.57c-1.364 1.892-3.483 3.034-6.284 3.034-4.884 0-8.942-4.105-8.942-9.389 0-5.318 4.058-9.388 8.942-9.388 2.801 0 4.92 1.142 6.284 2.999V1.973zm-5.674 21.775c3.232 0 5.674-2.392 5.674-5.712s-2.442-5.711-5.674-5.711-5.674 2.392-5.674 5.711c0 3.32 2.442 5.712 5.674 5.712zm22.553 3.677c-5.423 0-9.481-4.105-9.481-9.389 0-5.318 4.058-9.388 9.481-9.388 3.519 0 6.572 1.82 8.008 4.605l-3.34 1.928c-.79-1.678-2.549-2.749-4.704-2.749-3.16 0-5.566 2.392-5.566 5.604 0 3.213 2.406 5.605 5.566 5.605 2.155 0 3.914-1.107 4.776-2.749l3.34 1.892c-1.508 2.82-4.561 4.64-8.08 4.64zm14.472-13.387c0 3.249 9.661 1.285 9.661 7.89 0 3.57-3.125 5.497-7.003 5.497-3.591 0-6.177-1.607-7.326-4.177l3.34-1.927c.574 1.606 2.011 2.57 3.986 2.57 1.724 0 3.052-.571 3.052-2 0-3.176-9.66-1.391-9.66-7.781 0-3.356 2.909-5.462 6.572-5.462 2.945 0 5.387 1.357 6.644 3.713l-3.268 1.82c-.647-1.392-1.904-2.035-3.376-2.035-1.401 0-2.622.607-2.622 1.892zm16.556 0c0 3.249 9.66 1.285 9.66 7.89 0 3.57-3.124 5.497-7.003 5.497-3.591 0-6.176-1.607-7.326-4.177l3.34-1.927c.575 1.606 2.011 2.57 3.986 2.57 1.724 0 3.053-.571 3.053-2 0-3.176-9.66-1.391-9.66-7.781 0-3.356 2.908-5.462 6.572-5.462 2.944 0 5.386 1.357 6.643 3.713l-3.268 1.82c-.646-1.392-1.903-2.035-3.375-2.035-1.401 0-2.622.607-2.622 1.892z"
+                    fill="currentColor">
                 </path>
             </svg>
             <div class="flex items-center">
                 <!-- TAILWIND SEARCH BUTTON -->
-                <button type="button" class="text-slate-500 hover:text-slate-600 w-8 h-8 -my-1 flex items-center justify-center md:hidden dark:hover:text-slate-300">
+                <button type="button"
+                    class="text-slate-500 hover:text-slate-600 w-8 h-8 -my-1 flex items-center justify-center md:hidden dark:hover:text-slate-300">
                     <span class="sr-only">Search</span>
-                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m19 19-3.5-3.5">
-                    </path><circle cx="11" cy="11" r="6"></circle></svg>
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m19 19-3.5-3.5">
+                        </path>
+                        <circle cx="11" cy="11" r="6"></circle>
+                    </svg>
                 </button>
                 <div class="-my-1 ml-2 -mr-1 md:hidden">
                     <!-- TAILWIND SEARCH HAMBURGER -->
-                    <button type="button" class="text-slate-500 w-8 h-8 flex items-center justify-center hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300">
+                    <button type="button"
+                        class="text-slate-500 w-8 h-8 flex items-center justify-center hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300">
                         <span class="sr-only">Navigation</span>
                         <svg width="24" height="24" fill="none" aria-hidden="true">
-                            <path d="M12 6v.01M12 12v.01M12 18v.01M12 7a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" 
+                            <path
+                                d="M12 6v.01M12 12v.01M12 18v.01M12 7a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"
                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             </path>
                         </svg>
@@ -305,36 +337,43 @@
                     <label class="sr-only" id="headlessui-listbox-label-9">
                         Theme
                     </label>
-                    <button type="button" id="headlessui-listbox-button-10" aria-haspopup="true" aria-expanded="false" 
+                    <button type="button" id="headlessui-listbox-button-10" aria-haspopup="true" aria-expanded="false"
                         aria-labelledby="headlessui-listbox-label-9 headlessui-listbox-button-10">
-                        <span class="dark:hidden"> 
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
-                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" 
-                                class="stroke-slate-400 dark:stroke-slate-500">
+                        <span class="dark:hidden">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="w-6 h-6">
+                                <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                                    class="stroke-slate-400 dark:stroke-slate-500">
                                 </path>
-                                <path d="M12 4v1M17.66 6.344l-.828.828M20.005 12.004h-1M17.66 17.664l-.828-.828M12 20.01V19M6.34 17.664l.835-.836M3.995 12.004h1.01M6 6l.835.836" 
-                                class="stroke-slate-400 dark:stroke-slate-500">
+                                <path
+                                    d="M12 4v1M17.66 6.344l-.828.828M20.005 12.004h-1M17.66 17.664l-.828-.828M12 20.01V19M6.34 17.664l.835-.836M3.995 12.004h1.01M6 6l.835.836"
+                                    class="stroke-slate-400 dark:stroke-slate-500">
                                 </path>
                             </svg>
                         </span>
                         <span class="hidden dark:inline">
                             <svg viewBox="0 0 24 24" fill="none" class="w-6 h-6">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M17.715 15.15A6.5 6.5 0 0 1 9 6.035C6.106 6.922 4 9.645 4 12.867c0 3.94 3.153 7.136 7.042 7.136 3.101 0 5.734-2.032 6.673-4.853Z" 
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M17.715 15.15A6.5 6.5 0 0 1 9 6.035C6.106 6.922 4 9.645 4 12.867c0 3.94 3.153 7.136 7.042 7.136 3.101 0 5.734-2.032 6.673-4.853Z"
                                     class="fill-transparent">
                                 </path>
-                                <path d="m17.715 15.15.95.316a1 1 0 0 0-1.445-1.185l.495.869ZM9 6.035l.846.534a1 1 0 0 0-1.14-1.49L9 6.035Zm8.221 8.246a5.47 5.47 0 0 1-2.72.718v2a7.47 7.47 0 0 0 3.71-.98l-.99-1.738Zm-2.72.718A5.5 5.5 0 0 1 9 9.5H7a7.5 7.5 0 0 0 7.5 7.5v-2ZM9 9.5c0-1.079.31-2.082.845-2.93L8.153 5.5A7.47 7.47 0 0 0 7 9.5h2Zm-4 3.368C5 10.089 6.815 7.75 9.292 6.99L8.706 5.08C5.397 6.094 3 9.201 3 12.867h2Zm6.042 6.136C7.718 19.003 5 16.268 5 12.867H3c0 4.48 3.588 8.136 8.042 8.136v-2Zm5.725-4.17c-.81 2.433-3.074 4.17-5.725 4.17v2c3.552 0 6.553-2.327 7.622-5.537l-1.897-.632Z" 
+                                <path
+                                    d="m17.715 15.15.95.316a1 1 0 0 0-1.445-1.185l.495.869ZM9 6.035l.846.534a1 1 0 0 0-1.14-1.49L9 6.035Zm8.221 8.246a5.47 5.47 0 0 1-2.72.718v2a7.47 7.47 0 0 0 3.71-.98l-.99-1.738Zm-2.72.718A5.5 5.5 0 0 1 9 9.5H7a7.5 7.5 0 0 0 7.5 7.5v-2ZM9 9.5c0-1.079.31-2.082.845-2.93L8.153 5.5A7.47 7.47 0 0 0 7 9.5h2Zm-4 3.368C5 10.089 6.815 7.75 9.292 6.99L8.706 5.08C5.397 6.094 3 9.201 3 12.867h2Zm6.042 6.136C7.718 19.003 5 16.268 5 12.867H3c0 4.48 3.588 8.136 8.042 8.136v-2Zm5.725-4.17c-.81 2.433-3.074 4.17-5.725 4.17v2c3.552 0 6.553-2.327 7.622-5.537l-1.897-.632Z"
                                     class="fill-slate-400 dark:fill-slate-500">
                                 </path>
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M17 3a1 1 0 0 1 1 1 2 2 0 0 0 2 2 1 1 0 1 1 0 2 2 2 0 0 0-2 2 1 1 0 1 1-2 0 2 2 0 0 0-2-2 1 1 0 1 1 0-2 2 2 0 0 0 2-2 1 1 0 0 1 1-1Z" 
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M17 3a1 1 0 0 1 1 1 2 2 0 0 0 2 2 1 1 0 1 1 0 2 2 2 0 0 0-2 2 1 1 0 1 1-2 0 2 2 0 0 0-2-2 1 1 0 1 1 0-2 2 2 0 0 0 2-2 1 1 0 0 1 1-1Z"
                                     class="fill-slate-400 dark:fill-slate-500">
                                 </path>
                             </svg>
                         </span>
                     </button>
-                    <a href="https://github.com/tailwindlabs/tailwindcss" class="ml-6 block text-slate-400 hover:text-slate-500 dark:hover:text-slate-300">
+                    <a href="https://github.com/tailwindlabs/tailwindcss"
+                        class="ml-6 block text-slate-400 hover:text-slate-500 dark:hover:text-slate-300">
                         <span class="sr-only">Tailwind CSS on GitHub</span>
                         <svg viewBox="0 0 16 16" class="w-5 h-5" fill="currentColor" aria-hidden="true">
-                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                            <path
+                                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
                             </path>
                         </svg>
                     </a>
@@ -351,30 +390,31 @@
                 <code class="font-mono font-medium text-sky-500 dark:text-sky-400">flex</code>,
                 <code class="font-mono font-medium text-sky-500 dark:text-sky-400">pt-4</code>,
                 <code class="font-mono font-medium text-sky-500 dark:text-sky-400">text-center</code> and
-                <code class="font-mono font-medium text-sky-500 dark:text-sky-400">rotate-90</code> that can be composed to
+                <code class="font-mono font-medium text-sky-500 dark:text-sky-400">rotate-90</code> that can be composed
+                to
                 build any design, directly in your markup.
             </p>
         </div>
         <div class="mt-6 sm:mt-10 flex justify-center space-x-6 text-sm bg-red-300 h-[48px]"></div>
-        </div>
-        <div
-            class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-20 sm:mt-24 lg:mt-32 lg:grid lg:gap-8 lg:grid-cols-12 lg:items-center">
-            <div class="relative row-start-1 col-start-6 xl:col-start-7 col-span-7 xl:col-span-6">
-                <div class="-mx-4 sm:mx-0">
-                    <div
-                        class="relative overflow-hidden shadow-xl flex bg-slate-800 h-[31.625rem] max-h-[60vh] sm:max-h-[none] sm:rounded-xl lg:h-[34.6875rem] xl:h-[31.625rem] dark:bg-slate-900/70 dark:backdrop-blur dark:ring-1 dark:ring-inset dark:ring-white/10 !h-auto max-h-[none]">
-                        <div class="relative w-full flex flex-col">
-                            <div class="flex-none border-b border-slate-500/30">
-                                <div class="flex items-center h-8 space-x-1.5 px-3">
-                                    <div class="w-2.5 h-2.5 bg-slate-600 rounded-full"></div>
-                                    <div class="w-2.5 h-2.5 bg-slate-600 rounded-full"></div>
-                                    <div class="w-2.5 h-2.5 bg-slate-600 rounded-full"></div>
-                                </div>
+    </div>
+    <div
+        class="max-w-7xl mx-auto xs:px-4 sm:px-6 md:px-8 mt-20 sm:mt-24 lg:mt-32 lg:grid lg:gap-8 lg:grid-cols-12 lg:items-center">
+        <div class="relative row-start-1 col-start-6 xl:col-start-7 col-span-7 xl:col-span-6">
+            <div class="-mx-4 sm:mx-0">
+                <div
+                    class="relative overflow-hidden shadow-xl flex bg-slate-800 h-[31.625rem] max-h-[60vh] sm:max-h-[none] sm:rounded-xl lg:h-[34.6875rem] xl:h-[31.625rem] dark:bg-slate-900/70 dark:backdrop-blur dark:ring-1 dark:ring-inset dark:ring-white/10 !h-auto max-h-[none]">
+                    <div class="relative w-full flex flex-col">
+                        <div class="flex-none border-b border-slate-500/30">
+                            <div class="flex items-center h-8 space-x-1.5 px-3">
+                                <div class="w-2.5 h-2.5 bg-slate-600 rounded-full"></div>
+                                <div class="w-2.5 h-2.5 bg-slate-600 rounded-full"></div>
+                                <div class="w-2.5 h-2.5 bg-slate-600 rounded-full"></div>
                             </div>
-                            <div class="relative min-h-0 flex-auto flex flex-col">
-                                <div class="w-full flex-auto flex min-h-0 overflow-auto">
-                                    <div class="w-full relative flex-auto">
-                                        <pre class="flex min-h-full text-sm leading-6"><div aria-hidden="true" class="hidden md:block text-slate-600 flex-none py-4 pr-4 text-right select-none" style="width: 50px;"><span>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21
+                        </div>
+                        <div class="relative min-h-0 flex-auto flex flex-col">
+                            <div class="w-full flex-auto flex min-h-0 overflow-auto">
+                                <div class="w-full relative flex-auto">
+                                    <pre class="flex min-h-full text-sm leading-6"><div aria-hidden="true" class="hidden md:block text-slate-600 flex-none py-4 pr-4 text-right select-none" style="width: 50px;"><span>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21
                 </span></div><code class="flex-auto relative block text-slate-50 pt-4 pb-4 px-4 overflow-auto"><span class="token tag"><span class="token punctuation">&lt;</span>figure <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span><span>m</span><span>d</span><span>:</span><span>f</span><span>l</span><span>e</span><span>x</span><span> </span>bg-slate-100 rounded-xl<span> </span><span>p</span><span>-</span><span>8</span><span class="hidden"> </span><span class="border -mx-px" style="height: 1.125rem;"></span><span class="hidden">m</span><span class="hidden">d</span><span class="hidden">:</span><span class="hidden">p</span><span class="hidden">-</span><span class="hidden">0</span> dark:bg-slate-800<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
                   <span class="token tag"><span class="token punctuation">&lt;</span>img <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>w-24 h-24<span class="hidden"> </span><span class="hidden">m</span><span class="hidden">d</span><span class="hidden">:</span><span class="hidden">w</span><span class="hidden">-</span><span class="hidden">4</span><span class="hidden">8</span><span class="hidden"> </span><span class="hidden">m</span><span class="hidden">d</span><span class="hidden">:</span><span class="hidden">h</span><span class="hidden">-</span><span class="hidden">a</span><span class="hidden">u</span><span class="hidden">t</span><span class="hidden">o</span><span class="hidden"> </span><span class="hidden">m</span><span class="hidden">d</span><span class="hidden">:</span><span class="hidden">r</span><span class="hidden">o</span><span class="hidden">u</span><span class="hidden">n</span><span class="hidden">d</span><span class="hidden">e</span><span class="hidden">d</span><span class="hidden">-</span><span class="hidden">n</span><span class="hidden">o</span><span class="hidden">n</span><span class="hidden">e</span><span> </span><span>r</span><span>o</span><span>u</span><span>n</span><span>d</span><span>e</span><span>d</span><span>-</span><span>f</span><span>u</span><span>l</span><span>l</span><span> </span><span>m</span><span>x</span><span>-</span><span>a</span><span>u</span><span>t</span><span>o</span><span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/sarah-dayan.jpg<span class="token punctuation">"</span></span> <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span> <span class="token attr-name">width</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>384<span class="token punctuation">"</span></span> <span class="token attr-name">height</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>512<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
                   <span class="token tag"><span class="token punctuation">&lt;</span>div <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>pt-6<span class="hidden"> </span><span class="hidden">m</span><span class="hidden">d</span><span class="hidden">:</span><span class="hidden">p</span><span class="hidden">-</span><span class="hidden">8</span><span> </span><span>t</span><span>e</span><span>x</span><span>t</span><span>-</span><span>c</span><span>e</span><span>n</span><span>t</span><span>e</span><span>r</span><span class="hidden"> </span><span class="hidden">m</span><span class="hidden">d</span><span class="hidden">:</span><span class="hidden">t</span><span class="hidden">e</span><span class="hidden">x</span><span class="hidden">t</span><span class="hidden">-</span><span class="hidden">l</span><span class="hidden">e</span><span class="hidden">f</span><span class="hidden">t</span> space-y-4<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
@@ -396,142 +436,142 @@
                   <span class="token tag"><span class="token punctuation">&lt;/</span>div<span class="token punctuation">&gt;</span></span>
                 <span class="token tag"><span class="token punctuation">&lt;/</span>figure<span class="token punctuation">&gt;</span></span>
                 </code></pre>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="relative row-start-1 col-start-1 col-span-5 xl:col-span-6 -mt-10">
-                <div class="h-[28rem] max-w-xl mx-auto lg:max-w-none flex items-center justify-center">
-                    <div class="w-full h-full md:h-[50%] flex-none">
-                        <div class="lg:-mr-18">
-                            <div class=" w-[23.4375rem] md:w-[600px] h-full relative z-10 rounded-lg shadow-xl text-slate-900 mx-auto  dark:text-slate-300">
-                                <div class="w-full h-full bg-white rounded-lg overflow-hidden ring-1 ring-slate-900/5 dark:bg-slate-800 dark:highlight-white/5 dark:ring-0 flex p-8 text-center"
-                                    style="transform-origin: 50% 50% 0px;">
-                                    <div class="relative z-10 overflow-hidden flex-none mx-auto w-24 h-24"
-                                        style="transform-origin: 50% 50% 0px; border-radius: 50%;"><img
-                                            src="/images/tailwind-section/sarah.jpg" alt=""
-                                            class="absolute max-w-none object-cover bg-slate-100"
-                                            style="height: 128px; left: 0px; top: -16px; transform-origin: 50% 50% 0px;">
-                                    </div>
-                                    <div class="pt-6" style="transform-origin: 50% 50% 0px;">
-                                        <div class="mb-4" style="transform-origin: 50% 50% 0px;"><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">“Tailwind </span><span
-                                                    style="opacity: 0; font-weight: 500;">“Tailwind </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">CSS </span><span
-                                                    style="opacity: 0; font-weight: 500;">CSS </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">is </span><span
-                                                    style="opacity: 0; font-weight: 500;">is </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">the </span><span
-                                                    style="opacity: 0; font-weight: 500;">the </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">only </span><span
-                                                    style="opacity: 0; font-weight: 500;">only </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">framework </span><span
-                                                    style="opacity: 0; font-weight: 500;">framework </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">that </span><span
-                                                    style="opacity: 0; font-weight: 500;">that </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">I've </span><span
-                                                    style="opacity: 0; font-weight: 500;">I've </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">seen </span><span
-                                                    style="opacity: 0; font-weight: 500;">seen </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">scale </span><span
-                                                    style="opacity: 0; font-weight: 500;">scale </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">on </span><span
-                                                    style="opacity: 0; font-weight: 500;">on </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">large </span><span
-                                                    style="opacity: 0; font-weight: 500;">large </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">teams. </span><span
-                                                    style="opacity: 0; font-weight: 500;">teams. </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">It’s </span><span
-                                                    style="opacity: 0; font-weight: 500;">It’s </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">easy </span><span
-                                                    style="opacity: 0; font-weight: 500;">easy </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">to </span><span
-                                                    style="opacity: 0; font-weight: 500;">to </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">customize, </span><span
-                                                    style="opacity: 0; font-weight: 500;">customize, </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">adapts </span><span
-                                                    style="opacity: 0; font-weight: 500;">adapts </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">to </span><span
-                                                    style="opacity: 0; font-weight: 500;">to </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">any </span><span
-                                                    style="opacity: 0; font-weight: 500;">any </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">design, </span><span
-                                                    style="opacity: 0; font-weight: 500;">design, </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">and </span><span
-                                                    style="opacity: 0; font-weight: 500;">and </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">the </span><span
-                                                    style="opacity: 0; font-weight: 500;">the </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">build </span><span
-                                                    style="opacity: 0; font-weight: 500;">build </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">size </span><span
-                                                    style="opacity: 0; font-weight: 500;">size </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">is </span><span
-                                                    style="opacity: 0; font-weight: 500;">is </span></span><span
-                                                class="relative inline-flex whitespace-pre text-lg"
-                                                style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
-                                                    style="font-weight: 500;">tiny.” </span><span
-                                                    style="opacity: 0; font-weight: 500;">tiny.” </span></span></div>
-                                        <div class="flex flex-col items-center" style="font-weight: 500;">
-                                            <p class="transition-colors duration-500 text-sky-500 dark:text-sky-400"
-                                                style="transform-origin: 50% 50% 0px;">Sarah Dayan</p>
-                                            <p class="transition-colors duration-500 text-slate-700 dark:text-slate-500"
-                                                style="transform-origin: 50% 50% 0px;">Staff Engineer, Algolia</p>
-                                        </div>
+        </div>
+        <div class="relative row-start-1 col-start-1 col-span-5 xl:col-span-6 -mt-10">
+            <div class="h-[28rem] max-w-xl mx-auto lg:max-w-none flex items-center justify-center">
+                <div class="w-full h-full md:h-[50%] flex-none">
+                    <div class="lg:-mr-18">
+                        <div
+                            class=" w-[23.4375rem] md:w-[600px] h-full relative z-10 rounded-lg shadow-xl text-slate-900 mx-auto  dark:text-slate-300">
+                            <div class="w-full h-full bg-white xs:rounded-lg overflow-hidden ring-1 ring-slate-900/5 dark:bg-slate-800 dark:highlight-white/5 dark:ring-0 flex xs:p-8 text-center"
+                                style="transform-origin: 50% 50% 0px;">
+                                <div class="relative z-10 overflow-hidden flex-none mx-auto w-24 h-24"
+                                    style="transform-origin: 50% 50% 0px; border-radius: 50%;"><img
+                                        src="/images/tailwind-section/sarah.jpg" alt=""
+                                        class="absolute max-w-none object-cover bg-slate-100"
+                                        style="height: 128px; left: 0px; top: -16px; transform-origin: 50% 50% 0px;">
+                                </div>
+                                <div class="pt-6" style="transform-origin: 50% 50% 0px;">
+                                    <div class="mb-4" style="transform-origin: 50% 50% 0px;"><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">“Tailwind </span><span
+                                                style="opacity: 0; font-weight: 500;">“Tailwind </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">CSS </span><span
+                                                style="opacity: 0; font-weight: 500;">CSS </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">is </span><span
+                                                style="opacity: 0; font-weight: 500;">is </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">the </span><span
+                                                style="opacity: 0; font-weight: 500;">the </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">only </span><span
+                                                style="opacity: 0; font-weight: 500;">only </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">framework </span><span
+                                                style="opacity: 0; font-weight: 500;">framework </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">that </span><span
+                                                style="opacity: 0; font-weight: 500;">that </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">I've </span><span
+                                                style="opacity: 0; font-weight: 500;">I've </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">seen </span><span
+                                                style="opacity: 0; font-weight: 500;">seen </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">scale </span><span
+                                                style="opacity: 0; font-weight: 500;">scale </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">on </span><span
+                                                style="opacity: 0; font-weight: 500;">on </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">large </span><span
+                                                style="opacity: 0; font-weight: 500;">large </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">teams. </span><span
+                                                style="opacity: 0; font-weight: 500;">teams. </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">It’s </span><span
+                                                style="opacity: 0; font-weight: 500;">It’s </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">easy </span><span
+                                                style="opacity: 0; font-weight: 500;">easy </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">to </span><span
+                                                style="opacity: 0; font-weight: 500;">to </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">customize, </span><span
+                                                style="opacity: 0; font-weight: 500;">customize, </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">adapts </span><span
+                                                style="opacity: 0; font-weight: 500;">adapts </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">to </span><span
+                                                style="opacity: 0; font-weight: 500;">to </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">any </span><span
+                                                style="opacity: 0; font-weight: 500;">any </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">design, </span><span
+                                                style="opacity: 0; font-weight: 500;">design, </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">and </span><span
+                                                style="opacity: 0; font-weight: 500;">and </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">the </span><span
+                                                style="opacity: 0; font-weight: 500;">the </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">build </span><span
+                                                style="opacity: 0; font-weight: 500;">build </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">size </span><span
+                                                style="opacity: 0; font-weight: 500;">size </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">is </span><span
+                                                style="opacity: 0; font-weight: 500;">is </span></span><span
+                                            class="relative inline-flex whitespace-pre text-lg"
+                                            style="transform-origin: 50% 50% 0px;"><span class="absolute top-0 left-0"
+                                                style="font-weight: 500;">tiny.” </span><span
+                                                style="opacity: 0; font-weight: 500;">tiny.” </span></span></div>
+                                    <div class="flex flex-col items-center" style="font-weight: 500;">
+                                        <p class="transition-colors duration-500 text-sky-500 dark:text-sky-400"
+                                            style="transform-origin: 50% 50% 0px;">Sarah Dayan</p>
+                                        <p class="transition-colors duration-500 text-slate-700 dark:text-slate-500"
+                                            style="transform-origin: 50% 50% 0px;">Staff Engineer, Algolia</p>
                                     </div>
                                 </div>
                             </div>
@@ -540,6 +580,326 @@
                 </div>
             </div>
         </div>
-        </section>
+    </div>
+</section>
 <!-- FIGMA SECTION -->
-<section class="relative lg-xl:h-[632px] bg-[#ff6f61] pb-10"></section>
+
+<section >
+    <!-- HEADER DESKTOP -->
+    <div x-cloak="large" class="w-full h-[105px] bg-slate-200 px-12 py-6">
+        <header class="w-full h-full flex justify-between">
+            <!-- LOGO FIGMA -->
+            <a href="https://figma.com" class="w-[38px]">
+                <svg viewBox="0 0 38 57" class="figma-77e5ie" aria-label="Homepage">
+                    <path fill="#1abcfe" d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z"></path>
+                    <path fill="#0acf83" d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0z"></path>
+                    <path fill="#ff7262" d="M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z"></path>
+                    <path fill="#f24e1e" d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z"></path>
+                    <path fill="#a259ff" d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z"></path>
+                </svg>
+            </a>
+            <nav class="flex items-center text-[18px]">
+                <div class="relative flex items-center">
+                    <button class="px-4 py-2 flex items-center">
+                        Products
+                        <svg width="8" height="6" viewBox="0 0 8 6" class=" ml-[6px]">
+                            <path d="M4 6L0.535898 0L7.4641 0L4 6Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="relative flex items-center">
+                    <button class="px-4 py-2 flex items-center">
+                        Enterprise
+                        <svg width="8" height="6" viewBox="0 0 8 6" class=" ml-[6px]">
+                            <path d="M4 6L0.535898 0L7.4641 0L4 6Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="relative flex items-center px-4 py-2">
+                    <a href="https://figma.com/pricing">
+                        Pricing
+                    </a>    
+                </div>
+                <div class="relative flex items-center">
+                    <button class="px-4 py-2 flex items-center">
+                        Community
+                        <svg width="8" height="6" viewBox="0 0 8 6" class=" ml-[6px]">
+                            <path d="M4 6L0.535898 0L7.4641 0L4 6Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="relative flex items-center">
+                    <button class="px-4 py-2 flex items-center">
+                        Company
+                        <svg width="8" height="6" viewBox="0 0 8 6" class=" ml-[6px]">
+                            <path d="M4 6L0.535898 0L7.4641 0L4 6Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="relative flex items-center">
+                    <button class="px-4 py-2 flex items-center">
+                        English
+                        <svg width="8" height="6" viewBox="0 0 8 6" class=" ml-[6px]">
+                            <path d="M4 6L0.535898 0L7.4641 0L4 6Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="relative flex items-center">
+                    <span class="px-4 py-2 flex items-center cursor-not-allowed">
+                        Login
+                    </span>
+                </div>
+                <div class="relative ml-2 flex items-center ">
+                    <a href="https://figma.com/signup?locale=en" 
+                       class="w-full h-full px-6 py-2 text-[white] bg-black flex items-center rounded-md">
+                        Sign up
+                    </a>
+                </div>
+            </nav>
+        </header>
+    </div>
+    <!-- HEADER MOBILE -->
+    <div x-data="{ isOpen: 0 }">
+        <div x-show="isOpen === 0 || isOpen < 1" class="w-full h-24 bg-slate-200 xl:hidden">
+            <header class="w-full h-full py-6 px-8 flex justify-between">
+                <a aria-current="page" href="https://figma.com">
+                    <svg viewBox="0 0 38 57" class="w-8 h-12" aria-label="Homepage">
+                        <path fill="#1abcfe" d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z"></path>
+                        <path fill="#0acf83" d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0z"></path>
+                        <path fill="#ff7262" d="M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z"></path>
+                        <path fill="#f24e1e" d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z"></path>
+                        <path fill="#a259ff" d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z"></path>
+                    </svg>
+                </a>
+                <div class="flex items-center">
+                    <a href="https://figma.com/signup?locale=en"
+                        class=" h-full  bg-black text-white px-6 pb-4 pt-[14px] rounded-lg flex items-center font-semibold">
+                        Sign up
+                    </a>
+                    <button @click="isOpen = 1" class="ml-4">
+                        <div class="h-6 w-6 space-y-[6px] flex-col">
+                            <div class=" h-[3px] bg-black rounded-sm"></div>
+                            <div class=" h-[3px] bg-black rounded-sm"></div>
+                            <div class=" h-[3px] bg-black rounded-sm"></div>
+                        </div>
+                    </button> 
+                </div>
+            </header>
+        </div>
+        <!-- NAV MOBILE -->
+        <div x-show="isOpen === 1 || isOpen > 0" class="w-full h-screen xl:hidden">
+            <div class="w-full h-24 flex justify-between items-center px-8 py-6">
+                <a aria-current="page" href="https://figma.com">
+                    <svg viewBox="0 0 38 57" class="w-8 h-12" aria-label="Homepage">
+                        <path fill="#1abcfe" d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z"></path>
+                        <path fill="#0acf83" d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0z"></path>
+                        <path fill="#ff7262" d="M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z"></path>
+                        <path fill="#f24e1e" d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z"></path>
+                        <path fill="#a259ff" d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z"></path>
+                    </svg>
+                </a>
+                <button @click="isOpen= 0" class="ml-2">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="currentColor" d="M4 18L18 4l2 2L6 20z"></path>
+                        <path fill="currentColor" d="M6 4l14 14-2 2L4 6z"></path>
+                    </svg>
+                </button>
+            </div>
+            <nav x-data="{ product: false, enterprise: false, community: false, company: false }" x-show="isOpen === 1 || isOpen > 0" class="w-full px-8 text-[20px] flex flex-col">
+                <div class="h-11 flex items-center">
+                    <button @click="product = ! product" class="flex items-center">
+                        Products
+                        <svg width="8" height="6" viewBox="0 0 8 6" class=" w-2 h-[6px] ml-[6px] mt-1 mr-[10px]">
+                            <path d="M4 6L0.535898 0L7.4641 0L4 6Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div x-show="product" class="ml-5 mb-[6px] py-[6px] px-3">
+                    <span class="font-medium">
+                        Figma
+                    </span>
+                </div>
+                <a x-show="product" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/design">
+                    <span>
+                        Design
+                    </span>
+                </a>
+                <a x-show="product" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/prototyping">
+                    <span>
+                        Prototyping
+                    </span>
+                </a>
+                <a x-show="product" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/design-systems">
+                    <span>
+                        Design Systems
+                    </span>
+                </a>
+                <a x-show="product" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/downloads">
+                    <span>
+                        Downloads
+                    </span>
+                </a>
+                <div x-show="product" class="ml-5 mb-[6px] py-[6px] px-3">
+                    <span class="font-medium">
+                        Figmajam
+                    </span>
+                </div>
+                <a x-show="product" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/figmajam">
+                    <span>
+                        Online Whiteboarding
+                    </span>
+                </a>
+                <a x-show="product" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/figmajam/design-processes">
+                    <span>
+                        Design Processes
+                    </span>
+                </a>
+                <a x-show="product" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/figmajam/team-meetings">
+                    <span>
+                        Team Meetings
+                    </span>
+                </a>
+                <div class="h-11 flex items-center">
+                    <button @click="enterprise = ! enterprise" class="flex items-center">
+                        Enterprise
+                        <svg width="8" height="6" viewBox="0 0 8 6" class=" w-2 h-[6px] ml-[6px] mt-1 mr-[10px]">
+                            <path d="M4 6L0.535898 0L7.4641 0L4 6Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </div>
+                <a x-show="enterprise" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/enterprise">
+                    <span>
+                        Overview
+                    </span>
+                </a>
+                <a x-show="enterprise" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/customers">
+                    <span>
+                        Customers
+                    </span>
+                </a>
+                <a x-show="enterprise" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/contact">
+                    <span>
+                        Contact
+                    </span>
+                </a>
+                <a class="h-11 flex items-center" href="https://figma.com/pricing">
+                    <span>
+                        Pricing
+                    </span>
+                </a>
+                <button @click="community = ! community" class="flex items-center">
+                    Community
+                    <svg width="8" height="6" viewBox="0 0 8 6" class=" w-2 h-[6px] ml-[6px] mt-1 mr-[10px]">
+                        <path d="M4 6L0.535898 0L7.4641 0L4 6Z" fill="currentColor"></path>
+                    </svg>
+                </button>
+                <a x-show="community" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/commmunity/explore">
+                    <span>
+                        Files and templates
+                    </span>
+                </a>
+                <a x-show="community" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/commmunity/plugins">
+                    <span>
+                        Plugins and widgets
+                    </span>
+                </a>
+                <a x-show="community" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/commmunity/events">
+                    <span>
+                        Events and livestreams
+                    </span>
+                </a>
+                <a x-show="community" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/commmunity/best-practices">
+                    <span>
+                        Best practices
+                    </span>
+                </a>
+                <a x-show="community" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/commmunity/education">
+                    <span>
+                        Education Program
+                    </span>
+                </a>
+                <a x-show="community" class="ml-5 mb-[6px] py-[6px] px-3" href="https://friends.figma.com">
+                    <span>
+                        User Groups
+                    </span>
+                </a>
+                <div class="h-11 flex items-center">
+                    <button @click="company= ! company" class="flex items-center">
+                        Company
+                        <svg width="8" height="6" viewBox="0 0 8 6" class=" w-2 h-[6px] ml-[6px] mt-1 mr-[10px]">
+                            <path d="M4 6L0.535898 0L7.4641 0L4 6Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </div>
+                <a x-show="company" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/blog">
+                    <span>
+                        Blog
+                    </span>
+                </a>
+                <a x-show="company" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/careers">
+                    <span>
+                        Careers
+                    </span>
+                </a>
+                <a x-show="company" class="ml-5 mb-[6px] py-[6px] px-3" href="https://figma.com/about">
+                    <span>
+                        Our story
+                    </span>
+                </a>
+                <a x-show="company" class="ml-5 mb-[6px] py-[6px] px-3" href="https://help.figma.com/hc/en-us">
+                    <span>
+                        Help Center
+                    </span>
+                </a>
+                <div class="h-11 flex items-center">
+                    <svg fill="none" viewBox="0 0 18 21" class="w-4 mt-1 mr-[10px] inline-block line-through">
+                        <path fill="#000" d="M9 2.68 2.02.22v15.16l6.96-2.25V2.68Z"></path>
+                        <path fill="#fff" d="M8.83 2.67 16.05.22v15.15l-7.22-2.25V2.67ZM.22 18.03l8.61-2.87V2.67L.22 5.54v12.49Z"></path>
+                        <path fill="#000"
+                            d="m12.74 18.22 1.22 2.01.65-1.87-1.87-.14ZM3.15 6.98c-.05-.05.06.36.2.51.26.26.47.3.57.3.24.01.54-.06.71-.13.17-.07.47-.22.58-.44.03-.05.09-.13.05-.33-.03-.15-.13-.2-.24-.19-.12.01-.48.1-.65.15-.17.05-.52.16-.68.19-.15.04-.49-.01-.54-.06Zm4.34 4.92-1.67-.7-.75-.33c.53-.81.86-1.43.91-1.52.08-.17.64-1.27.65-1.33.01-.07.03-.32.02-.39-.01-.06-.22.06-.5.16-.28.09-.81.43-1.01.48-.21.04-.86.29-1.2.4l-1.23.38c-.27.07-.49.07-.64.12 0 0 .02.2.06.26.04.07.18.22.34.26.16.04.42.02.55 0a.92.92 0 0 0 .36-.18c.02-.04-.02-.19.03-.23.05-.04.69-.19.93-.26.24-.08 1.17-.39 1.29-.38-.04.13-.78 1.61-1.02 2.05-.24.44-1.63 2.37-1.93 2.71-.22.26-.77.92-.96 1.07.05.02.39-.01.45-.05.38-.24 1.02-1.03 1.23-1.27a22.5 22.5 0 0 0 1.57-2.12c.08.03.75.58.93.7.17.12.86.51 1.01.57.15.07.73.33.75.24.02-.09-.1-.62-.17-.64Z">
+                        </path>
+                        <path fill="#000" fill-rule="evenodd"
+                            d="m4.25 19.2.4.22a9.28 9.28 0 0 0 2.9.92c.02 0 .68.08.82.08h.67c.26-.03.51-.04.77-.08.21-.03.44-.06.66-.12.17-.03.34-.07.5-.12l.51-.17.35-.13.33-.14.44-.22.38-.21c.1-.05.32-.22.44-.22.14 0 .23.12.23.22 0 .22-.29.28-.43.38-.14.1-.31.17-.46.25a7.89 7.89 0 0 1-2.07.77c-.14.03-.28.07-.43.09a9.9 9.9 0 0 1-1.06.14h-.99c-.26-.02-.54-.05-.8-.09-.23-.04-.47-.08-.71-.14-.18-.03-.37-.09-.54-.14-.3-.08-.59-.18-.87-.3a7.1 7.1 0 0 1-1.56-.78c-.09-.06-.1-.12-.1-.19a.2.2 0 0 1 .21-.21c.12 0 .36.17.41.19ZM8.59 15 .46 17.71V5.7l8.13-2.71V15Zm.46-12.36v12.54c-.01.04-.02.08-.05.12a.37.37 0 0 1-.07.06c-.19.07-8.59 2.89-8.71 2.89-.09 0-.17-.06-.21-.15L0 18.07V5.52c.01-.04.02-.09.05-.12.06-.08.17-.1.23-.12.13-.05 8.41-2.82 8.53-2.82.07 0 .24.05.24.18Z">
+                        </path>
+                        <path fill="#000"
+                            d="m15.83 15.06-6.77-2.1V2.83l6.77-2.3v14.52ZM16.28.24v15.1c0 .17-.13.25-.24.25-.1 0-.8-.24-.92-.28l-2.82-.87-.62-.2-.56-.18c-.8-.24-1.6-.49-2.4-.76-.04 0-.11-.1-.11-.13V2.62a.24.24 0 0 1 .06-.11c.06-.07 2.62-.92 3.63-1.26.27-.1 3.64-1.25 3.74-1.25.14 0 .24.1.24.24Z">
+                        </path>
+                        <path fill="#000" d="m18 18.22-9.05-2.88L9 2.79l9 2.86v12.57Z"></path>
+                        <path fill="#fff"
+                            d="m13.44 8.4-.89 2.14 1.63.5-.74-2.64Zm-.53-2.03 1.16.35 2.13 7.65-1.2-.36-.43-1.57-2.47-.75-.54 1.28-1.2-.36 2.55-6.24Z">
+                        </path>
+                    </svg>
+                    English
+                </div>
+                <div class="h-11 flex items-center">
+                    <span class="line-through cursor-not-allowed">Login</span>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- FIGMA HERO -->
+    <article  class="relative w-full h-[700px] py-6 px-8 flex flex-col justify-start items-center">
+        <h2>
+            <div class="relative font-bold text-[44px] sm:text-[66px]">
+                <span class="mx-auto md:hidden">
+                    Nothing great
+                </span>
+                <span class="text-[44px] text-center md:hidden absolute left-0 right-0 bottom-[-45px]">
+                    is made alone
+                </span>
+            </div>
+            <div class="mt-[50px] text[20px] sm:text-[28px] flex-col items-center text-[20px] md:hidden">
+                <p class="text-center leading-tight">Figma connects everyone in the</p>
+                <p class="text-center leading-tight">design process so teams can</p>
+                <p class="text-center leading-tight">deliver better products, faster.</p>
+            </div>
+            <video x-cloak="mobile" class="w-[790px] mx-auto" src="/videos/figma-hero.mp4" type="video/mp4" autoplay></video>
+            <div class="z-0 absolute left-0 right-0 mt-10">
+                <img src="https://cdn.sanity.io/images/599r6htc/localized/455e29e0d05e64300b4a2aa99bcd25fa10a341a7-6969x2010.png?rect=0,0,6969,2008&amp;w=2016&amp;h=581&amp;q=75&amp;fit=max&amp;auto=format"
+                    srcset="https://cdn.sanity.io/images/599r6htc/localized/455e29e0d05e64300b4a2aa99bcd25fa10a341a7-6969x2010.png?w=2016&amp;q=75&amp;fit=max&amp;auto=format&amp;dpr=0.5 1008w,https://cdn.sanity.io/images/599r6htc/localized/455e29e0d05e64300b4a2aa99bcd25fa10a341a7-6969x2010.png?w=2016&amp;q=75&amp;fit=max&amp;auto=format&amp;dpr=0.75 1512w,https://cdn.sanity.io/images/599r6htc/localized/455e29e0d05e64300b4a2aa99bcd25fa10a341a7-6969x2010.png?w=2016&amp;q=75&amp;fit=max&amp;auto=format&amp;dpr=1 2016w,https://cdn.sanity.io/images/599r6htc/localized/455e29e0d05e64300b4a2aa99bcd25fa10a341a7-6969x2010.png?w=2016&amp;q=75&amp;fit=max&amp;auto=format&amp;dpr=1.5 3024w,https://cdn.sanity.io/images/599r6htc/localized/455e29e0d05e64300b4a2aa99bcd25fa10a341a7-6969x2010.png?w=2016&amp;q=75&amp;fit=max&amp;auto=format&amp;dpr=2 4032w"
+                    loading="lazy" alt="FigJam and Figma product windows" sizes="(max-width: 1440px) 150vw, 2016w"
+                    class="figma-xpqnvj css-0" width="2016" height="581">
+            </div>
+        </h2>
+    </article>
+</section>

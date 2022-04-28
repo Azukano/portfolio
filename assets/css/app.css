@@ -11,7 +11,7 @@
     [x-cloak="mobile"] { display: none; }
 }
 
-/* hidden on mobile/smaller screens */
+/* hidden on medium/smaller screens */
 @media screen and (max-width: 960px) {
     [x-cloak="medium"] { display: none; }
 }
@@ -21,3 +21,7 @@
     [x-cloak="sm-mobile"] { display: none; }
 }
 
+/* hidden on large/smaller screens */
+@media screen and (max-width: 1280px) {
+    [x-cloak="large"] { display: none; }
+}
