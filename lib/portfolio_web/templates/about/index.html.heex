@@ -877,14 +877,14 @@
         </div>
     </div>
     <!-- FIGMA HERO -->
-    <article class="relative w-full py-6 px-8">
+    <article class="relative w-full py-6 px-6 xs:px-8">
         <h2>
             <div class="relative mt-8 h-full flex flex-col justify-start items-center leading-none">
                 <span class="text-[44px] sm:text-[64px] md:hidden font-bold ">
-                    Nothing great is
+                    Nothing great <span class="hidden md:!flex">is</span> 
                 </span>
                 <span class="text-[44px] sm:text-[64px] md:hidden font-bold ">
-                    made alone
+                    <span class="md:hidden">is </span>made alone
                 </span>
                 <div class="mt-8 text[20px] sm:text-[28px] flex-col items-center text-[20px] md:hidden">
                     <p class="text-center leading-tight">Figma connects everyone in the</p>
@@ -892,7 +892,7 @@
                     <p class="text-center leading-tight">deliver better products, faster.</p>
                 </div>
                 <video x-cloak="mobile" class="w-[790px] mx-auto" src="/videos/figma-hero.mp4" type="video/mp4" autoplay></video>
-                <div class="w-screen z-0 mt-10">
+                <div class="z-0 mt-10">
                     <div style="background-size: cover; background-image: linear-gradient(rgba(250, 250, 250, 0) 0%, rgb(250, 250, 250) 85%); box-sizing: inherit">
                         <div class="relative w-full bg-slate-600 overflow-hidden">
                             <img src="https://cdn.sanity.io/images/599r6htc/localized/455e29e0d05e64300b4a2aa99bcd25fa10a341a7-6969x2010.png?rect=0,0,6969,2008&amp;w=2016&amp;h=581&amp;q=75&amp;fit=max&amp;auto=format"
@@ -913,17 +913,76 @@
     </article>
 </section>
 <!-- POSTGRES SECTION -->
-<section class=" border-t-2 border-gray-300 w-full bg-slate-500">
+<section class=" border-t-2 border-gray-300 w-full pb-2">
     <!-- CONTAINER 2 DIVS TOPBAR -->
     <div class="w-full px-[15px] mx-auto">
         <div class="mx-[-15px] flex flex-wrap ">
             <div class="relative w-full px-[15px]">
-                <nav class="relative px-2.5 py-[5px] bg-[#f8f9fa] flex flex-wrap justify-between">
-                    <a href="" class="p-0">
-                        <img src="/images/postgres/postgres-logo.png" alt="Postgres Logo"
+                <nav x-data="{ postgreNav: true }" class="relative px-2.5 py-[5px] bg-[#f8f9fa] flex flex-wrap justify-between" style="box-shadow: 0px 3px 15px rgba(0,0,0,0.2);">
+                    <a href="https://www.postgresql.org/" class="p-0 mr-4">
+                        <img src="/images/postgre/postgre-logo.png" alt="postgre Logo"
                             class="h-8 mb-0 ml-0">
                     </a>
+                    <button @click="postgreNav = ! postgreNav" class="m-0 px-3 py-1 border-[1px] border-[black]/10 lg:hidden">
+                        <span>
+                            <img src="/images/postgre/postgre-hamburger.svg" alt="hamB" style="width: 1rem; height: 1.5rem;">
+                        </span>
+                    </button>
+                    <div x-show="postgreNav" class="grow-[1] lg:grow-0 basis-full lg:!flex lg:basis-auto">
+                        <ul class="mr-auto flex flex-col lg:flex-row pl-0 my-0 text-[#336791]">
+                            <li class="p-2">
+                                <a href="https://www.postgresql.org/">Home</a>
+                            </li>
+                            <li class="p-2">
+                                <a href="https://www.postgresql.org/about">About</a>
+                            </li>
+                            <li class="p-2">
+                                <a href="https://www.postgresql.org/download">Download</a>
+                            </li>
+                            <li class="p-2">
+                                <a href="https://www.postgresql.org/docs">Documentation</a>
+                            </li>
+                            <li class="p-2">
+                                <a href="https://www.postgresql.org/community">Community</a>
+                            </li>
+                            <li class="p-2">
+                                <a href="https://www.postgresql.org/developer">Developers</a>
+                            </li>
+                            <li class="p-2">
+                                <a href="https://www.postgresql.org/support">Support</a>
+                            </li>
+                            <li class="p-2">
+                                <a href="https://www.postgresql.org/about/donate">Donate</a>
+                            </li>   
+                            <li class="p-2">
+                                <a href="https://www.postgresql.org/about/account">Your account</a>
+                            </li>                              
+                        </ul>
+                    </div>
                 </nav>
+            </div>
+        </div>
+        <div class="flex flex-wrap justify-center bg-[#336791] mx-[-15px] py-[0.2rem] text-white text-center">
+            <div class="px-[15px] max-w-full basis-0 grow font-semibold">
+                10th February 2022: <a
+                    href="https://www.postgresql.org/about/news/postgresql-142-136-1210-1115-and-1020-released-2402/">PostgreSQL
+                    14.2, 13.6, 12.10, 11.15, and 10.20 Released</a>
+            </div>
+        </div>
+    </div>
+    <!-- JUMBOTRON -->
+    <div class="p-[4em] bg-center bg-cover m-0 text-center" style="background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('./images/postgre/postgre-bg.jpg')"> 
+        <div class="w-full mx-auto px-[15px]">
+            <h2 class="text-white text-[24px] font-semibold mt-[0.67em]">
+                PostgreSQL: The World's Most Advanced Open Source Relational Database
+            </h2>
+            <div class="flex flex-wrap mx-[-15px] max-w-full text-center">
+                <div class="text-black basis-0 grow max-w-full ml-auto">
+                    <a class="w-[14em] py-1.5 px-3 my-[5px] border bg-[#f8f9fa] border-[#f8f9fa] inline-block rounded-md" href="https://www.postgresql/download/">Download</a>
+                </div>
+                <div class="text-black basis-0 grow max-w-full mr-auto">
+                    <a class="w-[14em] py-1.5 px-3 my-[5px] border bg-[#f8f9fa] border-[#f8f9fa] inline-block rounded-md" href="https://www.postgresql/download/">New to PostgreSQL?</a>
+                </div>
             </div>
         </div>
     </div>
