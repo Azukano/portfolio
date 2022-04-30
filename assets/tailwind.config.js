@@ -16,10 +16,13 @@ module.exports = {
     },
     screens: {
       'xs': '480px',
-      // => @media (min-width: 640px) { ... }
+      // => @media (min-width: 480px) { ... }
 
       'sm': '540px',
-      // => @media (min-width: 640px) { ... }
+      // => @media (min-width: 540px) { ... }
+
+      'sm-md': '610px',
+      // => @media (min-width: 610px) { ... }
 
       'md': '768px',
       // => @media (min-width: 768px) { ... }
