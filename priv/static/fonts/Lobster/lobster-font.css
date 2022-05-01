@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'Lobster';
+    font-style: normal;
+    font-weight: 400;
+    src: url('lobster-v28-latin-regular.eot'); /* IE9 Compat Modes */
+    src: local(''),
+         url('lobster-v28-latin-regular.eot?') format('embedded-opentype'), /* IE6-IE8 */
+         url('lobster-v28-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+         url('lobster-v28-latin-regular.woff') format('woff'), /* Modern Browsers */
+         url('lobster-v28-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('lobster-v28-latin-regular.svg') format('svg'); /* Legacy iOS */
+  }

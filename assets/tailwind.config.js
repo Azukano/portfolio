@@ -43,8 +43,9 @@ module.exports = {
       // => @media (min-width: 1536px) { ... }
     },
     extend: {
-      fontFamily: {
-        'ubuntu': ["Ubuntu"]
+      fontFamily:{
+        'lobster': ['Lobster'],
+        'ubuntu': ['Ubuntu']
       },
       textColor: {
         'topbar': '#E6E6E6'
