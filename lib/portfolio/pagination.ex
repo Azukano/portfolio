@@ -47,20 +47,28 @@ defmodule Portfolio.Pagination do
   @doc """
     guard function to count records only at first batch
   """
-  def count_pages([i | lists], rec_perpage) when i < 2 do
-    rec_perpage = div(count_records(), rec_perpage)
-    lists = [i | lists]
-    count_pages([i + 1 | lists], rec_perpage)
+  def count_pages([i | lists], rec_perpage, pages) when i < 2 do
+    if count_records() == 0 do
+      i = 2
+      lists = ["empty list/no messages"]
+    else
+      pages = div(count_records(), rec_perpage)
+      lists = [i | lists]
+      count_pages([i + 1 | lists], rec_perpage, pages)
+    end
   end
 
-  def count_pages([i | lists], rec_perpage) when i > rec_perpage do
-    lists = [i | lists]
-    lists
+  def count_pages([i | lists], rec_perpage, pages) when i > pages do
+    if fetch_records("messages", rec_perpage, i) == [] do
+      lists
+    else
+      lists = [i | lists]
+    end
   end
 
-  def count_pages([i | lists], rec_perpage) do
+  def count_pages([i | lists], rec_perpage, pages) do
     lists = [i | lists]
-    count_pages([i + 1 | lists], rec_perpage)
+    count_pages([i + 1 | lists], rec_perpage, pages)
   end
 
 end

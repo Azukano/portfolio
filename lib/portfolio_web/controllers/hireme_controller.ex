@@ -24,16 +24,14 @@ defmodule PortfolioWeb.HiremeController do
   #SHOW A main function must all get params /messages?page=x&rec_perpage=y
   def show(conn, %{"page" => page, "rec_perpage" => rec_perpage}) do
     IO.puts("SHOW A # ")
-    IO.inspect(conn)
     messages = Portfolio.Pagination.page("messages", rec_perpage, page)
-    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], String.to_integer(rec_perpage)))
+    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], String.to_integer(rec_perpage), 1))
     render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
   end
 
   #SHOW B sub function page got params, rec_perpage null /messages?page=x&rec_perpage=nil
   def show(conn, %{"page" => page}) do
     IO.puts("SHOW B # ")
-    IO.inspect(conn)
     messages = Portfolio.Pagination.page("messages", 6, page)
     page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 6))
     render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
@@ -42,11 +40,10 @@ defmodule PortfolioWeb.HiremeController do
   #SHOW C sub function page got params, rec_perpage null /messages?page=x=nil&rec_perpage=y
   def show(conn, %{"rec_perpage" => rec_perpage}) do
     IO.puts("SHOW C # ")
-    IO.inspect(conn.assigns)
     #qparams = fetch_query_params(conn)
     conn = assign(conn, :hello, :world)
     messages = Portfolio.Pagination.page("messages", rec_perpage, 1)
-    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], String.to_integer(rec_perpage)))
+    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], String.to_integer(rec_perpage), 1))
     render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
   end
 
@@ -56,14 +53,11 @@ defmodule PortfolioWeb.HiremeController do
     #Map.update(%{a: 1}, :a, 13, fn existing_value -> existing_value * 2 end)
     #conn.params = %{"rec_perpage" => "6"}
     conn = assign(conn, :rec_perpage, [6])
-    IO.inspect(conn.params)
     #conn = Map.replace(conn.params, :params, [6])
     messages = Portfolio.Pagination.page("messages", 6, 1)
-    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 6))
+    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 6, 1))
     render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
   end
-
-
 end
 
 #%{"rec_perpage" => rec_perpage}
