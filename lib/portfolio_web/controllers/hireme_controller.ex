@@ -33,7 +33,7 @@ defmodule PortfolioWeb.HiremeController do
   def show(conn, %{"page" => page}) do
     IO.puts("SHOW B # ")
     messages = Portfolio.Pagination.page("messages", 6, page)
-    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 6))
+    page = Enum.reverse(Portfolio.Pagination.count_pages([1, ], 6, 1))
     render(conn, "show.html", messages: messages, page: page, rec_perpage: [6, 10, 20])
   end
 
