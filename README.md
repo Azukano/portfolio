@@ -17,3 +17,11 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
+
+## Chess
+
+  * Tiles Module
+  ** struct will be composed of ChessTiles.id? with values 
+      [:alpha => "A..H", :no => "1..8", :color => "black/white could be boolean"]
+      %Portfolio.ChessTiles{alpha: "A", color: "BLACK", no: 1}
+  ** make another module in here I save another map that will order the tiles.

@@ -23,6 +23,7 @@ defmodule PortfolioWeb.Router do
     post "/hireme", HiremeController, :create
     get "/messages", HiremeController, :show
     get "/messages:rec_perpage/:page/", HiremeController, :show
+    live "/games", GamesLive
     live "/chess", ChessLive
   end
 

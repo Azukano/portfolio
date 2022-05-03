@@ -1,4 +1,4 @@
-defmodule PortfolioWeb.ChessLive do
+defmodule PortfolioWeb.GamesLive do
   use PortfolioWeb, :live_view
 
   @impl true
