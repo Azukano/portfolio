@@ -1,0 +1,27 @@
+<section class="bg-[#242526] h-full text-[#e6e6e6]">
+    <div class="w-full h-[20em] flex flex-col items-center justify-center">
+        <span class="text-xl"> Light Bulb</span>
+        <div class=" w-[600px] bg-slate-600 h-6 mx-auto mt-10 flex items-center">
+            <div class={"relative h-full bg-yellow-300 text-right max-w-full min-w-[0%]"} style={"width: #{@brightness}%"}>
+                <span class="absolute text-black" style={"right: 0; left: 0"}><%= @brightness %>%</span>
+            </div>
+        </div>
+        <div class="mt-10">
+            <button phx-click="off" class="w-10 h-10">
+            <img src="images/light-off.svg">
+            </button>
+        
+            <button phx-click="down" class="w-10 h-10">
+            <img src="images/down.svg">
+            </button>
+        
+            <button phx-click="up" class="w-10 h-10">
+            <img src="images/up.svg">
+            </button>
+        
+            <button phx-click="on" class="w-10 h-10">
+            <img src="images/light-on.svg">
+        </button>
+    </div>
+    </div>
+</section>

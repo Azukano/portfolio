@@ -15,6 +15,7 @@ alias Portfolio.Repo
 alias Portfolio.Message.Seeds
 
   for n <- 1..100 do
+    Process.sleep(1000)
     Repo.insert! %Seeds{}
     |> Seeds.changeset(%{
         name: "tester #{n}",

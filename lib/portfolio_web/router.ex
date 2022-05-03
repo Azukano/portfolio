@@ -18,12 +18,12 @@ defmodule PortfolioWeb.Router do
     pipe_through :browser
 
     get "/", HomeController, :index
-    get "/games", GamesController, :index
     get "/about", AboutController, :index
     get "/hireme", HiremeController, :index
     post "/hireme", HiremeController, :create
     get "/messages", HiremeController, :show
     get "/messages:rec_perpage/:page/", HiremeController, :show
+    live "/chess", ChessLive
   end
 
   # Other scopes may use custom stacks.

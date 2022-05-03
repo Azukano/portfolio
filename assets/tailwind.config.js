@@ -1,7 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
-  content: ["../lib/*_web/**/*.*ex", "./js/*.js"],
+  content: ["../lib/*_web/*_view/*.*hex", "../lib/*_web/**/*.*ex", "./js/*.js"],
   theme: {    
     backgroundSize: {
       'auto': 'auto',
