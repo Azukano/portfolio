@@ -1,5 +1,9 @@
 defmodule PortfolioWeb.GamesLive do
   use PortfolioWeb, :live_view
+  @doc """
+  PRAGMATICSTUDIO PROGRAM LIVE VIEW MODULE LESSON 1 END
+  SIMPLE LIFE CYCLE LIVE VIEW ~ LIGHT BULB
+  """
 
   @impl true
   def mount(_params, _session, socket) do
