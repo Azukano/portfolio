@@ -4,9 +4,13 @@ defmodule PortfolioWeb.GamesLive do
   PRAGMATICSTUDIO PROGRAM LIVE VIEW MODULE LESSON 1 END
   SIMPLE LIFE CYCLE LIVE VIEW ~ LIGHT BULB
   """
-
   @impl true
   def mount(_params, _session, socket) do
+    socket = assign(socket, :brightness, 10)
+    {:ok, socket}
+  end
+
+  def render(_params, _session, socket) do
     socket = assign(socket, :brightness, 10)
     {:ok, socket}
   end

@@ -9,4 +9,10 @@ defmodule PortfolioWeb.ChessLive do
     socket = assign(socket, chess_board: Chess.fill_board)
     {:ok, socket}
   end
+
+  def render(_params, _session, socket) do
+    socket = assign(socket, chess_board: Chess.fill_board)
+    {:ok, socket}
+  end
+
 end

@@ -23,8 +23,8 @@ defmodule PortfolioWeb.Router do
     post "/hireme", HiremeController, :create
     get "/messages", HiremeController, :show
     get "/messages:rec_perpage/:page/", HiremeController, :show
-    live "/games", GamesLive
-    live "/chess", ChessLive
+    get "/games", GamesController, :index
+    get "/chess", ChessController, :index
   end
 
   # Other scopes may use custom stacks.
