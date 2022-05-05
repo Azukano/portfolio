@@ -23,5 +23,10 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Tiles Module
   ** struct will be composed of ChessTiles.id? with values 
       [:alpha => "A..H", :no => "1..8", :color => "black/white could be boolean"]
-      %Portfolio.ChessTiles{alpha: "A", color: "BLACK", no: 1}
-  ** make another module in here I save another map that will order the tiles.
+      %Portfolio.ChessTiles{alpha: "A", color: :BLACK/:WHITE, no: 1} done 
+  ** make another module in here I save another map that will order the tiles. done
+  ** render maps structure to html
+
+____ GET THE KEYS: a1 
+____ GET THE COLOR: BLACK
+_____________________ PUT THEM IN LIST*

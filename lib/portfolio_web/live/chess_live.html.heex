@@ -1,9 +1,19 @@
 <section class="bg-[#242526] h-full text-[#e6e6e6] flex flex-col justify-center">
     <!-- WRAPPER -->
     <div class="container mx-auto">
-        <div class="py-10 mx-auto text-center">
-            <div class="h-[800px] w-[800px] self-center inline-block">
-                
+        <div class="py-10 text-center">
+            <div class="w-[800px] h-[800px] self-center flex flex-col-reverse mx-auto">
+                <%= for no <- 1..8 do %>
+                <ul class="h-full w-full flex flex-wrap items-center justify-center">
+                    <%= for {_tile, value} <- @chess_board, value.no == no do %>    
+                    <li class="h-full w-[12.5%] text-center py-6 border border-[#e6e6e6]">
+                        <span class="uppercase place-self-center"><%= IO.inspect value.alpha  %></span>
+                        <span class=" self-center"><%= IO.inspect value.no %><br></span> 
+                        <span><%= IO.inspect value.color %><br></span>
+                    </li>
+                    <% end %>
+                </ul>
+                <% end %>
             </div>
         </div>
     </div>
