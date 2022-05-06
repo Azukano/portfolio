@@ -6,7 +6,7 @@ defmodule PortfolioWeb.ChessLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    socket = assign(socket, chess_board: Chess.fill_board, key_press: "none", sel_alpha: "a", sel_alpha_pointer: 0, sel_no: 1)
+    socket = assign(socket, chess_board: Chess.fill_board, key_press: "none", sel_alpha: "a", sel_alpha_pointer: 1, sel_no: 1)
     {:ok, socket}
   end
 
@@ -20,21 +20,40 @@ defmodule PortfolioWeb.ChessLive do
   def handle_event("tile_selection", %{"key" => key_up}, socket) do
     sel_no = case key_up do
       "ArrowUp" ->
-        socket.assigns.sel_no + 1
+        if socket.assigns.sel_no < 9 do
+          socket.assigns.sel_no + 1
+        else
+          IO.puts "reached the edge of chess board"
+          socket.assigns.sel_no
+        end
       "ArrowDown" ->
-        socket.assigns.sel_no - 1
+        if socket.assigns.sel_no > 0 do
+          socket.assigns.sel_no - 1
+        else
+          IO.puts "reached the edge of chess board"
+          socket.assigns.sel_no
+        end
       _ ->
         socket.assigns.sel_no
     end
     sel_alpha_pointer = case key_up do
       "ArrowRight" ->
-        socket.assigns.sel_alpha_pointer + 1
+        if socket.assigns.sel_alpha_pointer < 9 do
+          socket.assigns.sel_alpha_pointer + 1
+        else
+          IO.puts "reached the edge of chess board"
+          socket.assigns.sel_alpha_pointer
+        end
       "ArrowLeft" ->
-        socket.assigns.sel_alpha_pointer - 1
+        if socket.assigns.sel_alpha_pointer > 0 do
+          socket.assigns.sel_alpha_pointer - 1
+        else
+          IO.puts "reached the edge of chess board"
+          socket.assigns.sel_alpha_pointer
+        end
       _ ->
         socket.assigns.sel_alpha_pointer
     end
-    IO.inspect sel_alpha_pointer
     socket = assign(socket, sel_no: sel_no, sel_alpha: <<96+sel_alpha_pointer>>, sel_alpha_pointer: sel_alpha_pointer)
     {:noreply, socket}
   end
