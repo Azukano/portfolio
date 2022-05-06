@@ -1,5 +1,6 @@
 defmodule Portfolio.Chess do
   alias Portfolio.ChessTiles
+  alias Portfolio.ChessPieces
   require Integer
 
   def fill_board(i, j, k, chess_board) when k > 7 do
@@ -35,11 +36,51 @@ defmodule Portfolio.Chess do
         color: elem(color_tuple, j),
         no: elem(Enum.fetch(no_range, k), 1))
 
+      # !IMPORTANT Map.put 2nd arg :a1 concatinated alpha + no
       chess_board = Map.put(chess_board, String.to_atom(elem(Enum.fetch(alpha_list, i), 1) <> Integer.to_string(elem(Enum.fetch(no_range, k), 1))), board)
 
       #call itself to iterate
       fill_board(i + 1, j + 1, k, chess_board)
   end
 
+  def spawn_pieces(i, j, pieces) when j > 5 do
+    IO.puts "End of process"
+    pieces
+  end
+
+  def spawn_pieces(i \\ 0, j \\ 0, pieces \\ %{}) do
+    # roles: pones, knights, bishops, rooks, queen/s, king/s
+    # position: ID of chess tiles :a1 .. :h8
+    # roles_list = ["pone", "knight", "bishop", "rook", "queen", "king"
+    pieces_map = %{bishop: 2, king: 1, knight: 2, pone: 8, queen: 1, rook: 2}
+
+    #IO.puts "#{j}"
+
+    role  = pieces_map
+      |> Enum.fetch(j)                # index pointer in pieces_map
+      |> elem(1)                      # index pointer in tuple returned by fetch {:ok, x} always X so 1!
+      |> elem(0)                      # index pointer in tuple returned inside (i)element of map 0 = name; 1 = count of map
+      |> Atom.to_string()             #return text type
+    position = :x0                    #TLDR;
+
+    if i >= (pieces_map |> Enum.fetch(j) |> elem(1) |> elem(1)) - 1 do
+      #IO.inspect role
+      #IO.puts "piece: #{pieces_map |> Enum.fetch(j) |> elem(1) |> elem(0)}: #{pieces_map |> Enum.fetch(0) |> elem(1) |> elem(1)}"
+      #IO.puts "IF #{i} \ #{j}"
+      piece = ChessPieces.pieces(role: role, position: position)
+      pieces = Map.put(pieces, String.to_atom(role <> Integer.to_string(i + 1)), piece)
+      j = j + 1
+      spawn_pieces(0, j, pieces)
+    else
+      #IO.inspect role
+      #IO.puts "piece: #{pieces_map |> Enum.fetch(j) |> elem(1) |> elem(0)}: #{pieces_map |> Enum.fetch(0) |> elem(1) |> elem(1)}"
+      #IO.puts "ELSE #{i} \ #{j}"
+      piece = ChessPieces.pieces(role: role, position: position)
+      pieces = Map.put(pieces, String.to_atom(role <> Integer.to_string(i + 1)), piece)
+      spawn_pieces(i + 1, j, pieces)
+    end
+
+
+  end
 
 end

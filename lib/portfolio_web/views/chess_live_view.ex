@@ -24,6 +24,7 @@ defmodule PortfolioWeb.ChessLive do
           socket.assigns.sel_no + 1
         else
           IO.puts "reached the edge of chess board"
+          put_flash(socket, :error, "You can't access that page")
           socket.assigns.sel_no
         end
       "ArrowDown" ->
