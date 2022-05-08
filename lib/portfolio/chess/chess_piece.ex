@@ -1,10 +1,10 @@
 defmodule Portfolio.ChessPieces do
-  @enforce_keys [:role, :position]
-  defstruct  [:role, :position]
+  @enforce_keys [:role, :coordinate_alpha, :coordinate_no]
+  defstruct  [:role, :coordinate_alpha, :coordinate_no]
 
   alias Portfolio.ChessPieces
 
-  def pieces(role: role, position: position) do
-    %ChessPieces{role: role, position: position}
+  def pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no) do
+    %ChessPieces{role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no}
   end
 end

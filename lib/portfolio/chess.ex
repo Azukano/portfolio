@@ -29,7 +29,7 @@ defmodule Portfolio.Chess do
     # actual chess row and columns & color b/w
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     no_range = 1..8
-    color_tuple = {:BLACK, :WHITE}
+    color_tuple = {:black, :white}
 
       board = ChessTiles.tiles(
         alpha: elem(Enum.fetch(alpha_list, i), 1),
@@ -43,44 +43,82 @@ defmodule Portfolio.Chess do
       fill_board(i + 1, j + 1, k, chess_board)
   end
 
+  @doc """
+  Guard Function for Spawn pieces when j index pointer reaches 5 it is over bishop(1) ... rook(5)
+  """
   def spawn_pieces(i, j, pieces) when j > 5 do
     IO.puts "End of process"
     pieces
   end
 
+  @doc """
+  SPAWN PIECES Initial Position done. Position after movement TLDR;
+  """
   def spawn_pieces(i \\ 0, j \\ 0, pieces \\ %{}) do
-    # roles: pones, knights, bishops, rooks, queen/s, king/s
-    # position: ID of chess tiles :a1 .. :h8
-    # roles_list = ["pone", "knight", "bishop", "rook", "queen", "king"
+    # combo map role + count of piece
     pieces_map = %{bishop: 2, king: 1, knight: 2, pone: 8, queen: 1, rook: 2}
 
-    #IO.puts "#{j}"
-
     role  = pieces_map
-      |> Enum.fetch(j)                # index pointer in pieces_map
-      |> elem(1)                      # index pointer in tuple returned by fetch {:ok, x} always X so 1!
-      |> elem(0)                      # index pointer in tuple returned inside (i)element of map 0 = name; 1 = count of map
-      |> Atom.to_string()             #return text type
-    position = :x0                    #TLDR;
+      |> Enum.fetch(j)                                         # index pointer in pieces_map
+      |> elem(1)                                               # index pointer in tuple returned by fetch {:ok, x} always X so 1!
+      |> elem(0)                                               # index pointer in tuple returned inside (i)element of map 0 = name; 1 = count of map
+      |> Atom.to_string()                                      # return text type
+    coordinate_alpha = elem(piece_coordinate(role, i), 0)      # return string poistion a .. h
+    coordinate_no = elem(piece_coordinate(role, i), 1)         # return integer poistion 1 .. 8
 
     if i >= (pieces_map |> Enum.fetch(j) |> elem(1) |> elem(1)) - 1 do
-      #IO.inspect role
-      #IO.puts "piece: #{pieces_map |> Enum.fetch(j) |> elem(1) |> elem(0)}: #{pieces_map |> Enum.fetch(0) |> elem(1) |> elem(1)}"
-      #IO.puts "IF #{i} \ #{j}"
-      piece = ChessPieces.pieces(role: role, position: position)
-      pieces = Map.put(pieces, String.to_atom(role <> Integer.to_string(i + 1)), piece)
+      # IO.inspect role
+      # IO.puts "piece: #{pieces_map |> Enum.fetch(j) |> elem(1) |> elem(0)}: #{pieces_map |> Enum.fetch(0) |> elem(1) |> elem(1)}"
+      # IO.puts "IF #{i} \ #{j}"
+      piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no)
+      # map id could be same format id of ChessTiles :a1 .. :h8 right now lets use role.count
+      pieces = Map.put(pieces, String.to_atom(coordinate_alpha <> Integer.to_string(coordinate_no)), piece)
       j = j + 1
       spawn_pieces(0, j, pieces)
     else
       #IO.inspect role
       #IO.puts "piece: #{pieces_map |> Enum.fetch(j) |> elem(1) |> elem(0)}: #{pieces_map |> Enum.fetch(0) |> elem(1) |> elem(1)}"
       #IO.puts "ELSE #{i} \ #{j}"
-      piece = ChessPieces.pieces(role: role, position: position)
-      pieces = Map.put(pieces, String.to_atom(role <> Integer.to_string(i + 1)), piece)
+      piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no)
+      pieces = Map.put(pieces, String.to_atom(coordinate_alpha <> Integer.to_string(coordinate_no)), piece)
       spawn_pieces(i + 1, j, pieces)
     end
+  end
 
-
+  @doc """
+  INITIAL POSITION of pieces.
+  """
+  def piece_coordinate(role, i) do
+    # IO.puts i
+    case role do
+      "pone" ->
+        {<<97+i>>, 2}
+      "knight" ->
+        if i > 0 do
+          col = i + 4
+          {<<98+col>>, 1}
+        else
+          {<<98+i>>, 1}
+        end
+      "bishop" ->
+        if i > 0 do
+          col = i + 2
+          {<<99+col>>, 1}
+        else
+          {<<99+i>>, 1}
+        end
+      "rook" ->
+        if i > 0 do
+          col = i + 6
+          {<<97+col>>, 1}
+        else
+          {<<97+i>>, 1}
+        end
+      "queen" ->
+        {<<100+i>>, 1}
+      "king" ->
+        {<<101+i>>, 1}
+    end
   end
 
 end

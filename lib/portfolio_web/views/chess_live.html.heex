@@ -3,35 +3,50 @@
     <div class="container mx-auto">
         <div class="py-10 text-center">
             <div class="w-[800px] h-[800px] self-center flex flex-col-reverse mx-auto">
-            <%= for no <- 1..8 do %>
-            <ul class="h-full w-full flex flex-wrap items-center justify-center">
-                <%= for i <- 1..8, {_tile, value} <- @chess_board, value.no == no, value.alpha == <<96+i>> do %>  
-                <li class="relative h-full w-[12.5%] text-center py-6 border border-[#c7c7c7]" style={"background-color: #{value.color}"}>
-                <%# IO.puts "alpha: #{value.alpha}\nno.: #{value.no}" %>   
-                <!-- SELECTION TILE SVG -->
-                <%= if value.alpha == @sel_alpha and value.no == @sel_no do %>
-                    <svg style="position: absolute; right: calc(50% - 6.5px); top: 0; transform: rotate(180deg);" width="14" height="13"
-                        viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 0L14 13H0L7 0Z" fill="#E81818" />
-                    </svg>
-                    <svg style="position: absolute; right: 0; top: calc(50% - 6.5px); transform: rotate(-90deg);" width="14" height="13"
-                        viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 0L14 13H0L7 0Z" fill="#E81818" />
-                    </svg>
-                    <svg style="position: absolute; left: 0; top: calc(50% - 6.5px); transform: rotate(90deg);" width="14" height="13"
-                        viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 0L14 13H0L7 0Z" fill="#E81818" />
-                    </svg>
-                    <svg style="position: absolute; left: calc(50% - 6.5px); bottom: 0;" width="14" height="13"
-                        viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 0L14 13H0L7 0Z" fill="#E81818" />
-                    </svg>
+
+                <%= for no <- 1..8 do %>
+                <ul class="h-full w-full flex flex-wrap items-center justify-center">
+                    <%= for i <- 1..8, {tile_id, tile} <- @chess_board, tile.no == no, tile.alpha == <<96+i>> do %>  
+                    <li class="relative h-full w-[12.5%] text-center py-6 border border-[#c7c7c7]" style={"background-color: #{tile.color}"}>  
+                    <!-- PUT PIECE LABEL/TILE SVG -->
+                    <%= for {piece_id, piece} <- @chess_pieces do %>
+                        <%= if piece_id == tile_id do %>
+                        <% #IO.inspect piece_id, label: piece.role %> 
+                        <% #IO.puts"white-#{piece.role}.svg" %> 
+                        <img src={"/images/chess/white-#{piece.role}.svg"} alt="b-king"
+                        style="width: 100%; position: absolute; top: -8%">
+                        <!-- <span class={[:'w-#{@brightness}']}> -->
+                        <% end %>
+                    <!-- SELECTION TILE SVG -->
+                    <%= if tile.alpha == @sel_alpha and tile.no == @sel_no do %>
+                        <svg style="position: absolute; right: calc(50% - 6.5px); top: 0; transform: rotate(180deg);" width="14" height="13"
+                            viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 0L14 13H0L7 0Z" fill="#E81818" />
+                        </svg>
+                        <svg style="position: absolute; right: 0; top: calc(50% - 6.5px); transform: rotate(-90deg);" width="14" height="13"
+                            viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 0L14 13H0L7 0Z" fill="#E81818" />
+                        </svg>
+                        <svg style="position: absolute; left: 0; top: calc(50% - 6.5px); transform: rotate(90deg);" width="14" height="13"
+                            viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 0L14 13H0L7 0Z" fill="#E81818" />
+                        </svg>
+                        <svg style="position: absolute; left: calc(50% - 6.5px); bottom: 0;" width="14" height="13"
+                            viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 0L14 13H0L7 0Z" fill="#E81818" />
+                        </svg>
+                    <% end %>
+                    <% end %>
+                    </li>
+                    <% end %>
+                </ul>
                 <% end %>
-                </li>
-                <% end %>
-            </ul>
-            <% end %>
+
             </div>
         </div>
     </div>
 </section>
+<!--
+    <img src="/images/chess/black-king.svg" alt="b-king"
+        style="width: 100%; position: absolute; top: -8%">
+-->

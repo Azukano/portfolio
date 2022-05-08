@@ -6,7 +6,11 @@ defmodule PortfolioWeb.ChessLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    socket = assign(socket, chess_board: Chess.fill_board, key_press: "none", sel_alpha: "a", sel_alpha_pointer: 1, sel_no: 1)
+    socket = assign(socket,
+      chess_board: Chess.fill_board,
+      key_press: "none", sel_alpha: "a",
+      sel_alpha_pointer: 1, sel_no: 1,
+      chess_pieces: Chess.spawn_pieces)
     {:ok, socket}
   end
 
