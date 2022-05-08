@@ -1,7 +1,7 @@
 <section phx-window-keydown="key_press" phx-window-keyup="tile_selection" class="bg-[#242526] h-full text-[#e6e6e6] flex flex-col justify-center">
     <!-- WRAPPER -->
     <div class="container mx-auto">
-        <div class="py-10 text-center">
+        <div class="text-center">
             <div class="w-[800px] h-[800px] self-center flex flex-col-reverse mx-auto">
 
                 <%= for no <- 1..8 do %>
@@ -14,7 +14,7 @@
                         <% #IO.inspect piece_id, label: piece.role %> 
                         <% #IO.puts"white-#{piece.role}.svg" %> 
                         <img src={"/images/chess/white-#{piece.role}.svg"} alt="b-king"
-                        style="width: 100%; position: absolute; top: -8%">
+                        style="width: 100%; position: absolute; top: 0">
                         <!-- <span class={[:'w-#{@brightness}']}> -->
                         <% end %>
                     <!-- SELECTION TILE SVG -->
@@ -42,6 +42,17 @@
                 </ul>
                 <% end %>
 
+            </div>
+            <div class="w-[800px] bg-black mt-2 mx-auto text-left p-2">
+                <span>SELECTOR COORDINATE: </span>
+                <span class="font-bold uppercase text-red-500">
+                    <%= if @sel_alpha < "a"  or @sel_alpha > "h"
+                        or @sel_no < 1 or @sel_no > 8 do %>
+                    (INVALID COORDINATE)
+                    <% else %>
+                    <%= @sel_alpha %><%= @sel_no %>
+                    <% end %>
+                </span>
             </div>
         </div>
     </div>
