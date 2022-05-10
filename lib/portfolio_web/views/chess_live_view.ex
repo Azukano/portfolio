@@ -16,7 +16,8 @@ defmodule PortfolioWeb.ChessLive do
 
   @impl true
   def handle_event("tile_selection", %{"key" => key_up}, socket)
-    when key_up != "ArrowUp" and "ArrowDown" and "ArrowLeft" and "ArrowRight" do
+    when key_up != "ArrowUp" and "ArrowDown" and "ArrowLeft" and "ArrowRight"
+    and key_up != "Enter" do
     IO.puts "guard clause for tile_selection"
     {:noreply, socket}
   end
@@ -63,18 +64,6 @@ defmodule PortfolioWeb.ChessLive do
     {:noreply, socket}
   end
 
-  def handle_event("col_right_left", %{"key" => key_up}, socket) do
-    IO.puts "pumasok sa col left right"
-  end
-
-
-  def handle_event("down_row", %{"key" => "ArrowDown"}, socket) do
-    IO.puts("pumasok sa up_arrow")
-    sel_no = socket.assigns.sel_no
-    socket = assign(socket, sel_no: sel_no - 1)
-    {:noreply, socket}
-  end
-
   def handle_event("key_press", %{"key" => key}, socket) do
     #socket = assign(socket, Map.replace(socket.assigns.chess_board.a1, :color, :RED))
     #IO.inspect socket.assigns.chess_board.a1
@@ -83,4 +72,23 @@ defmodule PortfolioWeb.ChessLive do
     {:noreply, socket}
   end
 
+  @doc """
+  first argument: role from ChessPiece struct determining how this piece_move will perform in after position
+  second argument: from ChessPiece struct alpha > for locating position in col
+  third argument: from ChessPiece struct > for locating position in row
+  """
+  def piece_move(socket, piece_id) do
+    #IO.puts"role: #{role} coordinate: #{coordinate_alpha}#{coordinate_no}"
+    #IO.inspect socket.assigns.chess_pieces
+    chess_pieces = socket.assigns.chess_pieces
+    Chess.piece_movement(chess_pieces, piece_id)
+  end
+
 end
+
+#for {key, value} <- chess_pieces, value.coordinate_alpha == coordinate_alpha and value.coordinate_no == coordinate_no do
+#  IO.puts("#{key}: #{value.coordinate_alpha} #{value.coordinate_no}")
+#  piece = Chess.piece_movement(socket.assigns.chess_pieces, piece_id, coordinate_alpha, coordinate_no)
+#  socket = assign(socket, chess_pieces: piece)
+#  IO.inspect socket.assigns.chess_pieces, label: "after assign inside"
+#end

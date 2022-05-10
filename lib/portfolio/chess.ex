@@ -32,9 +32,9 @@ defmodule Portfolio.Chess do
     color_tuple = {:black, :white}
 
       board = ChessTiles.tiles(
-        alpha: elem(Enum.fetch(alpha_list, i), 1),
+        coordinate_alpha: elem(Enum.fetch(alpha_list, i), 1),
         color: elem(color_tuple, j),
-        no: elem(Enum.fetch(no_range, k), 1))
+        coordinate_no: elem(Enum.fetch(no_range, k), 1))
 
       # !IMPORTANT Map.put 2nd arg :a1 concatinated alpha + no
       chess_board = Map.put(chess_board, String.to_atom(elem(Enum.fetch(alpha_list, i), 1) <> Integer.to_string(elem(Enum.fetch(no_range, k), 1))), board)
@@ -43,9 +43,8 @@ defmodule Portfolio.Chess do
       fill_board(i + 1, j + 1, k, chess_board)
   end
 
-  @doc """
-  Guard Function for Spawn pieces when j index pointer reaches 5 it is over bishop(1) ... rook(5)
-  """
+
+  #Guard Function for Spawn pieces when j index pointer reaches 5 it is over bishop(1) ... rook(5)
   def spawn_pieces(i, j, pieces) when j > 5 do
     IO.puts "End of process"
     pieces
@@ -66,13 +65,14 @@ defmodule Portfolio.Chess do
     coordinate_alpha = elem(piece_coordinate(role, i), 0)      # return string poistion a .. h
     coordinate_no = elem(piece_coordinate(role, i), 1)         # return integer poistion 1 .. 8
 
+    id = pieces_id(role, i)
+
     if i >= (pieces_map |> Enum.fetch(j) |> elem(1) |> elem(1)) - 1 do
       # IO.inspect role
       # IO.puts "piece: #{pieces_map |> Enum.fetch(j) |> elem(1) |> elem(0)}: #{pieces_map |> Enum.fetch(0) |> elem(1) |> elem(1)}"
       # IO.puts "IF #{i} \ #{j}"
       piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no)
-      # map id could be same format id of ChessTiles :a1 .. :h8 right now lets use role.count
-      pieces = Map.put(pieces, String.to_atom(coordinate_alpha <> Integer.to_string(coordinate_no)), piece)
+      pieces = Map.put(pieces, String.to_atom(id), piece)
       j = j + 1
       spawn_pieces(0, j, pieces)
     else
@@ -80,7 +80,7 @@ defmodule Portfolio.Chess do
       #IO.puts "piece: #{pieces_map |> Enum.fetch(j) |> elem(1) |> elem(0)}: #{pieces_map |> Enum.fetch(0) |> elem(1) |> elem(1)}"
       #IO.puts "ELSE #{i} \ #{j}"
       piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no)
-      pieces = Map.put(pieces, String.to_atom(coordinate_alpha <> Integer.to_string(coordinate_no)), piece)
+      pieces = Map.put(pieces, String.to_atom(id), piece)
       spawn_pieces(i + 1, j, pieces)
     end
   end
@@ -118,6 +118,18 @@ defmodule Portfolio.Chess do
         {<<100+i>>, 1}
       "king" ->
         {<<101+i>>, 1}
+    end
+  end
+
+  def pieces_id(role, i) do
+    #IO.inspect {role, i}
+    case role do
+      "bishop" -> "b"<>Integer.to_string(i + 1)
+      "king" -> "k"<>Integer.to_string(i + 1)
+      "knight" -> "n"<>Integer.to_string(i + 1)
+      "pone" -> "p"<>Integer.to_string(i + 1)
+      "queen" -> "q"<>Integer.to_string(i + 1)
+      "rook" -> "r"<>Integer.to_string(i + 1)
     end
   end
 

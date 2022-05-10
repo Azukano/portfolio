@@ -1,11 +1,11 @@
 defmodule Portfolio.ChessTiles do
-  @enforce_keys [:alpha, :color, :no]
-  defstruct  [:alpha, :color, :no]
+  @enforce_keys [:coordinate_alpha, :color, :coordinate_no]
+  defstruct  [:coordinate_alpha, :color, :coordinate_no]
 
   alias Portfolio.ChessTiles
 
-  def tiles(alpha: alpha, color: color, no: no) do
-    %ChessTiles{alpha: alpha, color: color, no: no}
+  def tiles(coordinate_alpha: coordinate_alpha, color: color, coordinate_no: no) do
+    %ChessTiles{coordinate_alpha: coordinate_alpha, color: color, coordinate_no: no}
   end
 
 end
