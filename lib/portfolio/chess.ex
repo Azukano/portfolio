@@ -34,7 +34,8 @@ defmodule Portfolio.Chess do
       board = ChessTiles.tiles(
         coordinate_alpha: elem(Enum.fetch(alpha_list, i), 1),
         color: elem(color_tuple, j),
-        coordinate_no: elem(Enum.fetch(no_range, k), 1))
+        coordinate_no: elem(Enum.fetch(no_range, k), 1),
+        occupant: nil)
 
       # !IMPORTANT Map.put 2nd arg :a1 concatinated alpha + no
       chess_board = Map.put(chess_board, String.to_atom(elem(Enum.fetch(alpha_list, i), 1) <> Integer.to_string(elem(Enum.fetch(no_range, k), 1))), board)
@@ -45,15 +46,15 @@ defmodule Portfolio.Chess do
 
 
   #Guard Function for Spawn pieces when j index pointer reaches 5 it is over bishop(1) ... rook(5)
-  def spawn_pieces(i, j, pieces) when j > 5 do
+  def spawn_pieces(i, j, pieces, chess_board) when j > 5 do
     IO.puts "End of process"
-    pieces
+    {pieces, chess_board}
   end
 
   @doc """
   SPAWN PIECES Initial Position done. Position after movement TLDR;
   """
-  def spawn_pieces(i \\ 0, j \\ 0, pieces \\ %{}) do
+  def spawn_pieces(i \\ 0, j \\ 0, pieces \\ %{}, chess_board \\ fill_board) do
     # combo map role + count of piece
     pieces_map = %{bishop: 2, king: 1, knight: 2, pone: 8, queen: 1, rook: 2}
 
@@ -66,22 +67,25 @@ defmodule Portfolio.Chess do
     coordinate_no = elem(piece_coordinate(role, i), 1)         # return integer poistion 1 .. 8
 
     id = pieces_id(role, i)
+    legal_move = [{coordinate_alpha, 1}, {coordinate_alpha, 2}]
 
+    new_tile = chess_board |> Map.get(String.to_atom(coordinate_alpha<>Integer.to_string(coordinate_no))) |> Map.put(:occupant, id)
+    chess_board = chess_board |> Map.put(String.to_atom(coordinate_alpha<>Integer.to_string(coordinate_no)), new_tile)
     if i >= (pieces_map |> Enum.fetch(j) |> elem(1) |> elem(1)) - 1 do
       # IO.inspect role
       # IO.puts "piece: #{pieces_map |> Enum.fetch(j) |> elem(1) |> elem(0)}: #{pieces_map |> Enum.fetch(0) |> elem(1) |> elem(1)}"
       # IO.puts "IF #{i} \ #{j}"
-      piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no)
-      pieces = Map.put(pieces, String.to_atom(id), piece)
+      piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no, legal_move: legal_move)
+      pieces = Map.put(pieces, String.to_atom(coordinate_alpha<>Integer.to_string(coordinate_no)), piece)
       j = j + 1
-      spawn_pieces(0, j, pieces)
+      spawn_pieces(0, j, pieces, chess_board)
     else
       #IO.inspect role
       #IO.puts "piece: #{pieces_map |> Enum.fetch(j) |> elem(1) |> elem(0)}: #{pieces_map |> Enum.fetch(0) |> elem(1) |> elem(1)}"
       #IO.puts "ELSE #{i} \ #{j}"
-      piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no)
-      pieces = Map.put(pieces, String.to_atom(id), piece)
-      spawn_pieces(i + 1, j, pieces)
+      piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no, legal_move: legal_move)
+      pieces = Map.put(pieces, String.to_atom(coordinate_alpha<>Integer.to_string(coordinate_no)), piece)
+      spawn_pieces(i + 1, j, pieces, chess_board)
     end
   end
 
