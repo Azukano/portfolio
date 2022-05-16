@@ -1,5 +1,5 @@
 defmodule Portfolio.ChessTiles do
-  @enforce_keys [:coordinate_alpha, :color, :coordinate_no, :occupant]
+  @enforce_keys [:coordinate_alpha, :color, :coordinate_no]
   defstruct  [:coordinate_alpha, :color, :coordinate_no, :occupant]
 
   alias Portfolio.ChessTiles

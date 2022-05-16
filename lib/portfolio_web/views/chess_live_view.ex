@@ -11,7 +11,8 @@ defmodule PortfolioWeb.ChessLive do
       key_press: "none", sel_alpha: "a",
       sel_alpha_pointer: 1, sel_no: 1,
       chess_pieces: elem(Chess.spawn_pieces, 0),
-      selection_toggle: false)
+      selection_toggle: false,
+      chess_board_overlay: Chess.fill_board(true))
     {:ok, socket}
   end
 
@@ -26,9 +27,61 @@ defmodule PortfolioWeb.ChessLive do
   def handle_event("tile_selection", %{"key" => key_up}, socket)
     when key_up == "Enter" and socket.assigns.selection_toggle == true do
 
+    atom_coordinate = String.to_atom(socket.assigns.sel_alpha<>Integer.to_string(socket.assigns.sel_no))
+    if socket
+      |> Map.get(:assigns)
+      |> Map.get(:chess_board_overlay)
+      |> Map.get(atom_coordinate)
+      |> Map.get(:color) == :red do
 
-    socket = assign(socket, selection_toggle: false, chess_board: socket.assigns.old_chess_board)
-    {:noreply, socket}
+      move_piece = socket
+        |> Map.get(:assigns)
+        |> Map.get(:chess_pieces)
+        |> Map.get(socket.assigns.target_piece_coordinate)
+        |> Map.put(:coordinate_alpha, socket.assigns.sel_alpha)
+        |> Map.put(:coordinate_no, socket.assigns.sel_no)
+
+      updated_pieces_coordinate = socket
+        |> Map.get(:assigns)
+        |> Map.get(:chess_pieces)
+        |> Map.put(atom_coordinate, move_piece)
+
+      move_occupant = socket
+        |> Map.get(:assigns)
+        |> Map.get(:chess_board)
+        |> Map.get(atom_coordinate)
+        |> Map.put(:occupant, "p1")
+
+      remove_target_occupant = socket
+      |> Map.get(:assigns)
+      |> Map.get(:chess_board)
+      |> Map.get(socket.assigns.target_piece_coordinate)
+      |> Map.put(:occupant, nil)
+
+      updated_tiles_occupant = socket
+      |> Map.get(:assigns)
+      |> Map.get(:chess_board)
+      |> Map.put(atom_coordinate, move_occupant)
+      |> Map.put(socket.assigns.target_piece_coordinate, remove_target_occupant)
+
+
+
+      # IO.inspect socket
+      #   |> Map.get(:assigns)
+      #   |> Map.get(:chess_board)
+
+      # chess_board = socket
+      # |> Map.get(:assigns)
+      # |> Map.get(:chess_board)
+
+      #update_board()
+
+      socket = assign(socket, selection_toggle: false, chess_pieces: updated_pieces_coordinate, chess_board_overlay: socket.assigns.old_chess_board_overlay, chess_board: updated_tiles_occupant)
+        {:noreply, socket}
+    else
+      socket = assign(socket, selection_toggle: false, chess_board: socket.assigns.old_chess_board, chess_board_overlay: socket.assigns.old_chess_board_overlay)
+      {:noreply, socket}
+    end
   end
 
   # first keyup enter press
@@ -36,14 +89,24 @@ defmodule PortfolioWeb.ChessLive do
     when key_up == "Enter" and socket.assigns.selection_toggle == false do
 
     old_chess_board = socket.assigns.chess_board
+    old_chess_board_overlay = socket.assigns.chess_board_overlay
 
-    IO.inspect sel_alpha = socket.assigns.sel_alpha
-    IO.inspect sel_no = socket.assigns.sel_no
+    sel_alpha = socket.assigns.sel_alpha
+    sel_no = socket.assigns.sel_no
 
-    pone_shaded = tile_shade_red(sel_alpha, sel_no, socket.assigns.chess_board, 1)
+    atom_coordinate = String.to_atom(socket.assigns.sel_alpha<>Integer.to_string(socket.assigns.sel_no))
 
-    socket = assign(socket, selection_toggle: :true, chess_board: pone_shaded, old_chess_board: old_chess_board)
-    {:noreply, socket}
+    if atom_coordinate in Map.keys(socket.assigns.chess_pieces) and socket
+    |> Map.get(:assigns)
+    |> Map.get(:chess_pieces)
+    |> Map.get(atom_coordinate)
+    |> Map.get(:role) == "pone"  do
+      pone_shaded = tile_shade_red(sel_alpha, sel_no, socket.assigns.chess_board, 1)
+      socket = assign(socket, selection_toggle: :true, chess_board_overlay: pone_shaded, old_chess_board_overlay: old_chess_board_overlay, old_chess_board: old_chess_board, target_piece_coordinate: atom_coordinate)
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
   end
 
   def handle_event("tile_selection", %{"key" => key_up}, socket) do
@@ -53,7 +116,6 @@ defmodule PortfolioWeb.ChessLive do
           socket.assigns.sel_no + 1
         else
           IO.puts "reached the edge of chess board"
-          put_flash(socket, :error, "You can't access that page")
           socket.assigns.sel_no
         end
       "ArrowDown" ->
@@ -94,6 +156,7 @@ defmodule PortfolioWeb.ChessLive do
     {:noreply, socket}
   end
 
+  #PONE TILE RED SHADE
   def tile_shade_red(sel_alpha, sel_no, chess_board, i) when i > 2 do
     chess_board
   end

@@ -3,45 +3,52 @@ defmodule Portfolio.Chess do
   alias Portfolio.ChessPieces
   require Integer
 
-  def fill_board(i, j, k, chess_board) when k > 7 do
+  def fill_board(i, j, k, chess_board, overlay) when k > 7 do
     chess_board
   end
 
-  def fill_board(i, j, k, chess_board) when i > 7 do
+  def fill_board(i, j, k, chess_board, overlay) when i > 7 do
     # i 0..7 =  row a1 b1 c1 d1 e1 f1 g1 h1 .. row a8 b8 c8 d8 e8 f8 g8 h8
     i = 0
     k = k + 1 #increase row
     # conditional guard for increasing the row e.a 1st row to 2nd row
     if Integer.is_odd(k) do
       j = 1 #white
-      fill_board(i, j, k,chess_board)
+      fill_board(i, j, k,chess_board, overlay)
     else
       j = 0 #black
-      fill_board(i, j, k,chess_board)
+      fill_board(i, j, k,chess_board, overlay)
     end
   end
 
-  def fill_board(i, j, k, chess_board) when j > 1 do
-    fill_board(i, j = 0, k, chess_board)
+  def fill_board(i, j, k, chess_board, overlay) when j > 1 do
+    fill_board(i, j = 0, k, chess_board, overlay)
   end
 
-  def fill_board(i \\ 0, j \\ 0, k \\ 0, chess_board \\ %{}) do
+  def fill_board(i \\ 0, j \\ 0, k \\ 0, chess_board \\ %{}, overlay \\ :false) do
     # actual chess row and columns & color b/w
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     no_range = 1..8
-    color_tuple = {:black, :white}
+    color_tuple = {:black, :white, :nil}
 
-      board = ChessTiles.tiles(
-        coordinate_alpha: elem(Enum.fetch(alpha_list, i), 1),
-        color: elem(color_tuple, j),
-        coordinate_no: elem(Enum.fetch(no_range, k), 1),
-        occupant: nil)
+    board = if overlay == :false do
+      ChessTiles.tiles(
+       coordinate_alpha: elem(Enum.fetch(alpha_list, i), 1),
+       color: elem(color_tuple, j),
+       coordinate_no: elem(Enum.fetch(no_range, k), 1),
+       occupant: nil)
+    else
+      ChessTiles.tiles(
+       coordinate_alpha: elem(Enum.fetch(alpha_list, i), 1),
+       color: elem(color_tuple, 2),
+       coordinate_no: elem(Enum.fetch(no_range, k), 1))
+    end
 
-      # !IMPORTANT Map.put 2nd arg :a1 concatinated alpha + no
-      chess_board = Map.put(chess_board, String.to_atom(elem(Enum.fetch(alpha_list, i), 1) <> Integer.to_string(elem(Enum.fetch(no_range, k), 1))), board)
+    # !IMPORTANT Map.put 2nd arg :a1 concatinated alpha + no
+    chess_board = Map.put(chess_board, String.to_atom(elem(Enum.fetch(alpha_list, i), 1) <> Integer.to_string(elem(Enum.fetch(no_range, k), 1))), board)
 
-      #call itself to iterate
-      fill_board(i + 1, j + 1, k, chess_board)
+    #call itself to iterate
+    fill_board(i + 1, j + 1, k, chess_board, overlay)
   end
 
 
