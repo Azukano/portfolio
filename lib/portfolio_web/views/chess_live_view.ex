@@ -121,7 +121,21 @@ defmodule PortfolioWeb.ChessLive do
         target_piece_role: target_piece_role )
 
         {:noreply, socket}
-
+      { true, "rook" } ->
+        IO.puts "rook"
+        {:noreply, socket}
+      { true, "knight" } ->
+        IO.puts "knight"
+        {:noreply, socket}
+      { true, "bishop" } ->
+        IO.puts "bishop"
+        {:noreply, socket}
+      { true, "queen" } ->
+        IO.puts "queen"
+        {:noreply, socket}
+      { true, "king" } ->
+        IO.puts "king"
+        {:noreply, socket}
       { false, _ } ->
         IO.puts "@@@"
         {:noreply, socket}
