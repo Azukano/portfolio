@@ -36,16 +36,17 @@ defmodule PortfolioWeb.ChessLive do
       |> Map.get(:color) == :red do
 
       move_piece = socket
-        |> Map.get(:assigns)
-        |> Map.get(:chess_pieces)
-        |> Map.get(socket.assigns.target_piece_coordinate)
-        |> Map.put(:coordinate_alpha, socket.assigns.sel_alpha)
-        |> Map.put(:coordinate_no, socket.assigns.sel_no)
+      |> Map.get(:assigns)
+      |> Map.get(:chess_pieces)
+      |> Map.get(socket.assigns.target_piece_coordinate)
+      |> Map.put(:coordinate_alpha, socket.assigns.sel_alpha)
+      |> Map.put(:coordinate_no, socket.assigns.sel_no)
 
       updated_pieces_coordinate = socket
-        |> Map.get(:assigns)
-        |> Map.get(:chess_pieces)
-        |> Map.put(atom_coordinate, move_piece)
+      |> Map.get(:assigns)
+      |> Map.get(:chess_pieces)
+      |> Map.delete(socket.assigns.target_piece_coordinate)
+      |> Map.put(atom_coordinate, move_piece)
 
       move_occupant = socket
         |> Map.get(:assigns)
@@ -76,7 +77,8 @@ defmodule PortfolioWeb.ChessLive do
       #update_board()
 
       socket = assign(socket, selection_toggle: false, chess_pieces: updated_pieces_coordinate, chess_board_overlay: socket.assigns.old_chess_board_overlay, chess_board: updated_tiles_occupant)
-        {:noreply, socket}
+      IO.inspect socket |> Map.get(:assigns) |> Map.get(:chess_pieces) |> Map.get(:a2)
+      {:noreply, socket}
     else
       socket = assign(socket, selection_toggle: false, chess_board: socket.assigns.old_chess_board, chess_board_overlay: socket.assigns.old_chess_board_overlay)
       {:noreply, socket}
@@ -93,10 +95,11 @@ defmodule PortfolioWeb.ChessLive do
     sel_alpha = socket.assigns.sel_alpha
     sel_no = socket.assigns.sel_no
 
-    atom_coordinate = String.to_atom(socket.assigns.sel_alpha<>Integer.to_string(socket.assigns.sel_no))
+    atom_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
 
-    target_piece_role = if atom_coordinate in Map.keys(socket.assigns.chess_pieces) do
-      socket
+    # target_piece_role = if atom_coordinate in Map.keys(socket.assigns.chess_pieces) do
+    target_piece_role = if Map.has_key?(socket.assigns.chess_pieces, atom_coordinate) do
+      IO.inspect socket
       |> Map.get(:assigns)
       |> Map.get(:chess_pieces)
       |> Map.get(atom_coordinate)
