@@ -28,13 +28,27 @@ defmodule PortfolioWeb.ChessLive do
     when key_up == "Enter" and socket.assigns.selection_toggle == true do
 
     atom_coordinate = String.to_atom(socket.assigns.sel_alpha<>Integer.to_string(socket.assigns.sel_no))
+    validate_coordinate_tile = if socket.assigns.sel_alpha < "a" or socket.assigns.sel_alpha > "h"
+      or socket.assigns.sel_no < 1 or socket.assigns.sel_no > 8 do
+      false
+    else
+      true
+    end
 
-    if socket
+    validate_color_tile = if validate_coordinate_tile == true do
+      case socket
       |> Map.get(:assigns)
       |> Map.get(:chess_board_overlay)
       |> Map.get(atom_coordinate)
-      |> Map.get(:color) == :red do
+      |> Map.get(:color) do
+        :black -> :black
+        :white -> :white
+        :red -> :red
+        #_ -> nil
+      end
+    end
 
+    if validate_color_tile == :red do
       move_piece = socket
       |> Map.get(:assigns)
       |> Map.get(:chess_pieces)
