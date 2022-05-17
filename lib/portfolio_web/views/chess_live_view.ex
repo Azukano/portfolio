@@ -66,7 +66,7 @@ defmodule PortfolioWeb.ChessLive do
         |> Map.get(:assigns)
         |> Map.get(:chess_board)
         |> Map.get(atom_coordinate)
-        |> Map.put(:occupant, "p1")
+        |> Map.put(:occupant, socket.assigns.target_piece_occupant_id)
 
       remove_target_occupant = socket
       |> Map.get(:assigns)
@@ -91,7 +91,7 @@ defmodule PortfolioWeb.ChessLive do
       #update_board()
 
       socket = assign(socket, selection_toggle: false, chess_pieces: updated_pieces_coordinate, chess_board_overlay: socket.assigns.old_chess_board_overlay, chess_board: updated_tiles_occupant)
-      IO.inspect socket |> Map.get(:assigns) |> Map.get(:chess_pieces) |> Map.get(:a2)
+
       {:noreply, socket}
     else
       socket = assign(socket, selection_toggle: false, chess_board: socket.assigns.old_chess_board, chess_board_overlay: socket.assigns.old_chess_board_overlay)
@@ -113,7 +113,7 @@ defmodule PortfolioWeb.ChessLive do
 
     # target_piece_role = if atom_coordinate in Map.keys(socket.assigns.chess_pieces) do
     target_piece_role = if Map.has_key?(socket.assigns.chess_pieces, atom_coordinate) do
-      IO.inspect socket
+      socket
       |> Map.get(:assigns)
       |> Map.get(:chess_pieces)
       |> Map.get(atom_coordinate)
@@ -128,18 +128,38 @@ defmodule PortfolioWeb.ChessLive do
 
     case {validate_tile_occupancy, target_piece_role}  do
       { true, "pone" } ->
-        pone_shaded = tile_shade_red(sel_alpha, sel_no, socket.assigns.chess_board, 1)
+        pone_shaded = tile_shade_red(sel_alpha, sel_no, socket.assigns.chess_board, 1, target_piece_role)
+        IO.inspect target_piece_occupant_id = socket
+        |> Map.get(:assigns)
+        |> Map.get(:chess_board)
+        |> Map.get(atom_coordinate)
+        |> Map.get(:occupant)
         socket = assign( socket,
         selection_toggle: :true,
         chess_board_overlay: pone_shaded,
         old_chess_board_overlay: old_chess_board_overlay,
         old_chess_board: old_chess_board,
         target_piece_coordinate: atom_coordinate,
-        target_piece_role: target_piece_role )
+        target_piece_role: target_piece_role,
+        target_piece_occupant_id: target_piece_occupant_id )
 
         {:noreply, socket}
       { true, "rook" } ->
-        IO.puts "rook"
+        rook_shaded = tile_shade_red(sel_alpha, sel_no, socket.assigns.chess_board, 1, target_piece_role)
+        target_piece_occupant_id = socket \
+        |> Map.get(:assigns)
+        |> Map.get(:chess_board)
+        |> Map.get(atom_coordinate)
+        |> Map.get(:occupant)
+        socket = assign( socket,
+        selection_toggle: :true,
+        chess_board_overlay: rook_shaded,
+        old_chess_board_overlay: old_chess_board_overlay,
+        old_chess_board: old_chess_board,
+        target_piece_coordinate: atom_coordinate,
+        target_piece_role: target_piece_role,
+        target_piece_occupant_id: target_piece_occupant_id )
+
         {:noreply, socket}
       { true, "knight" } ->
         IO.puts "knight"
@@ -154,7 +174,7 @@ defmodule PortfolioWeb.ChessLive do
         IO.puts "king"
         {:noreply, socket}
       { false, _ } ->
-        IO.puts "@@@"
+        IO.puts "nil/invalid coordinate"
         {:noreply, socket}
     end
   end
@@ -207,15 +227,17 @@ defmodule PortfolioWeb.ChessLive do
   end
 
   #PONE TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, i) when i > 2 do
+  def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  when i > 2 and target_piece_role == "pone" do
     chess_board
   end
 
   #PONE TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, i) do
-    coordinate_atom = String.to_atom(sel_alpha<>Integer.to_string(sel_no + i))
+  def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  when target_piece_role == "pone" do
+    target_piece_coordiante_atom = String.to_atom(sel_alpha<>Integer.to_string(sel_no + i))
     pone_step_1 = chess_board
-    |> Map.get(coordinate_atom)
+    |> Map.get(target_piece_coordiante_atom)
     |> Map.put(:color, :red)
 
     i = if sel_no > 2 do
@@ -224,11 +246,68 @@ defmodule PortfolioWeb.ChessLive do
       i
     end
     new_chess_board_with_red_tile = chess_board
-    |> Map.put(coordinate_atom, pone_step_1)
-    tile_shade_red(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1)
+    |> Map.put(target_piece_coordiante_atom, pone_step_1)
+    tile_shade_red(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
+  end
+
+  #ROOK TILE RED SHADE HORIZONTAL (ALPHA)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  when i > 8 and target_piece_role == "rook" do
+    chess_board
+  end
+
+  #ROOK TILE RED SHADE
+  def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  when target_piece_role == "rook" do
+
+    target_piece_coordiante_atom = String.to_atom(<<96+i>><>Integer.to_string(sel_no))
+
+    i = if target_piece_coordiante_atom == String.to_atom(sel_alpha<>Integer.to_string(sel_no)) do
+      i = i + 1
+    else
+      i
+    end
+
+    target_piece_coordiante_atom = String.to_atom(<<96+i>><>Integer.to_string(sel_no))
+
+    rook_step_1  = if target_piece_coordiante_atom != :i1 do
+      chess_board
+      |> Map.get(target_piece_coordiante_atom)
+      |> Map.put(:color, :red)
+    end
+
+    IO.inspect rook_step_1
+
+    new_chess_board_with_red_tile = if rook_step_1 != nil do
+      chess_board
+      |> Map.put(target_piece_coordiante_atom, rook_step_1)
+    else
+      chess_board
+    end
+
+    tile_shade_red(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
   end
 
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #for {key, value} <- chess_pieces, value.coordinate_alpha == coordinate_alpha and value.coordinate_no == coordinate_no do
 #  IO.puts("#{key}: #{value.coordinate_alpha} #{value.coordinate_no}")
