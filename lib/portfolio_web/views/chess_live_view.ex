@@ -129,7 +129,7 @@ defmodule PortfolioWeb.ChessLive do
     case {validate_tile_occupancy, target_piece_role}  do
       { true, "pone" } ->
         pone_shaded = tile_shade_red(sel_alpha, sel_no, socket.assigns.chess_board, 1, target_piece_role)
-        IO.inspect target_piece_occupant_id = socket
+        target_piece_occupant_id = socket
         |> Map.get(:assigns)
         |> Map.get(:chess_board)
         |> Map.get(atom_coordinate)
@@ -339,13 +339,15 @@ defmodule PortfolioWeb.ChessLive do
   #BISHOP TILE RED SHADE
   def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when target_piece_role == "bishop" do
-    #up_left_diagonal = bishop_1st_way(sel_alpha, sel_no, chess_board, i)
-    up_right_diagonal = bishop_2nd_way(sel_alpha, sel_no, chess_board, i)
+    up_left_diagonal = bishop_1st_way(sel_alpha, sel_no, chess_board, i)
+    #up_right_diagonal = bishop_2nd_way(sel_alpha, sel_no, chess_board, i)
+    #down_left_diagonal = bishop_3rd_way(sel_alpha, sel_no, chess_board, i)
+    #down_right_diagonal = bishop_4th_way(sel_alpha, sel_no, chess_board, i)
   end
 
   #BISHOP TILE RED 1st WAY UP-LEFT DIAGONAL (-) ALPHA (+) NUMERIC
   def bishop_1st_way(sel_alpha, sel_no, chess_board, i) when i > 7 do
-    chess_board
+    bishop_2nd_way(sel_alpha, sel_no, chess_board, 1)
   end
 
   #BISHOP TILE RED 1st WAY UP-LEFT DIAGONAL (-) ALPHA (+) NUMERIC
@@ -359,7 +361,8 @@ defmodule PortfolioWeb.ChessLive do
 
     target_piece_coordinate_atom = String.to_atom(<<alpha_binary - i>><>Integer.to_string(sel_no + i))
 
-    bishop_step_1 = if <<alpha_binary - i>> > <<96>> and (sel_no + i) < 9 do
+    bishop_step_1 = if <<alpha_binary - i>> > <<96>> and <<alpha_binary - i>> < <<105>>
+    and (sel_no + i) < 9 and (sel_no + i) > 0  do
       chess_board
       |> Map.get(target_piece_coordinate_atom)
       |> Map.put(:color, :red)
@@ -372,14 +375,12 @@ defmodule PortfolioWeb.ChessLive do
       chess_board
     end
 
-    IO.inspect new_chess_board_with_red_tile
-
     bishop_1st_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1)
   end
 
   #BISHOP TILE RED 2nd WAY UP-RIGHT DIAGONAL (+) ALPHA (+) NUMERIC
   def bishop_2nd_way(sel_alpha, sel_no, chess_board, i) when i > 7 do
-    chess_board
+    bishop_3rd_way(sel_alpha, sel_no, chess_board, 1)
   end
 
   #BISHOP TILE RED 2nd WAY UP-RIGHT DIAGONAL (+) ALPHA (+) NUMERIC
@@ -395,7 +396,6 @@ defmodule PortfolioWeb.ChessLive do
 
     bishop_step_1 = if <<alpha_binary + i>> > <<96>> and <<alpha_binary + i>> < <<105>>
     and (sel_no + i) < 9 and (sel_no + i) > 0  do
-      IO.inspect target_piece_coordinate_atom
       chess_board
       |> Map.get(target_piece_coordinate_atom)
       |> Map.put(:color, :red)
@@ -409,6 +409,74 @@ defmodule PortfolioWeb.ChessLive do
     end
 
     bishop_2nd_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1)
+  end
+
+  #BISHOP TILE RED 3rd WAY DOWN-LEFT DIAGONAL (-) ALPHA (-) NUMERIC
+  def bishop_3rd_way(sel_alpha, sel_no, chess_board, i) when i > 7 do
+    bishop_4th_way(sel_alpha, sel_no, chess_board, 1)
+  end
+
+  #BISHOP TILE RED 3rd WAY DOWN-LEF DIAGONAL (-) ALPHA (-) NUMERIC
+  def bishop_3rd_way(sel_alpha, sel_no, chess_board, i) do
+    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    alpha_binary = for x <- 0..7 do
+      if sel_alpha == alpha_list |> Enum.at(x) do
+        96 + x + 1
+      end
+    end |> Enum.find(fn x -> x != nil end )
+
+    target_piece_coordinate_atom = String.to_atom(<<alpha_binary - i>><>Integer.to_string(sel_no - i))
+
+    bishop_step_1 =
+      if <<alpha_binary - i>> > <<96>> and <<alpha_binary - i>> < <<105>>
+      and (sel_no - i) < 9 and (sel_no - i) > 0  do
+      chess_board
+      |> Map.get(target_piece_coordinate_atom)
+      |> Map.put(:color, :red)
+    end
+
+    new_chess_board_with_red_tile = if bishop_step_1 != nil do
+      chess_board
+      |> Map.put(target_piece_coordinate_atom, bishop_step_1)
+    else
+      chess_board
+    end
+
+    bishop_3rd_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1)
+  end
+
+  #BISHOP TILE RED 4th WAY DOWN-RIGHT DIAGONAL (+) ALPHA (-) NUMERIC
+  def bishop_4th_way(sel_alpha, sel_no, chess_board, i) when i > 7 do
+    chess_board
+  end
+
+  #BISHOP TILE RED 4th WAY DOWN-RIGHT DIAGONAL (+) ALPHA (-) NUMERIC
+  def bishop_4th_way(sel_alpha, sel_no, chess_board, i) do
+    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    alpha_binary = for x <- 0..7 do
+      if sel_alpha == alpha_list |> Enum.at(x) do
+        96 + x + 1
+      end
+    end |> Enum.find(fn x -> x != nil end )
+
+    target_piece_coordinate_atom = String.to_atom(<<alpha_binary + i>><>Integer.to_string(sel_no - i))
+
+    bishop_step_1 =
+      if <<alpha_binary + i>> > <<96>> and <<alpha_binary + i>> < <<105>>
+      and (sel_no - i) < 9 and (sel_no - i) > 0  do
+      chess_board
+      |> Map.get(target_piece_coordinate_atom)
+      |> Map.put(:color, :red)
+    end
+
+    new_chess_board_with_red_tile = if bishop_step_1 != nil do
+      chess_board
+      |> Map.put(target_piece_coordinate_atom, bishop_step_1)
+    else
+      chess_board
+    end
+
+    bishop_4th_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1)
   end
 
 end
