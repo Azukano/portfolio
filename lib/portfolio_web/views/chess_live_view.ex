@@ -250,13 +250,48 @@ defmodule PortfolioWeb.ChessLive do
     tile_shade_red(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
   end
 
-  #ROOK TILE RED SHADE HORIZONTAL (ALPHA)
-  def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  def tile_shade_red_extension(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when i > 8 and target_piece_role == "rook" do
     chess_board
   end
 
-  #ROOK TILE RED SHADE
+  #ROOK TILE RED SHADE VERTICAL (NUMERIC)
+  def tile_shade_red_extension(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  when target_piece_role == "rook" do
+
+    target_piece_coordiante_atom = String.to_atom(sel_alpha<>Integer.to_string(1 + i))
+
+    i = if target_piece_coordiante_atom == String.to_atom(sel_alpha<>Integer.to_string(sel_no)) do
+      i = i + 1
+    else
+      i
+    end
+
+    target_piece_coordiante_atom = String.to_atom(sel_alpha<>Integer.to_string(1 + i))
+
+    rook_step_1  = if (1 + i) < 9 do
+      chess_board
+      |> Map.get(target_piece_coordiante_atom)
+      |> Map.put(:color, :red)
+    end
+
+    new_chess_board_with_red_tile = if rook_step_1 != nil do
+      chess_board
+      |> Map.put(target_piece_coordiante_atom, rook_step_1)
+    else
+      chess_board
+    end
+
+    tile_shade_red_extension(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
+  end
+
+  #ROOK TILE RED SHADE HORIZONTAL (ALPHA)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  when i > 8 and target_piece_role == "rook" do
+    tile_shade_red_extension(sel_alpha, sel_no, chess_board, 0, target_piece_role)
+  end
+
+  #ROOK TILE RED SHADE HORIZONTAL (ALPHA)
   def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when target_piece_role == "rook" do
 
@@ -270,13 +305,11 @@ defmodule PortfolioWeb.ChessLive do
 
     target_piece_coordiante_atom = String.to_atom(<<96+i>><>Integer.to_string(sel_no))
 
-    rook_step_1  = if target_piece_coordiante_atom != :i1 do
+    rook_step_1  = if <<96+i>> < "i" do
       chess_board
       |> Map.get(target_piece_coordiante_atom)
       |> Map.put(:color, :red)
     end
-
-    IO.inspect rook_step_1
 
     new_chess_board_with_red_tile = if rook_step_1 != nil do
       chess_board
