@@ -146,7 +146,7 @@ defmodule PortfolioWeb.ChessLive do
         {:noreply, socket}
       { true, "rook" } ->
         rook_shaded = tile_shade_red(sel_alpha, sel_no, socket.assigns.chess_board, 1, target_piece_role)
-        target_piece_occupant_id = socket \
+        target_piece_occupant_id = socket
         |> Map.get(:assigns)
         |> Map.get(:chess_board)
         |> Map.get(atom_coordinate)
@@ -165,7 +165,21 @@ defmodule PortfolioWeb.ChessLive do
         IO.puts "knight"
         {:noreply, socket}
       { true, "bishop" } ->
-        IO.puts "bishop"
+        bishop_shaded = tile_shade_red(sel_alpha, sel_no, socket.assigns.chess_board, 1, target_piece_role)
+        target_piece_occupant_id = socket
+        |> Map.get(:assigns)
+        |> Map.get(:chess_board)
+        |> Map.get(atom_coordinate)
+        |> Map.get(:occupant)
+        socket = assign( socket,
+        selection_toggle: :true,
+        chess_board_overlay: bishop_shaded,
+        old_chess_board_overlay: old_chess_board_overlay,
+        old_chess_board: old_chess_board,
+        target_piece_coordinate: atom_coordinate,
+        target_piece_role: target_piece_role,
+        target_piece_occupant_id: target_piece_occupant_id )
+
         {:noreply, socket}
       { true, "queen" } ->
         IO.puts "queen"
@@ -235,9 +249,9 @@ defmodule PortfolioWeb.ChessLive do
   #PONE TILE RED SHADE
   def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when target_piece_role == "pone" do
-    target_piece_coordiante_atom = String.to_atom(sel_alpha<>Integer.to_string(sel_no + i))
+    target_piece_coordinate_atom = String.to_atom(sel_alpha<>Integer.to_string(sel_no + i))
     pone_step_1 = chess_board
-    |> Map.get(target_piece_coordiante_atom)
+    |> Map.get(target_piece_coordinate_atom)
     |> Map.put(:color, :red)
 
     i = if sel_no > 2 do
@@ -246,10 +260,11 @@ defmodule PortfolioWeb.ChessLive do
       i
     end
     new_chess_board_with_red_tile = chess_board
-    |> Map.put(target_piece_coordiante_atom, pone_step_1)
+    |> Map.put(target_piece_coordinate_atom, pone_step_1)
     tile_shade_red(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
   end
 
+  #ROOK TILE RED
   def tile_shade_red_extension(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when i > 8 and target_piece_role == "rook" do
     chess_board
@@ -259,25 +274,25 @@ defmodule PortfolioWeb.ChessLive do
   def tile_shade_red_extension(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when target_piece_role == "rook" do
 
-    target_piece_coordiante_atom = String.to_atom(sel_alpha<>Integer.to_string(1 + i))
+    target_piece_coordinate_atom = String.to_atom(sel_alpha<>Integer.to_string(1 + i))
 
-    i = if target_piece_coordiante_atom == String.to_atom(sel_alpha<>Integer.to_string(sel_no)) do
+    i = if target_piece_coordinate_atom == String.to_atom(sel_alpha<>Integer.to_string(sel_no)) do
       i = i + 1
     else
       i
     end
 
-    target_piece_coordiante_atom = String.to_atom(sel_alpha<>Integer.to_string(1 + i))
+    target_piece_coordinate_atom = String.to_atom(sel_alpha<>Integer.to_string(1 + i))
 
     rook_step_1  = if (1 + i) < 9 do
       chess_board
-      |> Map.get(target_piece_coordiante_atom)
+      |> Map.get(target_piece_coordinate_atom)
       |> Map.put(:color, :red)
     end
 
     new_chess_board_with_red_tile = if rook_step_1 != nil do
       chess_board
-      |> Map.put(target_piece_coordiante_atom, rook_step_1)
+      |> Map.put(target_piece_coordinate_atom, rook_step_1)
     else
       chess_board
     end
@@ -285,7 +300,7 @@ defmodule PortfolioWeb.ChessLive do
     tile_shade_red_extension(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
   end
 
-  #ROOK TILE RED SHADE HORIZONTAL (ALPHA)
+  #ROOK TILE RED SHADE
   def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when i > 8 and target_piece_role == "rook" do
     tile_shade_red_extension(sel_alpha, sel_no, chess_board, 0, target_piece_role)
@@ -295,30 +310,105 @@ defmodule PortfolioWeb.ChessLive do
   def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when target_piece_role == "rook" do
 
-    target_piece_coordiante_atom = String.to_atom(<<96+i>><>Integer.to_string(sel_no))
+    target_piece_coordinate_atom = String.to_atom(<<96+i>><>Integer.to_string(sel_no))
 
-    i = if target_piece_coordiante_atom == String.to_atom(sel_alpha<>Integer.to_string(sel_no)) do
+    i = if target_piece_coordinate_atom == String.to_atom(sel_alpha<>Integer.to_string(sel_no)) do
       i = i + 1
     else
       i
     end
 
-    target_piece_coordiante_atom = String.to_atom(<<96+i>><>Integer.to_string(sel_no))
+    target_piece_coordinate_atom = String.to_atom(<<96+i>><>Integer.to_string(sel_no))
 
     rook_step_1  = if <<96+i>> < "i" do
       chess_board
-      |> Map.get(target_piece_coordiante_atom)
+      |> Map.get(target_piece_coordinate_atom)
       |> Map.put(:color, :red)
     end
 
     new_chess_board_with_red_tile = if rook_step_1 != nil do
       chess_board
-      |> Map.put(target_piece_coordiante_atom, rook_step_1)
+      |> Map.put(target_piece_coordinate_atom, rook_step_1)
     else
       chess_board
     end
 
     tile_shade_red(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
+  end
+
+  #BISHOP TILE RED SHADE
+  def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  when target_piece_role == "bishop" do
+    #up_left_diagonal = bishop_1st_way(sel_alpha, sel_no, chess_board, i)
+    up_right_diagonal = bishop_2nd_way(sel_alpha, sel_no, chess_board, i)
+  end
+
+  #BISHOP TILE RED 1st WAY UP-LEFT DIAGONAL (-) ALPHA (+) NUMERIC
+  def bishop_1st_way(sel_alpha, sel_no, chess_board, i) when i > 7 do
+    chess_board
+  end
+
+  #BISHOP TILE RED 1st WAY UP-LEFT DIAGONAL (-) ALPHA (+) NUMERIC
+  def bishop_1st_way(sel_alpha, sel_no, chess_board, i) do
+    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    alpha_binary = for x <- 0..7 do
+      if sel_alpha == alpha_list |> Enum.at(x) do
+        96 + x + 1
+      end
+    end |> Enum.find(fn x -> x != nil end )
+
+    target_piece_coordinate_atom = String.to_atom(<<alpha_binary - i>><>Integer.to_string(sel_no + i))
+
+    bishop_step_1 = if <<alpha_binary - i>> > <<96>> and (sel_no + i) < 9 do
+      chess_board
+      |> Map.get(target_piece_coordinate_atom)
+      |> Map.put(:color, :red)
+    end
+
+    new_chess_board_with_red_tile = if bishop_step_1 != nil do
+      chess_board
+      |> Map.put(target_piece_coordinate_atom, bishop_step_1)
+    else
+      chess_board
+    end
+
+    IO.inspect new_chess_board_with_red_tile
+
+    bishop_1st_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1)
+  end
+
+  #BISHOP TILE RED 2nd WAY UP-RIGHT DIAGONAL (+) ALPHA (+) NUMERIC
+  def bishop_2nd_way(sel_alpha, sel_no, chess_board, i) when i > 7 do
+    chess_board
+  end
+
+  #BISHOP TILE RED 2nd WAY UP-RIGHT DIAGONAL (+) ALPHA (+) NUMERIC
+  def bishop_2nd_way(sel_alpha, sel_no, chess_board, i) do
+    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    alpha_binary = for x <- 0..7 do
+      if sel_alpha == alpha_list |> Enum.at(x) do
+        96 + x + 1
+      end
+    end |> Enum.find(fn x -> x != nil end )
+
+    target_piece_coordinate_atom = String.to_atom(<<alpha_binary + i>><>Integer.to_string(sel_no + i))
+
+    bishop_step_1 = if <<alpha_binary + i>> > <<96>> and <<alpha_binary + i>> < <<105>>
+    and (sel_no + i) < 9 and (sel_no + i) > 0  do
+      IO.inspect target_piece_coordinate_atom
+      chess_board
+      |> Map.get(target_piece_coordinate_atom)
+      |> Map.put(:color, :red)
+    end
+
+    new_chess_board_with_red_tile = if bishop_step_1 != nil do
+      chess_board
+      |> Map.put(target_piece_coordinate_atom, bishop_step_1)
+    else
+      chess_board
+    end
+
+    bishop_2nd_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1)
   end
 
 end
