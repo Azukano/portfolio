@@ -182,7 +182,21 @@ defmodule PortfolioWeb.ChessLive do
 
         {:noreply, socket}
       { true, "queen" } ->
-        IO.puts "queen"
+        queen_shaded = tile_shade_red(sel_alpha, sel_no, socket.assigns.chess_board, 1, "queen")
+        target_piece_occupant_id = socket
+        |> Map.get(:assigns)
+        |> Map.get(:chess_board)
+        |> Map.get(atom_coordinate)
+        |> Map.get(:occupant)
+        socket = assign( socket,
+        selection_toggle: :true,
+        chess_board_overlay: queen_shaded,
+        old_chess_board_overlay: old_chess_board_overlay,
+        old_chess_board: old_chess_board,
+        target_piece_coordinate: atom_coordinate,
+        target_piece_role: target_piece_role,
+        target_piece_occupant_id: target_piece_occupant_id )
+
         {:noreply, socket}
       { true, "king" } ->
         IO.puts "king"
@@ -264,15 +278,21 @@ defmodule PortfolioWeb.ChessLive do
     tile_shade_red(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
   end
 
+  #QUEEN TILE RED EXTENSION
+  def tile_shade_red_extension(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  when i > 8 and target_piece_role == "queen" do
+    bishop_1st_way(sel_alpha, sel_no, chess_board, 1, target_piece_role)
+  end
+
   #ROOK TILE RED
   def tile_shade_red_extension(sel_alpha, sel_no, chess_board, i, target_piece_role)
-  when i > 8 and target_piece_role == "rook" do
+  when i > 8 and (target_piece_role == "rook" or target_piece_role == "queen") do
     chess_board
   end
 
   #ROOK TILE RED SHADE VERTICAL (NUMERIC)
   def tile_shade_red_extension(sel_alpha, sel_no, chess_board, i, target_piece_role)
-  when target_piece_role == "rook" do
+  when (target_piece_role == "rook" or target_piece_role == "queen") do
 
     target_piece_coordinate_atom = String.to_atom(sel_alpha<>Integer.to_string(1 + i))
 
@@ -302,13 +322,13 @@ defmodule PortfolioWeb.ChessLive do
 
   #ROOK TILE RED SHADE
   def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
-  when i > 8 and target_piece_role == "rook" do
+  when i > 8 and (target_piece_role == "rook" or target_piece_role == "queen") do
     tile_shade_red_extension(sel_alpha, sel_no, chess_board, 0, target_piece_role)
   end
 
   #ROOK TILE RED SHADE HORIZONTAL (ALPHA)
   def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
-  when target_piece_role == "rook" do
+  when (target_piece_role == "rook" or target_piece_role == "queen") do
 
     target_piece_coordinate_atom = String.to_atom(<<96+i>><>Integer.to_string(sel_no))
 
@@ -339,19 +359,19 @@ defmodule PortfolioWeb.ChessLive do
   #BISHOP TILE RED SHADE
   def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when target_piece_role == "bishop" do
-    up_left_diagonal = bishop_1st_way(sel_alpha, sel_no, chess_board, i)
+    up_left_diagonal = bishop_1st_way(sel_alpha, sel_no, chess_board, i, target_piece_role)
     #up_right_diagonal = bishop_2nd_way(sel_alpha, sel_no, chess_board, i)
     #down_left_diagonal = bishop_3rd_way(sel_alpha, sel_no, chess_board, i)
     #down_right_diagonal = bishop_4th_way(sel_alpha, sel_no, chess_board, i)
   end
 
   #BISHOP TILE RED 1st WAY UP-LEFT DIAGONAL (-) ALPHA (+) NUMERIC
-  def bishop_1st_way(sel_alpha, sel_no, chess_board, i) when i > 7 do
-    bishop_2nd_way(sel_alpha, sel_no, chess_board, 1)
+  def bishop_1st_way(sel_alpha, sel_no, chess_board, i, target_piece_role) when i > 7 do
+    bishop_2nd_way(sel_alpha, sel_no, chess_board, 1, target_piece_role)
   end
 
   #BISHOP TILE RED 1st WAY UP-LEFT DIAGONAL (-) ALPHA (+) NUMERIC
-  def bishop_1st_way(sel_alpha, sel_no, chess_board, i) do
+  def bishop_1st_way(sel_alpha, sel_no, chess_board, i, target_piece_role) do
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
       if sel_alpha == alpha_list |> Enum.at(x) do
@@ -375,16 +395,16 @@ defmodule PortfolioWeb.ChessLive do
       chess_board
     end
 
-    bishop_1st_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1)
+    bishop_1st_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
   end
 
   #BISHOP TILE RED 2nd WAY UP-RIGHT DIAGONAL (+) ALPHA (+) NUMERIC
-  def bishop_2nd_way(sel_alpha, sel_no, chess_board, i) when i > 7 do
-    bishop_3rd_way(sel_alpha, sel_no, chess_board, 1)
+  def bishop_2nd_way(sel_alpha, sel_no, chess_board, i, target_piece_role) when i > 7 do
+    bishop_3rd_way(sel_alpha, sel_no, chess_board, 1, target_piece_role)
   end
 
   #BISHOP TILE RED 2nd WAY UP-RIGHT DIAGONAL (+) ALPHA (+) NUMERIC
-  def bishop_2nd_way(sel_alpha, sel_no, chess_board, i) do
+  def bishop_2nd_way(sel_alpha, sel_no, chess_board, i, target_piece_role) do
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
       if sel_alpha == alpha_list |> Enum.at(x) do
@@ -408,16 +428,16 @@ defmodule PortfolioWeb.ChessLive do
       chess_board
     end
 
-    bishop_2nd_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1)
+    bishop_2nd_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
   end
 
   #BISHOP TILE RED 3rd WAY DOWN-LEFT DIAGONAL (-) ALPHA (-) NUMERIC
-  def bishop_3rd_way(sel_alpha, sel_no, chess_board, i) when i > 7 do
-    bishop_4th_way(sel_alpha, sel_no, chess_board, 1)
+  def bishop_3rd_way(sel_alpha, sel_no, chess_board, i, target_piece_role) when i > 7 do
+    bishop_4th_way(sel_alpha, sel_no, chess_board, 1, target_piece_role)
   end
 
   #BISHOP TILE RED 3rd WAY DOWN-LEF DIAGONAL (-) ALPHA (-) NUMERIC
-  def bishop_3rd_way(sel_alpha, sel_no, chess_board, i) do
+  def bishop_3rd_way(sel_alpha, sel_no, chess_board, i, target_piece_role) do
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
       if sel_alpha == alpha_list |> Enum.at(x) do
@@ -442,16 +462,16 @@ defmodule PortfolioWeb.ChessLive do
       chess_board
     end
 
-    bishop_3rd_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1)
+    bishop_3rd_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
   end
 
   #BISHOP TILE RED 4th WAY DOWN-RIGHT DIAGONAL (+) ALPHA (-) NUMERIC
-  def bishop_4th_way(sel_alpha, sel_no, chess_board, i) when i > 7 do
+  def bishop_4th_way(sel_alpha, sel_no, chess_board, i, target_piece_role) when i > 7 do
     chess_board
   end
 
   #BISHOP TILE RED 4th WAY DOWN-RIGHT DIAGONAL (+) ALPHA (-) NUMERIC
-  def bishop_4th_way(sel_alpha, sel_no, chess_board, i) do
+  def bishop_4th_way(sel_alpha, sel_no, chess_board, i, target_piece_role) do
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
       if sel_alpha == alpha_list |> Enum.at(x) do
@@ -476,7 +496,7 @@ defmodule PortfolioWeb.ChessLive do
       chess_board
     end
 
-    bishop_4th_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1)
+    bishop_4th_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
   end
 
 end
