@@ -162,7 +162,21 @@ defmodule PortfolioWeb.ChessLive do
 
         {:noreply, socket}
       { true, "knight" } ->
-        IO.puts "knight"
+        knight_shaded = tile_shade_red(sel_alpha, sel_no, socket.assigns.chess_board, 1, target_piece_role)
+        target_piece_occupant_id = socket
+        |> Map.get(:assigns)
+        |> Map.get(:chess_board)
+        |> Map.get(atom_coordinate)
+        |> Map.get(:occupant)
+        socket = assign( socket,
+        selection_toggle: :true,
+        chess_board_overlay: knight_shaded,
+        old_chess_board_overlay: old_chess_board_overlay,
+        old_chess_board: old_chess_board,
+        target_piece_coordinate: atom_coordinate,
+        target_piece_role: target_piece_role,
+        target_piece_occupant_id: target_piece_occupant_id )
+
         {:noreply, socket}
       { true, "bishop" } ->
         bishop_shaded = tile_shade_red(sel_alpha, sel_no, socket.assigns.chess_board, 1, target_piece_role)
@@ -542,6 +556,80 @@ defmodule PortfolioWeb.ChessLive do
 
     IO.inspect targets_atom_list # [nil, :d1, :d2, nil, nil, :e2, nil, :f1, :f2]
 
+    ###### SHORT HAND VERSION ######
+
+    # new_chess_board_with_red_tile =
+    #   for target_atom <- targets_atom_list, target_atom != nil do
+    #     king_step1 = chess_board
+    #     |> Map.get(target_atom)
+    #     |> Map.put(:color, :red)
+    #     chess_board
+    #     |> Map.put(target_atom, king_step1)
+    #   end
+
+    # new_chess_board_with_red_tile = Enum.fetch(new_chess_board_with_red_tile, 4) |> elem(1)
+    # IO.inspect new_chess_board_with_red_tile.e2
+
+    ###### ~~~~~~~~~~~~~~~~~~ ######
+
+    target_atom = targets_atom_list |> Enum.fetch(i - 1) |> elem(1) # 1st element to 9th element
+
+     king_step_1 =
+       if target_atom != nil do #if statement to nullify the pattern match during recursion if value is nil
+       chess_board
+       |> Map.get(target_atom)
+       |> Map.put(:color, :red)
+    end
+
+     new_chess_board_with_red_tile = if king_step_1 != nil do #avoid passing in nil value to the map (will error)
+       chess_board
+       |> Map.put(target_atom, king_step_1)
+     else
+       chess_board
+     end
+
+     tile_shade_red(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
+  end
+
+  def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  when i > 25 and target_piece_role == "knight" do
+    chess_board
+  end
+  #KNIGHT MOVESET
+  def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  when target_piece_role == "knight" do
+
+    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    alpha_binary = for x <- 0..7 do
+      if sel_alpha == alpha_list |> Enum.at(x) do
+        96 + x + 1
+      end
+    end |> Enum.find(fn x -> x != nil end )
+
+    target_piece_coordinate_atom = String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no))
+
+    targets_atom_list = for x <- -2..2, j <- -2..2 do
+      if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>>
+        and sel_no + j > 0 and sel_no + j < 9
+        and String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) != target_piece_coordinate_atom
+        and (
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + 2))
+          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 2>><>Integer.to_string(sel_no + 1))
+          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no - 2))
+          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 2>><>Integer.to_string(sel_no - 1))
+          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + 2))
+          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 2>><>Integer.to_string(sel_no + 1))
+          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no - 2))
+          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 2>><>Integer.to_string(sel_no - 1))
+        ) do
+      String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))
+      else
+        nil
+      end
+    end
+
+    IO.inspect targets_atom_list
+
     target_atom = targets_atom_list |> Enum.fetch(i - 1) |> elem(1) # 1st element to 9th element
 
     king_step_1 =
@@ -549,7 +637,7 @@ defmodule PortfolioWeb.ChessLive do
       chess_board
       |> Map.get(target_atom)
       |> Map.put(:color, :red)
-    end
+   end
 
     new_chess_board_with_red_tile = if king_step_1 != nil do #avoid passing in nil value to the map (will error)
       chess_board
@@ -559,6 +647,7 @@ defmodule PortfolioWeb.ChessLive do
     end
 
     tile_shade_red(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
+
   end
 
 end
