@@ -307,81 +307,85 @@ defmodule PortfolioWeb.ChessLive do
   end
 
   #QUEEN TILE RED EXTENSION
-  def tile_shade_red_extension(sel_alpha, sel_no, chess_board, i, target_piece_role)
-  when i > 8 and target_piece_role == "queen" do
+  def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  when i > 28 and target_piece_role == "queen" do
     bishop_1st_way(sel_alpha, sel_no, chess_board, 1, target_piece_role)
   end
 
   #ROOK TILE RED
-  def tile_shade_red_extension(sel_alpha, sel_no, chess_board, i, target_piece_role)
-  when i > 8 and (target_piece_role == "rook" or target_piece_role == "queen") do
+  def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
+  when i > 28 and (target_piece_role == "rook" or target_piece_role == "queen") do
     chess_board
   end
 
   #ROOK TILE RED SHADE VERTICAL (NUMERIC)
-  def tile_shade_red_extension(sel_alpha, sel_no, chess_board, i, target_piece_role)
-  when (target_piece_role == "rook" or target_piece_role == "queen") do
-
-    target_piece_coordinate_atom = String.to_atom(sel_alpha<>Integer.to_string(1 + i))
-
-    i = if target_piece_coordinate_atom == String.to_atom(sel_alpha<>Integer.to_string(sel_no)) do
-      i = i + 1
-    else
-      i
-    end
-
-    target_piece_coordinate_atom = String.to_atom(sel_alpha<>Integer.to_string(1 + i))
-
-    rook_step_1  = if (1 + i) < 9 do
-      chess_board
-      |> Map.get(target_piece_coordinate_atom)
-      |> Map.put(:color, :red)
-    end
-
-    new_chess_board_with_red_tile = if rook_step_1 != nil do
-      chess_board
-      |> Map.put(target_piece_coordinate_atom, rook_step_1)
-    else
-      chess_board
-    end
-
-    tile_shade_red_extension(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
-  end
-
-  #ROOK TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
-  when i > 8 and (target_piece_role == "rook" or target_piece_role == "queen") do
-    tile_shade_red_extension(sel_alpha, sel_no, chess_board, 0, target_piece_role)
-  end
-
-  #ROOK TILE RED SHADE HORIZONTAL (ALPHA)
   def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when (target_piece_role == "rook" or target_piece_role == "queen") do
 
-    target_piece_coordinate_atom = String.to_atom(<<96+i>><>Integer.to_string(sel_no))
+    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    alpha_binary = for x <- 0..7 do
+      if sel_alpha == alpha_list |> Enum.at(x) do
+        96 + x + 1
+      end
+    end |> Enum.find(fn x -> x != nil end )
 
-    i = if target_piece_coordinate_atom == String.to_atom(sel_alpha<>Integer.to_string(sel_no)) do
-      i = i + 1
-    else
-      i
+    target_piece_coordinate_atom = String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no))
+
+    #1st WAY UP
+    targets_atom_list_up = for x <- 1..7 do
+      if sel_no + x > 0 and sel_no + x < 9 do
+        String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
+      end
     end
 
-    target_piece_coordinate_atom = String.to_atom(<<96+i>><>Integer.to_string(sel_no))
+    #2nd WAY DOWN
+    targets_atom_list_down = for x <- -1..-7 do
+      if sel_no + x > 0 and sel_no + x < 9 do
+        String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
+      end
+    end
 
-    rook_step_1  = if <<96+i>> < "i" do
+    #3rd WAY LEFT
+    targets_atom_list_left = for x <- -1..-7 do
+      if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>> do
+        String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no))
+      end
+    end
+
+    #4th WAY DOWN
+    targets_atom_list_right = for x <- 1..7 do
+      if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>> do
+        String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no))
+      end
+    end
+
+    IO.inspect targets_atom_list_up # [nil, :a2, :a3, :a4, :a5, :a6, :a7, :a8]
+    IO.inspect targets_atom_list_down # [nil, nil, nil, nil, nil, nil, nil, nil]
+    IO.inspect targets_atom_list_left # [nil, nil, nil, nil, nil, nil, nil, nil]
+    IO.inspect targets_atom_list_right # [nil, nil, nil, nil, nil, nil, nil, nil]
+
+    IO.inspect targets_atom_list = targets_atom_list_up
+    |> Enum.concat(targets_atom_list_down)
+    |> Enum.concat(targets_atom_list_left)
+    |> Enum.concat(targets_atom_list_right)
+
+    target_atom = targets_atom_list |> Enum.fetch(i - 1) |> elem(1) # 1st element to nth element
+
+    rook_step_1 =
+      if target_atom != nil do #if statement to nullify the pattern match during recursion if value is nil
       chess_board
-      |> Map.get(target_piece_coordinate_atom)
+      |> Map.get(target_atom)
       |> Map.put(:color, :red)
     end
 
-    new_chess_board_with_red_tile = if rook_step_1 != nil do
-      chess_board
-      |> Map.put(target_piece_coordinate_atom, rook_step_1)
-    else
-      chess_board
-    end
+     new_chess_board_with_red_tile = if rook_step_1 != nil do #avoid passing in nil value to the map (will error)
+       chess_board
+       |> Map.put(target_atom, rook_step_1)
+     else
+       chess_board
+     end
 
-    tile_shade_red(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
+     tile_shade_red(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
   end
 
   #BISHOP TILE RED SHADE
@@ -527,11 +531,13 @@ defmodule PortfolioWeb.ChessLive do
     bishop_4th_way(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
   end
 
+  #KING MOVESET
   def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when target_piece_role == "king" and i > 9 do
     chess_board
   end
 
+  #KING MOVESET
   def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when target_piece_role == "king" do
 
@@ -591,6 +597,7 @@ defmodule PortfolioWeb.ChessLive do
      tile_shade_red(sel_alpha, sel_no, new_chess_board_with_red_tile, i + 1, target_piece_role)
   end
 
+  #KNIGHT MOVESET GUARD C
   def tile_shade_red(sel_alpha, sel_no, chess_board, i, target_piece_role)
   when i > 25 and target_piece_role == "knight" do
     chess_board
