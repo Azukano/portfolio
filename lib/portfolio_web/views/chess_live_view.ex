@@ -284,7 +284,13 @@ defmodule PortfolioWeb.ChessLive do
       end
     end |> Enum.find(fn x -> x != nil end )
 
-    targets_atom_list_up = Enum.reduce_while(0..2, 0, fn #generator starts with 0 for acc initiation to [] important!
+    pone_step = if sel_no > 2 do
+      1
+    else
+      2
+    end
+
+    targets_atom_list_up = Enum.reduce_while(0..pone_step, 0, fn #generator starts with 0 for acc initiation to [] important!
     (x, acc) when x < 1 and acc == 0 ->
       {:cont, []}
     (x, acc) when x > 0 and acc != 0 ->
