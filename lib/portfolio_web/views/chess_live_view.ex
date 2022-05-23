@@ -458,8 +458,8 @@ defmodule PortfolioWeb.ChessLive do
       end
     end |> Enum.find(fn x -> x != nil end )
 
-    targets_atom_list_queen = chess_board |> elem(1)
-    chess_board = chess_board |> elem(0)
+    targets_atom_list_queen = if is_tuple(chess_board) do chess_board |> elem(1) end
+    chess_board = if is_tuple(chess_board) do IO.inspect chess_board |> elem(0) else chess_board end
 
     #1st WAY DIAGONAL UP-LEFT (-) coordinate_alpha/sel_alpha (+) coordinate_no/sel_no
     targets_atom_list_up_left = Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
@@ -533,10 +533,14 @@ defmodule PortfolioWeb.ChessLive do
     |> Enum.concat(targets_atom_list_up_right)
     |> Enum.concat(targets_atom_list_down_right)
     |> Enum.concat(targets_atom_list_down_left)
-    #|> Enum.concat(targets_atom_list_queen)
 
-    targets_atom_list = unless targets_atom_list_queen == [] do
+    IO.inspect targets_atom_list_queen
+
+    targets_atom_list = unless targets_atom_list_queen == nil do
+      IO.inspect targets_atom_list
       targets_atom_list |> Enum.concat(targets_atom_list_queen)
+    else
+      targets_atom_list
     end
 
     unless Enum.filter(targets_atom_list, & !is_nil(&1)) == [] do
