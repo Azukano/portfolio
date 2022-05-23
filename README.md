@@ -30,3 +30,10 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 ____ GET THE KEYS: a1 
 ____ GET THE COLOR: BLACK
 _____________________ PUT THEM IN LIST*
+
+## Chess Tile Survey
+  * With/out border  - 4 dia, adan, jhon, risa, left
+  * With border      - 2 wong, wency
+  * undecided        - 1 ayleen
+  * lower exposure   - gerald
+  * lower contrast   - jez

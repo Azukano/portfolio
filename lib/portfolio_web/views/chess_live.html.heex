@@ -8,7 +8,7 @@
                 <%= for no <- 1..8 do %>
                 <ul class="h-full w-full flex flex-wrap items-center justify-center">
                     <%= for i <- 1..8, {_tile_id, tile} <- @chess_board, tile.coordinate_no == no, tile.coordinate_alpha == <<96+i>> do %>  
-                    <li class="relative h-full w-[12.5%] text-center py-6 border border-[#c7c7c7]/20" style={"background-color: #{tile.color}; background-image: url(/images/chess/chess-bg.jpg)"}>  
+                    <li class="relative h-full w-[12.5%] text-center py-6 border border-[#c7c7c7]/70" style={"background-color: #{tile.color}; background-image: url(/images/chess/chess-bg.jpg)"}>  
                     <!-- PUT PIECE LABEL/TILE SVG -->
                         <%= unless tile.occupant == nil do %>
                         <%= #if piece.coordinate_alpha not nil do %>
@@ -45,7 +45,7 @@
                 <ul class="absolute h-[100px] w-full flex flex-wrap items-center justify-center" style={"bottom: calc((12.5%*#{no}) - 12.5%)"}>
                     <%= for i <- 1..8, {_tile_id, tile} <- @chess_board_overlay, tile.coordinate_no == no, tile.coordinate_alpha == <<96+i>> do %>  
                     <% #IO.puts "i: #{<<96+i>>} no: #{no} tile_coordinate_no: #{tile.coordinate_no} tile_coordinate_alpha: #{tile.coordinate_alpha}" %>
-                        <li class="relative h-full w-[12.5%] text-center border border-[#c7c7c7] mix-blend-overlay" style={"background-color: #{tile.color}; opacity: 50%"}>
+                        <li class="relative h-full w-[12.5%] text-center border border-[#c7c7c7] mix-blend-overlay contrast-75" style={"background-color: #{tile.color}; opacity: 50%"}>
                         </li>
                     <% end %>
                 </ul>
