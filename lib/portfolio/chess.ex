@@ -218,8 +218,6 @@ defmodule Portfolio.Chess do
       end
     end)
 
-    IO.inspect targets_atom_list_up
-
     unless Enum.filter(targets_atom_list_up, & !is_nil(&1)) == [] do
       Enum.reduce(targets_atom_list_up, 0, fn (tile_id, acc) ->
         pone_step1 = if tile_id != nil do
@@ -270,10 +268,13 @@ defmodule Portfolio.Chess do
           String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
         end
         unless Map.has_key?(chess_pieces_attacker, target_atom) do
-          {:cont, [ target_atom | acc ]}
+          unless Map.has_key?(chess_pieces_opponent, target_atom) do
+            {:cont, [ target_atom | acc ]}
+          else
+            {:halt, [ target_atom | acc ]}
+          end
         else
-          target_atom = nil
-          {:halt, [ target_atom | acc ]}
+          {:halt, [ nil | acc ]}
         end
     end)
 
@@ -286,11 +287,13 @@ defmodule Portfolio.Chess do
         String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
       end
       unless Map.has_key?(chess_pieces_attacker, target_atom) do
-        {:cont, [ target_atom | acc ]}
+        unless Map.has_key?(chess_pieces_opponent, target_atom) do
+          {:cont, [ target_atom | acc ]}
+        else
+          {:halt, [ target_atom | acc ]}
+        end
       else
-        target_atom = nil
-        target_atom
-        {:halt, [ target_atom | acc ]}
+        {:halt, [ nil | acc ]}
       end
     end)
 
@@ -303,10 +306,13 @@ defmodule Portfolio.Chess do
         String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no))
       end
       unless Map.has_key?(chess_pieces_attacker, target_atom) do
-        {:cont, [ target_atom | acc ]}
+        unless Map.has_key?(chess_pieces_opponent, target_atom) do
+          {:cont, [ target_atom | acc ]}
+        else
+          {:halt, [ target_atom | acc ]}
+        end
       else
-        target_atom = nil
-        {:halt, [ target_atom | acc ]}
+        {:halt, [ nil | acc ]}
       end
     end)
 
@@ -319,11 +325,13 @@ defmodule Portfolio.Chess do
         String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no))
       end
       unless Map.has_key?(chess_pieces_attacker, target_atom) do
-        target_atom
-        {:cont, [ target_atom | acc ]}
+        unless Map.has_key?(chess_pieces_opponent, target_atom) do
+          {:cont, [ target_atom | acc ]}
+        else
+          {:halt, [ target_atom | acc ]}
+        end
       else
-        target_atom = nil
-        {:halt, [ target_atom | acc ]}
+        {:halt, [ nil | acc ]}
       end
     end)
 
@@ -390,10 +398,13 @@ defmodule Portfolio.Chess do
         String.to_atom(<<alpha_binary - x>><>Integer.to_string(sel_no + x))
       end
       unless Map.has_key?(chess_pieces_attacker, target_atom) do
-        {:cont, [ target_atom | acc ]}
+        unless Map.has_key?(chess_pieces_opponent, target_atom) do
+          {:cont, [ target_atom | acc ]}
+        else
+          {:halt, [ target_atom | acc ]}
+        end
       else
-        target_atom = nil
-        {:halt, [ target_atom | acc ]}
+        {:halt, [ nil | acc ]}
       end
     end)
 
@@ -407,10 +418,13 @@ defmodule Portfolio.Chess do
         String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + x))
       end
       unless Map.has_key?(chess_pieces_attacker, target_atom) do
-        {:cont, [ target_atom | acc ]}
+        unless Map.has_key?(chess_pieces_opponent, target_atom) do
+          {:cont, [ target_atom | acc ]}
+        else
+          {:halt, [ target_atom | acc ]}
+        end
       else
-        target_atom = nil
-        {:halt, [ target_atom | acc ]}
+        {:halt, [ nil | acc ]}
       end
     end)
 
@@ -424,10 +438,13 @@ defmodule Portfolio.Chess do
         String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no - x))
       end
       unless Map.has_key?(chess_pieces_attacker, target_atom) do
-        {:cont, [ target_atom | acc ]}
+        unless Map.has_key?(chess_pieces_opponent, target_atom) do
+          {:cont, [ target_atom | acc ]}
+        else
+          {:halt, [ target_atom | acc ]}
+        end
       else
-        target_atom = nil
-        {:halt, [ target_atom | acc ]}
+        {:halt, [ nil | acc ]}
       end
     end)
 
@@ -441,10 +458,13 @@ defmodule Portfolio.Chess do
         String.to_atom(<<alpha_binary - x>><>Integer.to_string(sel_no - x))
       end
       unless Map.has_key?(chess_pieces_attacker, target_atom) do
-        {:cont, [ target_atom | acc ]}
+        unless Map.has_key?(chess_pieces_opponent, target_atom) do
+          {:cont, [ target_atom | acc ]}
+        else
+          {:halt, [ target_atom | acc ]}
+        end
       else
-        target_atom = nil
-        {:halt, [ target_atom | acc ]}
+        {:halt, [ nil | acc ]}
       end
     end)
 

@@ -29,8 +29,8 @@ defmodule PortfolioWeb.ChessLive do
   def handle_event("tile_selection", %{"key" => key_up}, socket)
     when key_up == "Enter" and socket.assigns.selection_toggle == true do
 
-    IO.inspect atom_coordinate = String.to_atom(socket.assigns.sel_alpha<>Integer.to_string(socket.assigns.sel_no))
-    IO.inspect target_piece_coordinate = socket.assigns.target_piece_coordinate
+    atom_coordinate = String.to_atom(socket.assigns.sel_alpha<>Integer.to_string(socket.assigns.sel_no))
+    target_piece_coordinate = socket.assigns.target_piece_coordinate
 
 
     validate_coordinate_tile = if socket.assigns.sel_alpha < "a" or socket.assigns.sel_alpha > "h"
