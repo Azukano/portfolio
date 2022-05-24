@@ -54,8 +54,7 @@ defmodule Portfolio.Chess do
   #Guard Function for Spawn pieces when j index pointer reaches 5 it is over bishop(1) ... rook(5)
   def spawn_pieces(i, j, white_pieces, black_pieces, black_switch, chess_board)
   when j > 5 and black_switch == true do
-    IO.puts "End of process"
-    {white_pieces, chess_board}
+    {white_pieces, black_pieces, chess_board}
   end
 
   #Guard Function for Spawn pieces when j index pointer reaches 5 it is over bishop(1) ... rook(5)
@@ -90,9 +89,6 @@ defmodule Portfolio.Chess do
     |> Map.put(String.to_atom(coordinate_alpha<>Integer.to_string(coordinate_no)), new_tile)
 
     if i >= (pieces_map |> Enum.fetch(j) |> elem(1) |> elem(1)) - 1 do
-      # IO.inspect role
-      # IO.puts "piece: #{pieces_map |> Enum.fetch(j) |> elem(1) |> elem(0)}: #{pieces_map |> Enum.fetch(0) |> elem(1) |> elem(1)}"
-      # IO.puts "IF #{i} \ #{j}"
       piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no, legal_move: legal_move)
       j = j + 1
       if black_switch == false do
@@ -103,9 +99,6 @@ defmodule Portfolio.Chess do
         spawn_pieces(0, j, white_pieces, black_pieces, black_switch, chess_board)
       end
     else
-      #IO.inspect role
-      #IO.puts "piece: #{pieces_map |> Enum.fetch(j) |> elem(1) |> elem(0)}: #{pieces_map |> Enum.fetch(0) |> elem(1) |> elem(1)}"
-      #IO.puts "ELSE #{i} \ #{j}"
       piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no, legal_move: legal_move)
       if black_switch == false do
         white_pieces = Map.put(white_pieces, String.to_atom(coordinate_alpha<>Integer.to_string(coordinate_no)), piece)
@@ -188,7 +181,7 @@ defmodule Portfolio.Chess do
              chess_pieces -> socket.assigns.ches_pieces to check what pieces are tiles occupied.
   """
   #PONE TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker, chess_pieces_opponent, black_pone)
   when target_piece_role == "pone" do
 
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
@@ -198,22 +191,34 @@ defmodule Portfolio.Chess do
       end
     end |> Enum.find(fn x -> x != nil end )
 
-    pone_step = if sel_no == 2 do 2 else 1 end
+    pone_step = case {black_pone, sel_no} do
+      { false, 2 } -> 2
+      { false, _ } -> 1
+      { true, 7 } -> 2
+      { true, _ } -> 1
+    end
 
     targets_atom_list_up = Enum.reduce_while(0..pone_step, 0, fn #generator starts with 0 for acc initiation to [] important!
     (x, acc) when x < 1 and acc == 0 ->
       {:cont, []}
     (x, acc) when x > 0 and acc != 0 ->
-      target_atom = if sel_no + x > 0 and sel_no + x < 9 do
-        String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
+      target_atom =
+      if sel_no + x in 1..8 or sel_no - x in 1..8 do
+        if black_pone == false do
+          String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
+        else
+          String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no - x))
+        end
       end
-      unless Map.has_key?(chess_pieces, target_atom) do
+      unless Map.has_key?(chess_pieces_attacker, target_atom) do
         {:cont, [ target_atom | acc ]}
       else
         target_atom = nil
         {:halt, [ target_atom | acc ]}
       end
     end)
+
+    IO.inspect targets_atom_list_up
 
     unless Enum.filter(targets_atom_list_up, & !is_nil(&1)) == [] do
       Enum.reduce(targets_atom_list_up, 0, fn (tile_id, acc) ->
@@ -246,7 +251,7 @@ defmodule Portfolio.Chess do
   end
 
   #ROOK TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker, chess_pieces_opponent)
   when (target_piece_role == "rook" or target_piece_role == "queen") do
 
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
@@ -264,7 +269,7 @@ defmodule Portfolio.Chess do
         target_atom = if sel_no + x > 0 and sel_no + x < 9 do
           String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
         end
-        unless Map.has_key?(chess_pieces, target_atom) do
+        unless Map.has_key?(chess_pieces_attacker, target_atom) do
           {:cont, [ target_atom | acc ]}
         else
           target_atom = nil
@@ -280,7 +285,7 @@ defmodule Portfolio.Chess do
       target_atom = if sel_no + x > 0 and sel_no + x < 9 do
         String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
       end
-      unless Map.has_key?(chess_pieces, target_atom) do
+      unless Map.has_key?(chess_pieces_attacker, target_atom) do
         {:cont, [ target_atom | acc ]}
       else
         target_atom = nil
@@ -297,7 +302,7 @@ defmodule Portfolio.Chess do
       target_atom = if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>> do
         String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no))
       end
-      unless Map.has_key?(chess_pieces, target_atom) do
+      unless Map.has_key?(chess_pieces_attacker, target_atom) do
         {:cont, [ target_atom | acc ]}
       else
         target_atom = nil
@@ -313,7 +318,7 @@ defmodule Portfolio.Chess do
       target_atom = if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>> do
         String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no))
       end
-      unless Map.has_key?(chess_pieces, target_atom) do
+      unless Map.has_key?(chess_pieces_attacker, target_atom) do
         target_atom
         {:cont, [ target_atom | acc ]}
       else
@@ -355,15 +360,14 @@ defmodule Portfolio.Chess do
       |> Map.put(String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no)), rook_step1)
     end
     if target_piece_role == "queen" do
-      IO.puts "@@@@ QUEEN"
-      tile_shade_red(sel_alpha, sel_no, { chess_board, targets_atom_list }, "bishop", chess_pieces)
+      tile_shade_red(sel_alpha, sel_no, { chess_board, targets_atom_list }, "bishop", chess_pieces_attacker, chess_pieces_opponent)
     else
       new_chess_board_with_red_tile
     end
   end
 
   #BISHOP TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces) #chess_board is combo map(chess_board) + list(queen_accumalative list target from rook)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker, chess_pieces_opponent) #chess_board is combo map(chess_board) + list(queen_accumalative list target from rook)
   when target_piece_role == "bishop" do
 
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
@@ -385,7 +389,7 @@ defmodule Portfolio.Chess do
       and sel_no + x > 0 and sel_no + x < 9 do
         String.to_atom(<<alpha_binary - x>><>Integer.to_string(sel_no + x))
       end
-      unless Map.has_key?(chess_pieces, target_atom) do
+      unless Map.has_key?(chess_pieces_attacker, target_atom) do
         {:cont, [ target_atom | acc ]}
       else
         target_atom = nil
@@ -402,7 +406,7 @@ defmodule Portfolio.Chess do
       and sel_no + x > 0 and sel_no + x < 9 do
         String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + x))
       end
-      unless Map.has_key?(chess_pieces, target_atom) do
+      unless Map.has_key?(chess_pieces_attacker, target_atom) do
         {:cont, [ target_atom | acc ]}
       else
         target_atom = nil
@@ -419,7 +423,7 @@ defmodule Portfolio.Chess do
       and sel_no - x > 0 and sel_no - x < 9 do
         String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no - x))
       end
-      unless Map.has_key?(chess_pieces, target_atom) do
+      unless Map.has_key?(chess_pieces_attacker, target_atom) do
         {:cont, [ target_atom | acc ]}
       else
         target_atom = nil
@@ -436,7 +440,7 @@ defmodule Portfolio.Chess do
       and sel_no - x > 0 and sel_no - x < 9 do
         String.to_atom(<<alpha_binary - x>><>Integer.to_string(sel_no - x))
       end
-      unless Map.has_key?(chess_pieces, target_atom) do
+      unless Map.has_key?(chess_pieces_attacker, target_atom) do
         {:cont, [ target_atom | acc ]}
       else
         target_atom = nil
@@ -450,7 +454,6 @@ defmodule Portfolio.Chess do
     |> Enum.concat(targets_atom_list_down_left)
 
     targets_atom_list = unless targets_atom_list_queen == nil do
-      targets_atom_list
       targets_atom_list |> Enum.concat(targets_atom_list_queen)
     else
       targets_atom_list
@@ -486,7 +489,7 @@ defmodule Portfolio.Chess do
   end
 
   #KING MOVESET
-  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker, chess_pieces_opponent)
   when target_piece_role == "king" do
 
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
@@ -503,7 +506,7 @@ defmodule Portfolio.Chess do
       if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>>
         and sel_no + j > 0 and sel_no + j < 9
         and target_atom != target_piece_coordinate_atom
-        and not Map.has_key?(chess_pieces, target_atom) do
+        and not Map.has_key?(chess_pieces_attacker, target_atom) do
       String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))
       else
         nil

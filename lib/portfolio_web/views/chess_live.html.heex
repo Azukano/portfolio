@@ -1,7 +1,7 @@
 <section phx-window-keydown="key_press" phx-window-keyup="tile_selection" class="bg-[#242526] h-full text-[#e6e6e6] flex flex-col justify-center">
     <!-- WRAPPER -->
     <div class="container mx-auto">
-    <% IO.inspect @chess_board == @chess_board_overlay %>
+    <% @chess_board == @chess_board_overlay %>
         <div class="text-center">
             <div class="relative w-[800px] h-[800px] self-center flex flex-col-reverse mx-auto">
 
@@ -11,10 +11,6 @@
                     <li class="relative h-full w-[12.5%] text-center py-6 border border-[#c7c7c7]/25" style={"background-color: #{tile.color}; background-image: url(/images/chess/chess-bg.jpg)"}>  
                     <!-- PUT PIECE LABEL/TILE SVG -->
                         <%= unless tile.occupant == nil do %>
-                        <%= #if piece.coordinate_alpha not nil do %>
-                        <% #IO.inspect piece.coordinate_alpha, label: piece.role %>
-                        <% #IO.inspect piece.coordinate_no, label: piece.role %>
-                        <% #IO.puts"white-#{piece.role}.svg" %>
                         <img src={"/images/chess/#{tile.occupant}.svg"} alt="#{tile.occupant}"
                         style="width: 100%; position: absolute; top: 0; z-index: 10">
                         <% end %>
@@ -45,7 +41,6 @@
                 <ul class="absolute h-[100px] w-full flex flex-wrap items-center justify-center" style={"bottom: calc((12.5%*#{no}) - 12.5%)"}>
                     <%= for i <- 1..8, {_tile_id, tile} <- @chess_board_overlay, tile.coordinate_no == no, tile.coordinate_alpha == <<96+i>> do %>  
                     <% opacity = if tile.color == :black do 50 else 30 end %>
-                    <% IO.inspect opacity %>
                         <li class="relative h-full w-[12.5%] text-center border border-[#c7c7c7] mix-blend-overlay contrast-75" style={"background-color: #{tile.color}; opacity: #{opacity}%"}>
                         </li>
                     <% end %>

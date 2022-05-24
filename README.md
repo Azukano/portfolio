@@ -32,8 +32,8 @@ ____ GET THE COLOR: BLACK
 _____________________ PUT THEM IN LIST*
 
 ## Chess Tile Survey
-  * With/out border  - 4 dia, adan, jhon, risa, left
-  * With border      - 2 wong, wency
+  * With/out border  - 7 dia, adan, jhon, risa, cyber28, santi, adam, michou
+  * With border      - 3 wong, wency, mike
   * undecided        - 1 ayleen
-  * lower exposure   - gerald
-  * lower contrast   - jez
+  * w/o border ! lower exposure   - gerald
+  * w/o border ! lower contrast   - jez
