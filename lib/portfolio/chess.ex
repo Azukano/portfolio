@@ -198,28 +198,45 @@ defmodule Portfolio.Chess do
       { true, _ } -> 1
     end
 
-    targets_atom_list_up = Enum.reduce_while(0..pone_step, 0, fn #generator starts with 0 for acc initiation to [] important!
+    targets_atom_list = Enum.reduce_while(0..pone_step, 0, fn #generator starts with 0 for acc initiation to [] important!
     (x, acc) when x < 1 and acc == 0 ->
       {:cont, []}
     (x, acc) when x > 0 and acc != 0 ->
-      target_atom =
-      if sel_no + x in 1..8 or sel_no - x in 1..8 do
-        if black_pone == false do
+      target_atom_up =
+      if black_pone == false do
+        if sel_no + x in 1..8 do
           String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
-        else
+        end
+      else
+        if sel_no - x in 1..8 do
           String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no - x))
         end
       end
-      unless Map.has_key?(chess_pieces_attacker, target_atom) do
-        {:cont, [ target_atom | acc ]}
+      unless Map.has_key?(chess_pieces_attacker, target_atom_up)
+      or Map.has_key?(chess_pieces_opponent, target_atom_up) do
+        {:cont, [ target_atom_up | acc ]}
       else
-        target_atom = nil
-        {:halt, [ target_atom | acc ]}
+        {:halt, [ nil | acc ]}
       end
     end)
 
-    unless Enum.filter(targets_atom_list_up, & !is_nil(&1)) == [] do
-      Enum.reduce(targets_atom_list_up, 0, fn (tile_id, acc) ->
+    black_white_pone_pov = if black_pone == false do 1 else -1 end
+
+    targets_atom_list =
+      if Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov))) do
+        [String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)) | targets_atom_list]
+      else
+        targets_atom_list
+      end
+    targets_atom_list =
+      if Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov))) do
+        [String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov)) | targets_atom_list]
+      else
+        targets_atom_list
+      end
+
+    unless Enum.filter(targets_atom_list, & !is_nil(&1)) == [] do
+      Enum.reduce(targets_atom_list, 0, fn (tile_id, acc) ->
         pone_step1 = if tile_id != nil do
           chess_board
           |> Map.get(tile_id)
@@ -264,10 +281,12 @@ defmodule Portfolio.Chess do
       (x, acc) when x < 1 and acc == 0 ->
         {:cont, []}
       (x, acc) when x > 0 and acc != 0 ->
-        target_atom = if sel_no + x > 0 and sel_no + x < 9 do
+        target_atom = if sel_no + x in 1..8 do
           String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
         end
+        # main conditional statement checks if there is ally piece ON ITS WAY IMPORTANT!
         unless Map.has_key?(chess_pieces_attacker, target_atom) do
+        # sub conditional statement checks if there is enemy piece beyond ON ITS WAY IMPORTANT!
           unless Map.has_key?(chess_pieces_opponent, target_atom) do
             {:cont, [ target_atom | acc ]}
           else
@@ -341,7 +360,8 @@ defmodule Portfolio.Chess do
     |> Enum.concat(targets_atom_list_right)
 
     new_chess_board_with_red_tile = unless Enum.filter(targets_atom_list, & !is_nil(&1)) == [] do
-      Enum.reduce(targets_atom_list, 0, fn (tile_id, acc) ->
+      Enum.reduce(targets_atom_list, 0, fn
+      (tile_id, acc) ->
         rook_step1 = if tile_id != nil do
           chess_board
           |> Map.get(tile_id)
@@ -509,7 +529,7 @@ defmodule Portfolio.Chess do
   end
 
   #KING MOVESET
-  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker, chess_pieces_opponent)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker)
   when target_piece_role == "king" do
 
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
@@ -616,3 +636,74 @@ defmodule Portfolio.Chess do
   end
 
 end
+
+# targets_atom_list = Enum.reduce_while(0..pone_step, 0, fn #generator starts with 0 for acc initiation to [] important!
+# (x, acc) when x < 1 and acc == 0 ->
+#   {:cont, []}
+# (x, acc) when x > 0 and acc != 0 ->
+#   target_atom_up =
+#   if sel_no + x in 1..8 or sel_no - x in 1..8 do
+#     if black_pone == false do
+#       String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
+#     else
+#       String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no - x))
+#     end
+#   end
+#   target_atom_up_left =
+#   if sel_no + x in 1..8 or sel_no - x in 1..8
+#   and alpha_binary + x in 97..105 or alpha_binary - x in 97..105 do
+#     if black_pone == false do
+#       IO.inspect sel_no + x
+#       String.to_atom(<<alpha_binary - x>><>Integer.to_string(sel_no + x))
+#     else
+#       String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no - x))
+#     end
+#   end
+#   target_atom_up_right =
+#   if sel_no + x in 1..8 or sel_no - x in 1..8
+#   and alpha_binary + x in 97..105 or alpha_binary - x in 97..105 do
+#     if black_pone == false do
+#       IO.inspect sel_no + x
+#       String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + x))
+#     else
+#       String.to_atom(<<alpha_binary - x>><>Integer.to_string(sel_no - x))
+#     end
+#   end
+#   # IO.inspect target_atom_up_left
+#   # IO.inspect target_atom_up_right
+#   # IO.inspect Map.has_key?(chess_pieces_opponent, target_atom_up_left)
+#   # IO.inspect Map.has_key?(chess_pieces_opponent, target_atom_up_right)
+#   unless Map.has_key?(chess_pieces_attacker, target_atom_up)
+#   or Map.has_key?(chess_pieces_opponent, target_atom_up) do
+#     {:cont, [ target_atom_up | acc ]}
+#   else
+#     if Map.has_key?(chess_pieces_opponent, target_atom_up_left)
+#     or Map.has_key?(chess_pieces_opponent, target_atom_up_right) do
+#       {:halt, [ target_atom_up_left, target_atom_up_right | acc ]}
+#     else
+#       {:halt, [ nil | acc ]}
+#     end
+#   end
+# end)
+
+
+#   target_atom_up_left =
+#   if black_pone == false do
+#     if sel_no + x in 1..8 and alpha_binary - x in 97..105 do
+#       String.to_atom(<<alpha_binary - x>><>Integer.to_string(sel_no + x))
+#     end
+#   else
+#     if sel_no - x in 1..8 do alpha_binary + x in 97..105
+#       String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no - x))
+#     end
+#   end
+#   target_atom_up_right =
+#   if black_pone == false do
+#     if sel_no + x in 1..8 and alpha_binary - x in 97..105 do
+#       String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + x))
+#     end
+#   else
+#     if sel_no - x in 1..8 do alpha_binary + x in 97..105
+#       String.to_atom(<<alpha_binary - x>><>Integer.to_string(sel_no - x))
+#     end
+#   end

@@ -355,8 +355,7 @@ defmodule PortfolioWeb.ChessLive do
             sel_no,
             socket.assigns.chess_board,
             target_piece_role,
-            socket.assigns.chess_pieces_white,
-            socket.assigns.chess_pieces_black
+            socket.assigns.chess_pieces_white
           )
         else
           Chess.tile_shade_red(
@@ -364,8 +363,7 @@ defmodule PortfolioWeb.ChessLive do
             sel_no,
             socket.assigns.chess_board,
             target_piece_role,
-            socket.assigns.chess_pieces_black,
-            socket.assigns.chess_pieces_white
+            socket.assigns.chess_pieces_black
           )
         end
         target_piece_occupant_id = socket
@@ -432,7 +430,6 @@ defmodule PortfolioWeb.ChessLive do
   end
 
   def handle_event("key_press", %{"key" => key}, socket) do
-    IO.inspect key
     socket = assign(socket, key_press: key, )
     {:noreply, socket}
   end
