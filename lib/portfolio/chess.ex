@@ -229,11 +229,6 @@ defmodule Portfolio.Chess do
         :chess_pieces_white
       end
 
-    IO.inspect past_pone_tuple_combo |> elem(3) != pone_side
-    IO.inspect Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)))
-    # IO.inspect chess_pieces_attacker
-    # IO.inspect chess_pieces_attacker == past_pone_tuple_combo |> elem(3)
-
     targets_atom_list =
       if pone_side != past_pone_tuple_combo |> elem(3) and
       (Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)))
