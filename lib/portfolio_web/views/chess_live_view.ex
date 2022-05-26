@@ -13,7 +13,8 @@ defmodule PortfolioWeb.ChessLive do
       chess_pieces_white: elem(Chess.spawn_pieces, 0),
       chess_pieces_black: elem(Chess.spawn_pieces, 1),
       selection_toggle: false,
-      chess_board_overlay: elem(Chess.spawn_pieces, 2))
+      chess_board_overlay: elem(Chess.spawn_pieces, 2),
+      past_pone_tuple_combo: { nil, nil, false, nil } )
 
     {:ok, socket}
   end
@@ -29,9 +30,11 @@ defmodule PortfolioWeb.ChessLive do
   def handle_event("tile_selection", %{"key" => key_up}, socket)
     when key_up == "Enter" and socket.assigns.selection_toggle == true do
 
+    sel_no = socket.assigns.sel_no
     atom_coordinate = String.to_atom(socket.assigns.sel_alpha<>Integer.to_string(socket.assigns.sel_no))
-    target_piece_coordinate = socket.assigns.target_piece_coordinate
-
+    attacker_piece_coordinate = socket.assigns.attacker_piece_coordinate
+    attacker_piece_coordinate_no = socket.assigns.attacker_piece_coordinate_no
+    attacker_piece_coordinate_alpha = socket.assigns.attacker_piece_coordinate_alpha
 
     validate_coordinate_tile = if socket.assigns.sel_alpha < "a" or socket.assigns.sel_alpha > "h"
       or socket.assigns.sel_no < 1 or socket.assigns.sel_no > 8 do
@@ -54,7 +57,7 @@ defmodule PortfolioWeb.ChessLive do
       end
     end
 
-    chess_piece_side = socket.assigns.target_piece_role_side
+    chess_piece_side = socket.assigns.attacker_piece_role_side
     chess_piece_opponent = if chess_piece_side == :chess_pieces_white do
       :chess_pieces_black
     else
@@ -66,18 +69,18 @@ defmodule PortfolioWeb.ChessLive do
       move_piece = socket
       |> Map.get(:assigns)
       |> Map.get(chess_piece_side)
-      |> Map.get(target_piece_coordinate)
+      |> Map.get(attacker_piece_coordinate)
       |> Map.put(:coordinate_alpha, socket.assigns.sel_alpha)
       |> Map.put(:coordinate_no, socket.assigns.sel_no)
 
-      #remove attacker piece from old position & put new position
+      #remove attacker piece from old position & put new position (DELETE OLD ATTACKER, NEW OLD ATTACKER COORDINATE)
       updated_pieces_coordinate_attacker = socket
       |> Map.get(:assigns)
       |> Map.get(chess_piece_side)
-      |> Map.delete(target_piece_coordinate)
+      |> Map.delete(attacker_piece_coordinate)
       |> Map.put(atom_coordinate, move_piece)
 
-      #remove opponent piece from entire map
+      #remove opponent piece from entire map (DELETE OPPONENT)
       updated_pieces_coordinate_opponent = socket
       |> Map.get(:assigns)
       |> Map.get(chess_piece_opponent)
@@ -87,20 +90,23 @@ defmodule PortfolioWeb.ChessLive do
       |> Map.get(:assigns)
       |> Map.get(:chess_board)
       |> Map.get(atom_coordinate)
-      |> Map.put(:occupant, socket.assigns.target_piece_occupant_id)
+      |> Map.put(:occupant, socket.assigns.attacker_piece_occupant_id)
 
       remove_target_occupant = socket
       |> Map.get(:assigns)
       |> Map.get(:chess_board)
-      |> Map.get(target_piece_coordinate)
+      |> Map.get(attacker_piece_coordinate)
       |> Map.put(:occupant, nil)
 
       updated_tiles_occupant = socket
       |> Map.get(:assigns)
       |> Map.get(:chess_board)
       |> Map.put(atom_coordinate, move_occupant)
-      |> Map.put(target_piece_coordinate, remove_target_occupant)
+      |> Map.put(attacker_piece_coordinate, remove_target_occupant)
 
+      past_pone_tuple_combo = Chess.past_pone(socket.assigns.attacker_piece_role, sel_no, attacker_piece_coordinate_no, attacker_piece_coordinate_alpha, atom_coordinate, chess_piece_side)
+
+      # player point of view for attacker/opponent side last layer function, returns value new socket!
       if chess_piece_side == :chess_pieces_white do
         socket = assign(socket,
           selection_toggle: false,
@@ -108,9 +114,9 @@ defmodule PortfolioWeb.ChessLive do
           chess_pieces_black: updated_pieces_coordinate_opponent,
           chess_board_overlay: socket.assigns.old_chess_board_overlay,
           chess_board: updated_tiles_occupant,
-          sel_no: socket.assigns.sel_no,
-          sel_alpha: socket.assigns.sel_alpha,
-          sel_alpha_pointer: socket.assigns.sel_alpha_pointer )
+          attacker_piece_coordinate_no: nil,
+          attacker_piece_coordinate_alpha: nil,
+          past_pone_tuple_combo: past_pone_tuple_combo )
 
         { :noreply, socket }
       else
@@ -120,9 +126,9 @@ defmodule PortfolioWeb.ChessLive do
           chess_pieces_white: updated_pieces_coordinate_opponent,
           chess_board_overlay: socket.assigns.old_chess_board_overlay,
           chess_board: updated_tiles_occupant,
-          sel_no: socket.assigns.sel_no,
-          sel_alpha: socket.assigns.sel_alpha,
-          sel_alpha_pointer: socket.assigns.sel_alpha_pointer )
+          attacker_piece_coordinate_no: nil,
+          attacker_piece_coordinate_alpha: nil,
+          past_pone_tuple_combo: past_pone_tuple_combo )
 
         { :noreply, socket }
       end
@@ -148,13 +154,14 @@ defmodule PortfolioWeb.ChessLive do
 
     atom_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
 
-    target_piece_role_side = case { Map.has_key?(socket.assigns.chess_pieces_white, atom_coordinate), Map.has_key?(socket.assigns.chess_pieces_black, atom_coordinate) } do
-      { true, _ } -> :chess_pieces_white
-      { _, true } -> :chess_pieces_black
-      { _, _} -> nil
-    end
+    attacker_piece_role_side =
+      case { Map.has_key?(socket.assigns.chess_pieces_white, atom_coordinate), Map.has_key?(socket.assigns.chess_pieces_black, atom_coordinate) } do
+        { true, _ } -> :chess_pieces_white
+        { _, true } -> :chess_pieces_black
+        { _, _} -> nil
+      end
 
-    target_piece_role = case target_piece_role_side do
+    attacker_piece_role = case attacker_piece_role_side do
       :chess_pieces_white ->
         socket
         |> Map.get(:assigns)
@@ -171,56 +178,61 @@ defmodule PortfolioWeb.ChessLive do
         nil
     end
 
-    validate_tile_occupancy = if target_piece_role != nil do true else false end
+    validate_tile_occupancy = if attacker_piece_role != nil do true else false end
 
-    case {validate_tile_occupancy, target_piece_role}  do
+    case {validate_tile_occupancy, attacker_piece_role}  do
       { true, "pone" } ->
         pone_shaded =
-        if target_piece_role_side == :chess_pieces_white do
+        if attacker_piece_role_side == :chess_pieces_white do
           Chess.tile_shade_red(
             sel_alpha,
             sel_no,
             socket.assigns.chess_board,
-            target_piece_role,
+            attacker_piece_role,
             socket.assigns.chess_pieces_white,
             socket.assigns.chess_pieces_black,
-            false
+            false,
+            socket.assigns.past_pone_tuple_combo
           )
         else
           Chess.tile_shade_red(
             sel_alpha,
             sel_no,
             socket.assigns.chess_board,
-            target_piece_role,
+            attacker_piece_role,
             socket.assigns.chess_pieces_black,
             socket.assigns.chess_pieces_white,
-            true
+            true,
+            socket.assigns.past_pone_tuple_combo
           )
         end
-        target_piece_occupant_id = socket
-        |> Map.get(:assigns)
-        |> Map.get(:chess_board)
-        |> Map.get(atom_coordinate)
-        |> Map.get(:occupant)
+        attacker_piece_occupant_id =
+          socket
+          |> Map.get(:assigns)
+          |> Map.get(:chess_board)
+          |> Map.get(atom_coordinate)
+          |> Map.get(:occupant)
         socket = assign( socket,
         selection_toggle: :true,
         chess_board_overlay: pone_shaded,
         old_chess_board_overlay: old_chess_board_overlay,
         old_chess_board: old_chess_board,
-        target_piece_coordinate: atom_coordinate,
-        target_piece_role: target_piece_role,
-        target_piece_occupant_id: target_piece_occupant_id,
-        target_piece_role_side: target_piece_role_side )
+        attacker_piece_coordinate_no: sel_no,
+        attacker_piece_coordinate_alpha: sel_alpha,
+        attacker_piece_coordinate: atom_coordinate,
+        attacker_piece_role: attacker_piece_role,
+        attacker_piece_occupant_id: attacker_piece_occupant_id,
+        attacker_piece_role_side: attacker_piece_role_side )
 
         {:noreply, socket}
       { true, "rook" } ->
         rook_shaded =
-        if target_piece_role_side == :chess_pieces_white do
+        if attacker_piece_role_side == :chess_pieces_white do
           Chess.tile_shade_red(
             sel_alpha,
             sel_no,
             socket.assigns.chess_board,
-            target_piece_role,
+            attacker_piece_role,
             socket.assigns.chess_pieces_white,
             socket.assigns.chess_pieces_black
           )
@@ -229,25 +241,28 @@ defmodule PortfolioWeb.ChessLive do
             sel_alpha,
             sel_no,
             socket.assigns.chess_board,
-            target_piece_role,
+            attacker_piece_role,
             socket.assigns.chess_pieces_black,
             socket.assigns.chess_pieces_white
           )
         end
-        target_piece_occupant_id = socket
-        |> Map.get(:assigns)
-        |> Map.get(:chess_board)
-        |> Map.get(atom_coordinate)
-        |> Map.get(:occupant)
+        attacker_piece_occupant_id =
+          socket
+          |> Map.get(:assigns)
+          |> Map.get(:chess_board)
+          |> Map.get(atom_coordinate)
+          |> Map.get(:occupant)
         socket = assign( socket,
         selection_toggle: :true,
         chess_board_overlay: rook_shaded,
         old_chess_board_overlay: old_chess_board_overlay,
         old_chess_board: old_chess_board,
-        target_piece_coordinate: atom_coordinate,
-        target_piece_role: target_piece_role,
-        target_piece_occupant_id: target_piece_occupant_id,
-        target_piece_role_side: target_piece_role_side )
+        attacker_piece_coordinate_no: sel_no,
+        attacker_piece_coordinate_alpha: sel_alpha,
+        attacker_piece_coordinate: atom_coordinate,
+        attacker_piece_role: attacker_piece_role,
+        attacker_piece_occupant_id: attacker_piece_occupant_id,
+        attacker_piece_role_side: attacker_piece_role_side )
 
         {:noreply, socket}
       { true, "knight" } ->
@@ -255,9 +270,9 @@ defmodule PortfolioWeb.ChessLive do
           sel_alpha,
           sel_no,
           socket.assigns.chess_board,
-          target_piece_role
+          attacker_piece_role
         )
-        target_piece_occupant_id = socket
+        attacker_piece_occupant_id = socket
         |> Map.get(:assigns)
         |> Map.get(:chess_board)
         |> Map.get(atom_coordinate)
@@ -267,20 +282,22 @@ defmodule PortfolioWeb.ChessLive do
         chess_board_overlay: knight_shaded,
         old_chess_board_overlay: old_chess_board_overlay,
         old_chess_board: old_chess_board,
-        target_piece_coordinate: atom_coordinate,
-        target_piece_role: target_piece_role,
-        target_piece_occupant_id: target_piece_occupant_id,
-        target_piece_role_side: target_piece_role_side )
+        attacker_piece_coordinate_no: sel_no,
+        attacker_piece_coordinate_alpha: sel_alpha,
+        attacker_piece_coordinate: atom_coordinate,
+        attacker_piece_role: attacker_piece_role,
+        attacker_piece_occupant_id: attacker_piece_occupant_id,
+        attacker_piece_role_side: attacker_piece_role_side )
 
         {:noreply, socket}
       { true, "bishop" } ->
         bishop_shaded =
-        if target_piece_role_side == :chess_pieces_white do
+        if attacker_piece_role_side == :chess_pieces_white do
           Chess.tile_shade_red(
             sel_alpha,
             sel_no,
             socket.assigns.chess_board,
-            target_piece_role,
+            attacker_piece_role,
             socket.assigns.chess_pieces_white,
             socket.assigns.chess_pieces_black
           )
@@ -289,35 +306,38 @@ defmodule PortfolioWeb.ChessLive do
             sel_alpha,
             sel_no,
             socket.assigns.chess_board,
-            target_piece_role,
+            attacker_piece_role,
             socket.assigns.chess_pieces_black,
             socket.assigns.chess_pieces_white
           )
         end
-        target_piece_occupant_id = socket
-        |> Map.get(:assigns)
-        |> Map.get(:chess_board)
-        |> Map.get(atom_coordinate)
-        |> Map.get(:occupant)
+        attacker_piece_occupant_id =
+          socket
+          |> Map.get(:assigns)
+          |> Map.get(:chess_board)
+          |> Map.get(atom_coordinate)
+          |> Map.get(:occupant)
         socket = assign( socket,
         selection_toggle: :true,
         chess_board_overlay: bishop_shaded,
         old_chess_board_overlay: old_chess_board_overlay,
         old_chess_board: old_chess_board,
-        target_piece_coordinate: atom_coordinate,
-        target_piece_role: target_piece_role,
-        target_piece_occupant_id: target_piece_occupant_id,
-        target_piece_role_side: target_piece_role_side )
+        attacker_piece_coordinate_no: sel_no,
+        attacker_piece_coordinate_alpha: sel_alpha,
+        attacker_piece_coordinate: atom_coordinate,
+        attacker_piece_role: attacker_piece_role,
+        attacker_piece_occupant_id: attacker_piece_occupant_id,
+        attacker_piece_role_side: attacker_piece_role_side )
 
         {:noreply, socket}
       { true, "queen" } ->
         queen_shaded =
-        if target_piece_role_side == :chess_pieces_white do
+        if attacker_piece_role_side == :chess_pieces_white do
           Chess.tile_shade_red(
             sel_alpha,
             sel_no,
             socket.assigns.chess_board,
-            target_piece_role,
+            attacker_piece_role,
             socket.assigns.chess_pieces_white,
             socket.assigns.chess_pieces_black
           )
@@ -326,35 +346,38 @@ defmodule PortfolioWeb.ChessLive do
             sel_alpha,
             sel_no,
             socket.assigns.chess_board,
-            target_piece_role,
+            attacker_piece_role,
             socket.assigns.chess_pieces_black,
             socket.assigns.chess_pieces_white
           )
         end
-        target_piece_occupant_id = socket
-        |> Map.get(:assigns)
-        |> Map.get(:chess_board)
-        |> Map.get(atom_coordinate)
-        |> Map.get(:occupant)
+        attacker_piece_occupant_id =
+          socket
+          |> Map.get(:assigns)
+          |> Map.get(:chess_board)
+          |> Map.get(atom_coordinate)
+          |> Map.get(:occupant)
         socket = assign( socket,
         selection_toggle: :true,
         chess_board_overlay: queen_shaded,
         old_chess_board_overlay: old_chess_board_overlay,
         old_chess_board: old_chess_board,
-        target_piece_coordinate: atom_coordinate,
-        target_piece_role: "queen", #important to reclaim queen roll after undergoing bishop red shade
-        target_piece_occupant_id: target_piece_occupant_id,
-        target_piece_role_side: target_piece_role_side )
+        attacker_piece_coordinate_no: sel_no,
+        attacker_piece_coordinate_alpha: sel_alpha,
+        attacker_piece_coordinate: atom_coordinate,
+        attacker_piece_role: "queen", #important to reclaim queen roll after undergoing bishop red shade
+        attacker_piece_occupant_id: attacker_piece_occupant_id,
+        attacker_piece_role_side: attacker_piece_role_side )
 
         {:noreply, socket}
       { true, "king" } ->
         king_shaded =
-        if target_piece_role_side == :chess_pieces_white do
+        if attacker_piece_role_side == :chess_pieces_white do
           Chess.tile_shade_red(
             sel_alpha,
             sel_no,
             socket.assigns.chess_board,
-            target_piece_role,
+            attacker_piece_role,
             socket.assigns.chess_pieces_white
           )
         else
@@ -362,24 +385,27 @@ defmodule PortfolioWeb.ChessLive do
             sel_alpha,
             sel_no,
             socket.assigns.chess_board,
-            target_piece_role,
+            attacker_piece_role,
             socket.assigns.chess_pieces_black
           )
         end
-        target_piece_occupant_id = socket
-        |> Map.get(:assigns)
-        |> Map.get(:chess_board)
-        |> Map.get(atom_coordinate)
-        |> Map.get(:occupant)
+        attacker_piece_occupant_id =
+          socket
+          |> Map.get(:assigns)
+          |> Map.get(:chess_board)
+          |> Map.get(atom_coordinate)
+          |> Map.get(:occupant)
         socket = assign( socket,
         selection_toggle: :true,
         chess_board_overlay: king_shaded,
         old_chess_board_overlay: old_chess_board_overlay,
         old_chess_board: old_chess_board,
-        target_piece_coordinate: atom_coordinate,
-        target_piece_role: target_piece_role,
-        target_piece_occupant_id: target_piece_occupant_id,
-        target_piece_role_side: target_piece_role_side )
+        attacker_piece_coordinate_no: sel_no,
+        attacker_piece_coordinate_alpha: sel_alpha,
+        attacker_piece_coordinate: atom_coordinate,
+        attacker_piece_role: attacker_piece_role,
+        attacker_piece_occupant_id: attacker_piece_occupant_id,
+        attacker_piece_role_side: attacker_piece_role_side )
 
         {:noreply, socket}
       { false, _ } ->

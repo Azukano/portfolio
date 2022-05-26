@@ -181,7 +181,7 @@ defmodule Portfolio.Chess do
              chess_pieces -> socket.assigns.ches_pieces to check what pieces are tiles occupied.
   """
   #PONE TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker, chess_pieces_opponent, black_pone)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker, chess_pieces_opponent, black_pone, past_pone_tuple_combo)
   when target_piece_role == "pone" do
 
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
@@ -222,14 +222,29 @@ defmodule Portfolio.Chess do
 
     black_white_pone_pov = if black_pone == false do 1 else -1 end
 
+    pone_side =
+      if black_pone == true do
+        :chess_pieces_black
+      else
+        :chess_pieces_white
+      end
+
+    # IO.inspect past_pone_tuple_combo |> elem(3)
+    # IO.inspect chess_pieces_attacker
+    # IO.inspect chess_pieces_attacker == past_pone_tuple_combo |> elem(3)
+
     targets_atom_list =
-      if Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov))) do
+      if pone_side != past_pone_tuple_combo |> elem(3) and
+      (Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)))
+      or String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)) == past_pone_tuple_combo |> elem(0)) do
         [String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)) | targets_atom_list]
       else
         targets_atom_list
       end
     targets_atom_list =
-      if Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov))) do
+      if pone_side != past_pone_tuple_combo |> elem(3) and
+      (Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)))
+      or String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov)) == past_pone_tuple_combo |> elem(0)) do
         [String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov)) | targets_atom_list]
       else
         targets_atom_list
@@ -633,6 +648,44 @@ defmodule Portfolio.Chess do
         end
       end
     end)
+  end
+
+  @doc """
+  returns past_pone coordinate: {:c3, c4} and switch: true/false
+  attacker_piece_role: "pone" or "bishop" in general this function only accept "pone".
+  sel_no the currect selector sel_no.
+  attacker_piece_coordinate_no origin place of the attacker piece to be moved. (NUMERIC)
+  attacker_piece_coordinate_alpha origin place of the attacher piece to be moved. (ALPHA)
+  atom_coordinate selected tile id in atom.
+  chess_piece_side: either :chess_pieces_white or :chess_pieces_black to determine what the past pone coordinates are
+  +1 from original attacker coordinate's numeric if white
+  -1 from original attacker cooridnate's numeric if black
+  """
+  def past_pone(attacker_piece_role, sel_no, attacker_piece_coordinate_no, attacker_piece_coordinate_alpha, atom_coordinate, chess_piece_side) do
+    IO.inspect chess_piece_side
+    past_pone_side_pov =
+      if chess_piece_side == :chess_pieces_white do
+        1
+      else
+        -1
+      end
+
+    if attacker_piece_role == "pone" and
+    (sel_no - attacker_piece_coordinate_no == 2 or sel_no - attacker_piece_coordinate_no == -2) do
+      {
+        String.to_atom(attacker_piece_coordinate_alpha<>Integer.to_string(attacker_piece_coordinate_no + past_pone_side_pov)),
+        atom_coordinate,
+        true,
+        chess_piece_side
+      }
+    else
+      {
+        :nil,
+        :nil,
+        false,
+        chess_piece_side
+      }
+    end
   end
 
 end
