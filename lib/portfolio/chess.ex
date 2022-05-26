@@ -248,16 +248,14 @@ defmodule Portfolio.Chess do
       end
 
     targets_atom_list =
-      if (Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)))
-      or String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)) == past_pone_tuple_combo |> elem(0)) do
+      if Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov))) do
         [String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)) | targets_atom_list]
       else
         targets_atom_list
       end
 
     targets_atom_list =
-      if (Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov)))
-      or String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov)) == past_pone_tuple_combo |> elem(0)) do
+      if Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov))) do
         [String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov)) | targets_atom_list]
       else
         targets_atom_list
