@@ -66,43 +66,78 @@ defmodule PortfolioWeb.ChessLive do
 
     if validate_color_tile == :red do
 
-      move_piece = socket
-      |> Map.get(:assigns)
-      |> Map.get(chess_piece_side)
-      |> Map.get(attacker_piece_coordinate)
-      |> Map.put(:coordinate_alpha, socket.assigns.sel_alpha)
-      |> Map.put(:coordinate_no, socket.assigns.sel_no)
+      move_piece =
+        socket
+        |> Map.get(:assigns)
+        |> Map.get(chess_piece_side)
+        |> Map.get(attacker_piece_coordinate)
+        |> Map.put(:coordinate_alpha, socket.assigns.sel_alpha)
+        |> Map.put(:coordinate_no, socket.assigns.sel_no)
 
       #remove attacker piece from old position & put new position (DELETE OLD ATTACKER, NEW OLD ATTACKER COORDINATE)
-      updated_pieces_coordinate_attacker = socket
-      |> Map.get(:assigns)
-      |> Map.get(chess_piece_side)
-      |> Map.delete(attacker_piece_coordinate)
-      |> Map.put(atom_coordinate, move_piece)
+      updated_pieces_coordinate_attacker =
+        socket
+        |> Map.get(:assigns)
+        |> Map.get(chess_piece_side)
+        |> Map.delete(attacker_piece_coordinate)
+        |> Map.put(atom_coordinate, move_piece)
 
       #remove opponent piece from entire map (DELETE OPPONENT)
-      updated_pieces_coordinate_opponent = socket
-      |> Map.get(:assigns)
-      |> Map.get(chess_piece_opponent)
-      |> Map.delete(atom_coordinate)
+      IO.inspect socket.assigns.past_pone_tuple_combo |> elem(0), label: "past_pone: behind tile"
+      IO.inspect atom_coordinate, label: "selected atom to moved on"
+      updated_pieces_coordinate_opponent =
+        if socket.assigns.past_pone_tuple_combo |> elem(2) == true
+        and socket.assigns.past_pone_tuple_combo |> elem(0) == atom_coordinate do
+          socket
+          |> Map.get(:assigns)
+          |> Map.get(chess_piece_opponent)
+          |> Map.delete(socket.assigns.past_pone_tuple_combo |> elem(1))
+        else
+          socket
+          |> Map.get(:assigns)
+          |> Map.get(chess_piece_opponent)
+          |> Map.delete(atom_coordinate)
+        end
 
-      move_occupant = socket
-      |> Map.get(:assigns)
-      |> Map.get(:chess_board)
-      |> Map.get(atom_coordinate)
-      |> Map.put(:occupant, socket.assigns.attacker_piece_occupant_id)
+      move_occupant =
+        socket
+        |> Map.get(:assigns)
+        |> Map.get(:chess_board)
+        |> Map.get(atom_coordinate)
+        |> Map.put(:occupant, socket.assigns.attacker_piece_occupant_id)
 
-      remove_target_occupant = socket
-      |> Map.get(:assigns)
-      |> Map.get(:chess_board)
-      |> Map.get(attacker_piece_coordinate)
-      |> Map.put(:occupant, nil)
+      remove_attacker_old_coordinate =
+        socket
+        |> Map.get(:assigns)
+        |> Map.get(:chess_board)
+        |> Map.get(attacker_piece_coordinate)
+        |> Map.put(:occupant, nil)
 
-      updated_tiles_occupant = socket
-      |> Map.get(:assigns)
-      |> Map.get(:chess_board)
-      |> Map.put(atom_coordinate, move_occupant)
-      |> Map.put(attacker_piece_coordinate, remove_target_occupant)
+      remove_past_pone =
+        if socket.assigns.past_pone_tuple_combo |> elem(2) == true
+        and socket.assigns.past_pone_tuple_combo |> elem(0) == atom_coordinate do
+          socket
+          |> Map.get(:assigns)
+          |> Map.get(:chess_board)
+          |> Map.get(socket.assigns.past_pone_tuple_combo |> elem(1))
+          |> Map.put(:occupant, nil)
+        end
+
+      updated_tiles_occupant =
+        if remove_past_pone != nil do
+          socket
+          |> Map.get(:assigns)
+          |> Map.get(:chess_board)
+          |> Map.put(atom_coordinate, move_occupant)
+          |> Map.put(attacker_piece_coordinate, remove_attacker_old_coordinate)
+          |> Map.put(socket.assigns.past_pone_tuple_combo |> elem(1), remove_past_pone)
+        else
+          socket
+          |> Map.get(:assigns)
+          |> Map.get(:chess_board)
+          |> Map.put(atom_coordinate, move_occupant)
+          |> Map.put(attacker_piece_coordinate, remove_attacker_old_coordinate)
+        end
 
       past_pone_tuple_combo = Chess.past_pone(socket.assigns.attacker_piece_role, sel_no, attacker_piece_coordinate_no, attacker_piece_coordinate_alpha, atom_coordinate, chess_piece_side)
 

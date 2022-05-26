@@ -662,7 +662,6 @@ defmodule Portfolio.Chess do
   -1 from original attacker cooridnate's numeric if black
   """
   def past_pone(attacker_piece_role, sel_no, attacker_piece_coordinate_no, attacker_piece_coordinate_alpha, atom_coordinate, chess_piece_side) do
-    IO.inspect chess_piece_side
     past_pone_side_pov =
       if chess_piece_side == :chess_pieces_white do
         1
