@@ -83,8 +83,8 @@ defmodule PortfolioWeb.ChessLive do
         |> Map.put(atom_coordinate, move_piece)
 
       #remove opponent piece from entire map (DELETE OPPONENT)
-      IO.inspect socket.assigns.past_pone_tuple_combo |> elem(0), label: "past_pone: behind tile"
-      IO.inspect atom_coordinate, label: "selected atom to moved on"
+      #IO.inspect socket.assigns.past_pone_tuple_combo |> elem(0), label: "past_pone: behind tile"
+      #IO.inspect atom_coordinate, label: "selected atom to moved on"
       updated_pieces_coordinate_opponent =
         if socket.assigns.past_pone_tuple_combo |> elem(2) == true
         and socket.assigns.past_pone_tuple_combo |> elem(0) == atom_coordinate do
