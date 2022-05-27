@@ -301,12 +301,24 @@ defmodule PortfolioWeb.ChessLive do
 
         {:noreply, socket}
       { true, "knight" } ->
-        knight_shaded = Chess.tile_shade_red(
-          sel_alpha,
-          sel_no,
-          socket.assigns.chess_board,
-          attacker_piece_role
-        )
+        knight_shaded =
+        if attacker_piece_role_side == :chess_pieces_white do
+          Chess.tile_shade_red(
+            sel_alpha,
+            sel_no,
+            socket.assigns.chess_board,
+            attacker_piece_role,
+            socket.assigns.chess_pieces_white
+          )
+        else
+          Chess.tile_shade_red(
+            sel_alpha,
+            sel_no,
+            socket.assigns.chess_board,
+            attacker_piece_role,
+            socket.assigns.chess_pieces_black
+          )
+        end
         attacker_piece_occupant_id = socket
         |> Map.get(:assigns)
         |> Map.get(:chess_board)

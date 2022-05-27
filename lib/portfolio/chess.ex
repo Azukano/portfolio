@@ -610,7 +610,7 @@ defmodule Portfolio.Chess do
   end
 
   #KNIGHT MOVESET
-  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker)
   when target_piece_role == "knight" do
 
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
@@ -635,7 +635,7 @@ defmodule Portfolio.Chess do
           String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 2>><>Integer.to_string(sel_no + 1)) or
           String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no - 2)) or
           String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 2>><>Integer.to_string(sel_no - 1))
-        ) do
+        ) and not Map.has_key?(chess_pieces_attacker, String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))) do
       String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))
       else
         nil
