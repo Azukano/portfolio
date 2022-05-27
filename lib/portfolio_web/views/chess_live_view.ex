@@ -124,7 +124,7 @@ defmodule PortfolioWeb.ChessLive do
         end
 
       updated_tiles_occupant =
-        if remove_past_pone != nil do
+        if remove_past_pone != nil and socket.assigns.attacker_piece_role == "pone" do
           socket
           |> Map.get(:assigns)
           |> Map.get(:chess_board)
