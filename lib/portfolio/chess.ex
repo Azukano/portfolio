@@ -229,6 +229,7 @@ defmodule Portfolio.Chess do
         :chess_pieces_white
       end
 
+    # pone attack up-left / up-right first 2 pattern match is for past-pone another 2 is for normal attack
     targets_atom_list =
       if pone_side != past_pone_tuple_combo |> elem(3) and
       (Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)))
@@ -293,7 +294,7 @@ defmodule Portfolio.Chess do
 
   #ROOK TILE RED SHADE
   def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker, chess_pieces_opponent)
-  when (target_piece_role == "rook" or target_piece_role == "queen") do
+  when target_piece_role == "rook" or target_piece_role == "queen" do
 
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
@@ -626,14 +627,14 @@ defmodule Portfolio.Chess do
         and sel_no + j > 0 and sel_no + j < 9
         and String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) != target_piece_coordinate_atom
         and (
-          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + 2))
-          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 2>><>Integer.to_string(sel_no + 1))
-          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no - 2))
-          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 2>><>Integer.to_string(sel_no - 1))
-          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + 2))
-          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 2>><>Integer.to_string(sel_no + 1))
-          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no - 2))
-          or String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 2>><>Integer.to_string(sel_no - 1))
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + 2)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 2>><>Integer.to_string(sel_no + 1)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no - 2)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 2>><>Integer.to_string(sel_no - 1)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + 2)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 2>><>Integer.to_string(sel_no + 1)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no - 2)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 2>><>Integer.to_string(sel_no - 1))
         ) do
       String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))
       else
