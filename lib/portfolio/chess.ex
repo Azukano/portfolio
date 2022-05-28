@@ -3,6 +3,8 @@ defmodule Portfolio.Chess do
   alias Portfolio.ChessPieces
   require Integer
 
+  @alpha_list ["a", "b", "c", "d", "e", "f", "g", "h"]
+
   def fill_board(i, j, k, chess_board, overlay) when k > 7 do
     chess_board
   end
@@ -177,12 +179,12 @@ defmodule Portfolio.Chess do
              chess_board -> passed in value is from initiated chess_board! or old_chess_board if game
              is already started and will keep using old_chess_board \\ returns new_chess_board to be passed
              on overlay_chess_board so that it shades tiles available beneath its original chess_board
-             target_piece_role -> socket.assigns.chess_pieces.tile_id\\:a1.role
+             attacker_piece_role -> socket.assigns.chess_pieces.tile_id\\:a1.role
              chess_pieces -> socket.assigns.ches_pieces to check what pieces are tiles occupied.
   """
   #PONE TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker, chess_pieces_opponent, black_pone, past_pone_tuple_combo)
-  when target_piece_role == "pone" do
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, black_pone, past_pone_tuple_combo)
+  when attacker_piece_role == "pone" do
 
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
@@ -293,98 +295,63 @@ defmodule Portfolio.Chess do
   end
 
   #ROOK TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker, chess_pieces_opponent)
-  when target_piece_role == "rook" or target_piece_role == "queen" do
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent)
+  when attacker_piece_role == "rook" or attacker_piece_role == "queen" do
 
-    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
-      if sel_alpha == alpha_list |> Enum.at(x) do
+      if sel_alpha == @alpha_list |> Enum.at(x) do
         96 + x + 1
       end
     end |> Enum.find(fn x -> x != nil end )
 
-    #1st WAY UP (+) coordinate_no/sel_no
-    targets_atom_list_up = Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
-      (x, acc) when x < 1 and acc == 0 ->
-        {:cont, []}
-      (x, acc) when x > 0 and acc != 0 ->
-        target_atom = if sel_no + x in 1..8 do
-          String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
-        end
-        # main conditional statement checks if there is ally piece ON ITS WAY IMPORTANT!
-        unless Map.has_key?(chess_pieces_attacker, target_atom) do
-        # sub conditional statement checks if there is enemy piece beyond ON ITS WAY IMPORTANT!
-          unless Map.has_key?(chess_pieces_opponent, target_atom) do
-            {:cont, [ target_atom | acc ]}
+    #1st&2nd WAY UP (+) DOWN (-) ROW coordinate_no/sel_no
+    targets_atom_list_up_down =
+    for x <- [7, -7] do
+      Enum.reduce_while(0..x, 0, fn #generator starts with 0 for acc initiation to [] important!
+        (x, acc) when x == 0 and acc == 0 ->
+          {:cont, []}
+        (x, acc) when acc != 0 ->
+          target_atom = move_up_down(alpha_binary, sel_no, x)
+          # main conditional statement checks if there is ally piece ON ITS WAY IMPORTANT!
+          unless Map.has_key?(chess_pieces_attacker, target_atom) do
+          # sub conditional statement checks if there is enemy piece beyond ON ITS WAY IMPORTANT!
+            unless Map.has_key?(chess_pieces_opponent, target_atom) do
+              {:cont, [ target_atom | acc ]}
+            else
+              {:halt, [ target_atom | acc ]}
+            end
           else
-            {:halt, [ target_atom | acc ]}
+            {:halt, [ nil | acc ]}
           end
-        else
-          {:halt, [ nil | acc ]}
-        end
-    end)
+      end)
+    end
 
-    #2nd WAY DOWN (-) coordinate_no/sel_no
-    targets_atom_list_down = Enum.reduce_while(0..-7, 0, fn #generator starts with 0 for acc initiation to [] important!
-    (x, acc) when x < 1 and acc == 0 ->
-      {:cont, []}
-    (x, acc) when x < 0 and acc != 0 ->
-      target_atom = if sel_no + x > 0 and sel_no + x < 9 do
-        String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
+    #3rd&4th WAY LEFT (-) RIGHT (+) COLUMN coordinate_alpha/sel_alpha
+    targets_atom_list_left_right =
+      for x <- [-7, 7] do
+        Enum.reduce_while(0..x, 0, fn #generator starts with 0 for acc initiation to [] important!
+          (x, acc) when x == 0 and acc == 0 ->
+            {:cont, []}
+          (x, acc) when acc != 0 ->
+            target_atom = move_left_right(alpha_binary, sel_no, x)
+            # main conditional statement checks if there is ally piece ON ITS WAY IMPORTANT!
+            unless Map.has_key?(chess_pieces_attacker, target_atom) do
+            # sub conditional statement checks if there is enemy piece beyond ON ITS WAY IMPORTANT!
+              unless Map.has_key?(chess_pieces_opponent, target_atom) do
+                {:cont, [ target_atom | acc ]}
+              else
+                {:halt, [ target_atom | acc ]}
+              end
+            else
+              {:halt, [ nil | acc ]}
+            end
+        end)
       end
-      unless Map.has_key?(chess_pieces_attacker, target_atom) do
-        unless Map.has_key?(chess_pieces_opponent, target_atom) do
-          {:cont, [ target_atom | acc ]}
-        else
-          {:halt, [ target_atom | acc ]}
-        end
-      else
-        {:halt, [ nil | acc ]}
-      end
-    end)
 
-    #3rd WAY LEFT (-) coordinate_alpha/sel_alpha
-    targets_atom_list_left = Enum.reduce_while(0..-7, 0, fn #generator starts with 0 for acc initiation to [] important!
-    (x, acc) when x < 1 and acc == 0 ->
-      {:cont, []}
-    (x, acc) when x < 0 and acc != 0 ->
-      target_atom = if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>> do
-        String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no))
-      end
-      unless Map.has_key?(chess_pieces_attacker, target_atom) do
-        unless Map.has_key?(chess_pieces_opponent, target_atom) do
-          {:cont, [ target_atom | acc ]}
-        else
-          {:halt, [ target_atom | acc ]}
-        end
-      else
-        {:halt, [ nil | acc ]}
-      end
-    end)
-
-    #4th WAY RIGHT (+) coordinate_alpha/sel_alpha
-    targets_atom_list_right = Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
-    (x, acc) when x < 1 and acc == 0 ->
-      {:cont, []}
-    (x, acc) when x > 0 and acc != 0 ->
-      target_atom = if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>> do
-        String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no))
-      end
-      unless Map.has_key?(chess_pieces_attacker, target_atom) do
-        unless Map.has_key?(chess_pieces_opponent, target_atom) do
-          {:cont, [ target_atom | acc ]}
-        else
-          {:halt, [ target_atom | acc ]}
-        end
-      else
-        {:halt, [ nil | acc ]}
-      end
-    end)
-
-    targets_atom_list = targets_atom_list_up
-    |> Enum.concat(targets_atom_list_down)
-    |> Enum.concat(targets_atom_list_left)
-    |> Enum.concat(targets_atom_list_right)
+    targets_atom_list = List.first(targets_atom_list_up_down)
+    |> Enum.concat(List.last(targets_atom_list_up_down))
+    |> Enum.concat(List.first(targets_atom_list_left_right))
+    |> Enum.concat(List.last(targets_atom_list_left_right))
 
     new_chess_board_with_red_tile = unless Enum.filter(targets_atom_list, & !is_nil(&1)) == [] do
       Enum.reduce(targets_atom_list, 0, fn
@@ -414,20 +381,31 @@ defmodule Portfolio.Chess do
       chess_board
       |> Map.put(String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no)), rook_step1)
     end
-    if target_piece_role == "queen" do
+    if attacker_piece_role == "queen" do
       tile_shade_red(sel_alpha, sel_no, { chess_board, targets_atom_list }, "bishop", chess_pieces_attacker, chess_pieces_opponent)
     else
       new_chess_board_with_red_tile
     end
   end
 
-  #BISHOP TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker, chess_pieces_opponent) #chess_board is combo map(chess_board) + list(queen_accumalative list target from rook)
-  when target_piece_role == "bishop" do
+  defp move_up_down(alpha_binary, sel_no, x) do
+    if sel_no + x in 1..8 do
+      String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no + x))
+    end
+  end
 
-    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
+  defp move_left_right(alpha_binary, sel_no, x) do
+    if alpha_binary + x in 97..104 do
+      String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no))
+    end
+  end
+
+  #BISHOP TILE RED SHADE
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent) #chess_board is combo map(chess_board) + list(queen_accumalative list target from rook)
+  when attacker_piece_role == "bishop" do
+
     alpha_binary = for x <- 0..7 do
-      if sel_alpha == alpha_list |> Enum.at(x) do
+      if sel_alpha == @alpha_list |> Enum.at(x) do
         96 + x + 1
       end
     end |> Enum.find(fn x -> x != nil end )
@@ -437,13 +415,10 @@ defmodule Portfolio.Chess do
 
     #1st WAY DIAGONAL UP-LEFT (-) coordinate_alpha/sel_alpha (+) coordinate_no/sel_no
     targets_atom_list_up_left = Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
-    (x, acc) when x < 1 and acc == 0 ->
+    (x, acc) when x == 0 and acc == 0 ->
       {:cont, []}
     (x, acc) when x > 0 and acc != 0 ->
-      target_atom = if <<alpha_binary - x>> > <<96>> and <<alpha_binary - x>> < <<105>>
-      and sel_no + x > 0 and sel_no + x < 9 do
-        String.to_atom(<<alpha_binary - x>><>Integer.to_string(sel_no + x))
-      end
+      target_atom = move_up_left(alpha_binary, sel_no, x)
       unless Map.has_key?(chess_pieces_attacker, target_atom) do
         unless Map.has_key?(chess_pieces_opponent, target_atom) do
           {:cont, [ target_atom | acc ]}
@@ -457,13 +432,10 @@ defmodule Portfolio.Chess do
 
     #2nd WAY DIAGONAL UP-RIGHT (+) coordinate_alpha/sel_alpha (+) coordinate_no/sel_no
     targets_atom_list_up_right = Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
-    (x, acc) when x < 1 and acc == 0 ->
+    (x, acc) when x == 0 and acc == 0 ->
       {:cont, []}
     (x, acc) when x > 0 and acc != 0 ->
-      target_atom = if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>>
-      and sel_no + x > 0 and sel_no + x < 9 do
-        String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + x))
-      end
+      target_atom = move_up_right(alpha_binary, sel_no, x)
       unless Map.has_key?(chess_pieces_attacker, target_atom) do
         unless Map.has_key?(chess_pieces_opponent, target_atom) do
           {:cont, [ target_atom | acc ]}
@@ -477,13 +449,10 @@ defmodule Portfolio.Chess do
 
     #3rd WAY DIAGONAL DOWN-RIGHT (+) coordinate_alpha/sel_alpha (-) coordinate_no/sel_no
     targets_atom_list_down_right = Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
-    (x, acc) when x < 1 and acc == 0 ->
+    (x, acc) when x == 0 and acc == 0 ->
       {:cont, []}
     (x, acc) when x > 0 and acc != 0 ->
-      target_atom = if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>>
-      and sel_no - x > 0 and sel_no - x < 9 do
-        String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no - x))
-      end
+      target_atom = move_down_right(alpha_binary, sel_no, x)
       unless Map.has_key?(chess_pieces_attacker, target_atom) do
         unless Map.has_key?(chess_pieces_opponent, target_atom) do
           {:cont, [ target_atom | acc ]}
@@ -500,10 +469,7 @@ defmodule Portfolio.Chess do
     (x, acc) when x < 1 and acc == 0 ->
       {:cont, []}
     (x, acc) when x > 0 and acc != 0 ->
-      target_atom = if <<alpha_binary - x>> > <<96>> and <<alpha_binary - x>> < <<105>>
-      and sel_no - x > 0 and sel_no - x < 9 do
-        String.to_atom(<<alpha_binary - x>><>Integer.to_string(sel_no - x))
-      end
+      target_atom = move_down_left(alpha_binary, sel_no, x)
       unless Map.has_key?(chess_pieces_attacker, target_atom) do
         unless Map.has_key?(chess_pieces_opponent, target_atom) do
           {:cont, [ target_atom | acc ]}
@@ -555,30 +521,41 @@ defmodule Portfolio.Chess do
     end
   end
 
-  #KING MOVESET
-  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker)
-  when target_piece_role == "king" do
+  defp move_up_left(alpha_binary, sel_no, x) do
+    if alpha_binary - x in 97..104 and sel_no + x in 1..8 do
+      String.to_atom(<<alpha_binary - x>><>Integer.to_string(sel_no + x))
+    end
+  end
 
-    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
+  defp move_up_right(alpha_binary, sel_no, x) do
+    if alpha_binary + x in 97..104 and sel_no + x in 1..8 do
+      String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + x))
+    end
+  end
+
+  defp move_down_right(alpha_binary, sel_no, x) do
+    if alpha_binary + x in 97..104 and sel_no - x in 1..8 do
+      String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no - x))
+    end
+  end
+
+  defp move_down_left(alpha_binary, sel_no, x) do
+    if alpha_binary - x in 97..104 and sel_no - x in 1..8 do
+      String.to_atom(<<alpha_binary - x>><>Integer.to_string(sel_no - x))
+    end
+  end
+
+  #KING MOVESET
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker)
+  when attacker_piece_role == "king" do
+
     alpha_binary = for x <- 0..7 do
-      if sel_alpha == alpha_list |> Enum.at(x) do
+      if sel_alpha == @alpha_list |> Enum.at(x) do
         96 + x + 1
       end
     end |> Enum.find(fn x -> x != nil end )
 
-    target_piece_coordinate_atom = String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no))
-
-    targets_atom_list = for x <- -1..1, j <- -1..1 do
-      target_atom = String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))
-      if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>>
-        and sel_no + j > 0 and sel_no + j < 9
-        and target_atom != target_piece_coordinate_atom
-        and not Map.has_key?(chess_pieces_attacker, target_atom) do
-      String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))
-      else
-        nil
-      end
-    end
+    targets_atom_list = move_king(alpha_binary, sel_no, chess_pieces_attacker)
 
     unless Enum.filter(targets_atom_list, & !is_nil(&1)) == [] do
       Enum.reduce(targets_atom_list, 0, fn (tile_id, acc) ->
@@ -609,9 +586,23 @@ defmodule Portfolio.Chess do
     end
   end
 
+  def move_king(alpha_binary, sel_no, chess_pieces_attacker) do
+    for x <- -1..1, j <- -1..1 do
+      target_atom = String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))
+      if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>>
+        and sel_no + j > 0 and sel_no + j < 9
+        and target_atom != String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no))
+        and not Map.has_key?(chess_pieces_attacker, target_atom) do
+      String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))
+      else
+        nil
+      end
+    end
+  end
+
   #KNIGHT MOVESET
-  def tile_shade_red(sel_alpha, sel_no, chess_board, target_piece_role, chess_pieces_attacker)
-  when target_piece_role == "knight" do
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker)
+  when attacker_piece_role == "knight" do
 
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
@@ -620,27 +611,7 @@ defmodule Portfolio.Chess do
       end
     end |> Enum.find(fn x -> x != nil end )
 
-    target_piece_coordinate_atom = String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no))
-
-    targets_atom_list = for x <- -2..2, j <- -2..2 do
-      if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>>
-        and sel_no + j > 0 and sel_no + j < 9
-        and String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) != target_piece_coordinate_atom
-        and (
-          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + 2)) or
-          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 2>><>Integer.to_string(sel_no + 1)) or
-          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no - 2)) or
-          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 2>><>Integer.to_string(sel_no - 1)) or
-          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + 2)) or
-          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 2>><>Integer.to_string(sel_no + 1)) or
-          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no - 2)) or
-          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 2>><>Integer.to_string(sel_no - 1))
-        ) and not Map.has_key?(chess_pieces_attacker, String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))) do
-      String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))
-      else
-        nil
-      end
-    end
+    targets_atom_list = move_knight(alpha_binary, sel_no, chess_pieces_attacker)
 
     Enum.reduce(targets_atom_list, 0, fn (tile_id, acc) ->
       knight_step1 = if tile_id != nil do
@@ -662,8 +633,28 @@ defmodule Portfolio.Chess do
     end)
   end
 
+  def move_knight(alpha_binary, sel_no, chess_pieces_attacker) do
+    for x <- -2..2, j <- -2..2 do
+      if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>>
+        and sel_no + j > 0 and sel_no + j < 9
+        and String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) != String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no))
+        and (
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + 2)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 2>><>Integer.to_string(sel_no + 1)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no - 2)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 2>><>Integer.to_string(sel_no - 1)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + 2)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary - 2>><>Integer.to_string(sel_no + 1)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no - 2)) or
+          String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j)) == String.to_atom(<<alpha_binary + 2>><>Integer.to_string(sel_no - 1))
+        ) and not Map.has_key?(chess_pieces_attacker, String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))) do
+      String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))
+      end
+    end
+  end
+
   @doc """
-  returns past_pone coordinate: {:c3, c4} and switch: true/false
+  returns past_pone coordinate: {:c3, c4} and switch: true/false and chess_piece_side: chess_pieces_white/black
   attacker_piece_role: "pone" or "bishop" in general this function only accept "pone".
   sel_no the currect selector sel_no.
   attacker_piece_coordinate_no origin place of the attacker piece to be moved. (NUMERIC)
@@ -674,12 +665,8 @@ defmodule Portfolio.Chess do
   -1 from original attacker cooridnate's numeric if black
   """
   def past_pone(attacker_piece_role, sel_no, attacker_piece_coordinate_no, attacker_piece_coordinate_alpha, atom_coordinate, chess_piece_side) do
-    past_pone_side_pov =
-      if chess_piece_side == :chess_pieces_white do
-        1
-      else
-        -1
-      end
+
+    past_pone_side_pov = if chess_piece_side == :chess_pieces_white do 1 else -1 end
 
     if attacker_piece_role == "pone" and
     (sel_no - attacker_piece_coordinate_no == 2 or sel_no - attacker_piece_coordinate_no == -2) do
@@ -690,13 +677,16 @@ defmodule Portfolio.Chess do
         chess_piece_side
       }
     else
-      {
-        :nil,
-        :nil,
-        false,
-        chess_piece_side
-      }
+      { :nil, :nil, false, chess_piece_side }
     end
+  end
+
+  @doc """
+  presumption mode of opponent's pieces to get pre allocated tiles so that attacker's king
+  can not set foot on tiles that presumptively took over by opponent's pieces.
+  """
+  def presume_tiles(sel_no \\ nil, sel_alpha \\ nil, chess_pieces_attacker, chess_pieces_opponent, chess_piece_side) do
+
   end
 
 end
