@@ -1,12 +1,12 @@
 <section phx-window-keydown="key_press" phx-window-keyup="tile_selection" class="bg-[#242526] h-full text-[#e6e6e6] flex flex-col justify-center">
     <!-- WRAPPER -->
-    <div class="container mx-auto">
+    <div class="flex flex-wrap justify-center">
     <% @chess_board == @chess_board_overlay %>
-        <div class="text-center">
-            <div class="relative w-[800px] h-[800px] self-center flex flex-col-reverse mx-auto">
+        <div class="w-[800px] h-[800px] mx-auto text-center flex justify-center items-center">
+            <div class="relative w-full h-full flex flex-col-reverse">
 
                 <%= for no <- 1..8 do %>
-                <ul class="h-full w-full flex flex-wrap items-center justify-center">
+                <ul class="h-[100px] w-[800px] flex flex-wrap items-center justify-center">
                     <%= for i <- 1..8, {_tile_id, tile} <- @chess_board, tile.coordinate_no == no, tile.coordinate_alpha == <<96+i>> do %>  
                     <li class="relative h-full w-[12.5%] text-center py-6 border border-[#c7c7c7]/25" style={"background-color: #{tile.color}; background-image: url(/images/chess/chess-bg.jpg)"}>  
                     <!-- PUT PIECE LABEL/TILE SVG -->
@@ -48,7 +48,9 @@
                 <% end %>
 
             </div>
-            <div class="w-[800px] bg-black mt-2 mx-auto text-left p-2">
+        </div>
+        <div class="w-[800px] bg-black mx-auto mt-2 text-left p-2 flex justify-between">
+            <div class="w-full">
                 <span>SELECTOR COORDINATE: </span>
                 <span class="font-bold uppercase text-red-500">
                     <%= if @sel_alpha < "a"  or @sel_alpha > "h"
@@ -59,6 +61,21 @@
                     <% end %>
                 </span>
             </div>
+            <div class="w-full">
+                <%= if @check_condition_black == true do %>
+                    <span>CHECK CONDITION: </span>
+                    <span class="font-bold uppercase text-red-500">
+                    <span> BLACK </span>
+                    </span>
+                <% end %>
+                <%= if @check_condition_white == true do %>
+                    <span>CHECK CONDITION: </span>
+                    <span class="font-bold uppercase text-red-500">
+                    <span> WHITE </span>
+                    </span>
+                <% end %>
+            </div>
+
         </div>
     </div>
 </section>
