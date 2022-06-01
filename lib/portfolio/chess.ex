@@ -92,7 +92,6 @@ defmodule Portfolio.Chess do
     coordinate_no = elem(piece_coordinate(role, i, black_switch), 1)         # return integer poistion 1 .. 8
 
     id = pieces_id(role, i, black_switch)
-    legal_move = [{coordinate_alpha, 1}, {coordinate_alpha, 2}]
 
     new_tile = chess_board
     |> Map.get(String.to_atom(coordinate_alpha<>Integer.to_string(coordinate_no)))
@@ -101,7 +100,7 @@ defmodule Portfolio.Chess do
     |> Map.put(String.to_atom(coordinate_alpha<>Integer.to_string(coordinate_no)), new_tile)
 
     if i >= (pieces_map |> Enum.fetch(j) |> elem(1) |> elem(1)) - 1 do
-      piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no, legal_move: legal_move)
+      piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no, role_id: id)
       j = j + 1
       if black_switch == false do
         white_pieces = Map.put(white_pieces, String.to_atom(coordinate_alpha<>Integer.to_string(coordinate_no)), piece)
@@ -111,7 +110,7 @@ defmodule Portfolio.Chess do
         spawn_pieces(0, j, white_pieces, black_pieces, black_switch, chess_board)
       end
     else
-      piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no, legal_move: legal_move)
+      piece = ChessPieces.pieces(role: role, coordinate_alpha: coordinate_alpha, coordinate_no: coordinate_no, role_id: id)
       if black_switch == false do
         white_pieces = Map.put(white_pieces, String.to_atom(coordinate_alpha<>Integer.to_string(coordinate_no)), piece)
         spawn_pieces(i + 1, j, white_pieces, black_pieces, black_switch, chess_board)
@@ -714,7 +713,7 @@ defmodule Portfolio.Chess do
     chess_pieces_attacker_no_king = chess_pieces_attacker |> Map.delete(String.to_atom(sel_alpha<>Integer.to_string(sel_no)))
     chess_board_removed_king = chess_board |> Map.delete(String.to_atom(sel_alpha<>Integer.to_string(sel_no)))
 
-    presume_tiles_opponent = presume_tiles(chess_pieces_opponent, chess_pieces_attacker_no_king, opponent_piece_side, chess_board_removed_king)
+    presume_tiles_opponent = presume_tiles(chess_pieces_opponent, chess_pieces_attacker_no_king, opponent_piece_side, chess_board_removed_king) |> elem(0)
 
     targets_atom_list = move_king(alpha_binary, sel_no, chess_pieces_attacker, presume_tiles_opponent)
 
@@ -781,24 +780,33 @@ defmodule Portfolio.Chess do
 
     targets_atom_list = move_knight(alpha_binary, sel_no, chess_pieces_attacker)
 
-    Enum.reduce(targets_atom_list, 0, fn (tile_id, acc) ->
-      knight_step1 = if tile_id != nil do
-        chess_board
-        |> Map.get(tile_id)
-        |> Map.put(:color, :red)
-      else
-        nil
-      end
-      if acc == 0 and knight_step1 != nil do
-        chess_board |> Map.put(tile_id, knight_step1)
-      else
-        if knight_step1 != nil do
-          acc |> Map.put(tile_id, knight_step1)
+    unless Enum.filter(targets_atom_list, & !is_nil(&1)) == [] do
+      Enum.reduce(targets_atom_list, 0, fn (tile_id, acc) ->
+        knight_step1 = if tile_id != nil do
+          chess_board
+          |> Map.get(tile_id)
+          |> Map.put(:color, :red)
         else
-          acc
+          nil
         end
-      end
-    end)
+        if acc == 0 and knight_step1 != nil do
+          chess_board |> Map.put(tile_id, knight_step1)
+        else
+          if knight_step1 != nil do
+            acc |> Map.put(tile_id, knight_step1)
+          else
+            acc
+          end
+        end
+      end)
+    else
+      knight_step1 =
+        chess_board
+        |> Map.get(String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no)))
+        |> Map.put(:color, :"#8F00FF")
+      chess_board
+      |> Map.put(String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no)), knight_step1)
+    end
   end
 
   defp move_knight(alpha_binary, sel_no, chess_pieces_attacker, presume_tile_mode \\ false) do
@@ -819,7 +827,7 @@ defmodule Portfolio.Chess do
           ) and not Map.has_key?(chess_pieces_attacker, String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))) do
         String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))
         end
-      end
+      end |> Enum.filter(& !is_nil(&1))
     else
       for x <- -2..2, j <- -2..2 do
         if <<alpha_binary + x>> > <<96>> and <<alpha_binary + x>> < <<105>>
@@ -838,7 +846,7 @@ defmodule Portfolio.Chess do
         String.to_atom(<<alpha_binary + x>><>Integer.to_string(sel_no + j))
         end
       end
-    end
+    end |> Enum.filter(& !is_nil(&1))
   end
 
   @doc """
@@ -919,11 +927,11 @@ defmodule Portfolio.Chess do
       piece_id = chess_board[String.to_atom(<<piece_coordinate_alpha>><>Integer.to_string(piece_coordinate_no))].occupant
 
       #1st&2nd WAY UP (+) DOWN (-) ROW coordinate_no/sel_no
-      piece_moves_up = moves_up(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
-      piece_moves_down = moves_down(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
+      piece_moves_up = moves_up(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_down = moves_down(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
       #3rd&4th WAY LEFT (-) RIGHT (+) COLUMN coordinate_alpha/sel_alpha
-      piece_moves_left = moves_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
-      piece_moves_right = moves_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
+      piece_moves_left = moves_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_right = moves_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
 
       piece_moves = piece_moves_up
       |> Enum.concat(piece_moves_down)
@@ -943,10 +951,10 @@ defmodule Portfolio.Chess do
       piece_coordinate_no = Atom.to_string(piece_tile_id) |> String.last() |> String.to_integer()
       piece_id = chess_board[String.to_atom(<<piece_coordinate_alpha>><>Integer.to_string(piece_coordinate_no))].occupant
 
-      piece_moves_up_left = moves_up_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
-      piece_moves_up_right = moves_up_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
-      piece_moves_down_right = moves_down_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
-      piece_moves_down_left = moves_down_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
+      piece_moves_up_left = moves_up_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_up_right = moves_up_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_down_right = moves_down_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_down_left = moves_down_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
 
       piece_moves = piece_moves_up_left
       |> Enum.concat(piece_moves_up_right)
@@ -966,14 +974,14 @@ defmodule Portfolio.Chess do
       piece_coordinate_no = Atom.to_string(piece_tile_id) |> String.last() |> String.to_integer()
       piece_id = chess_board[String.to_atom(<<piece_coordinate_alpha>><>Integer.to_string(piece_coordinate_no))].occupant
 
-      piece_moves_up = moves_up(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
-      piece_moves_down = moves_down(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
-      piece_moves_left = moves_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
-      piece_moves_right = moves_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
-      piece_moves_up_left = moves_up_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
-      piece_moves_up_right = moves_up_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
-      piece_moves_down_right = moves_down_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
-      piece_moves_down_left = moves_down_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true)
+      piece_moves_up = moves_up(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_down = moves_down(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_left = moves_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_right = moves_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_up_left = moves_up_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_up_right = moves_up_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_down_right = moves_down_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_down_left = moves_down_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
 
       piece_moves = piece_moves_up
       |> Enum.concat(piece_moves_left)
@@ -1002,12 +1010,12 @@ defmodule Portfolio.Chess do
       { String.to_atom(piece_id), piece_moves }
     end
 
-    IO.inspect presume_tiles_pone, label: "Ponies"
-    IO.inspect presume_tiles_knight, label: "Knights"
-    IO.inspect presume_tiles_bishop, label: "Bishops"
-    IO.inspect presume_tiles_rook, label: "Rooks"
-    IO.inspect presume_tiles_queen, label: "Queen"
-    IO.inspect presume_tiles_king, label: "King"
+    # IO.inspect presume_tiles_pone, label: "Ponies"
+    # IO.inspect presume_tiles_knight, label: "Knights"
+    # IO.inspect presume_tiles_bishop, label: "Bishops"
+    # IO.inspect presume_tiles_rook, label: "Rooks"
+    # IO.inspect presume_tiles_queen, label: "Queen"
+    # IO.inspect presume_tiles_king, label: "King"
 
     presume_tiles =
       presume_tiles_pone
@@ -1017,15 +1025,143 @@ defmodule Portfolio.Chess do
       |> Enum.concat(presume_tiles_queen)
       |> Enum.concat(presume_tiles_king)
 
-    for x <- presume_tiles do
+    presume_tiles = for x <- presume_tiles do
       x |> elem(1)
-    end |> List.flatten() |> Enum.filter(& !is_nil(&1)) |> Enum.uniq()
+      end |> List.flatten() |> Enum.filter(& !is_nil(&1)) |> Enum.uniq()
+
+    { presume_tiles, presume_tiles_pone, presume_tiles_rook, presume_tiles_knight, presume_tiles_bishop, presume_tiles_queen, presume_tiles_king }
   end
 
   def locate_king_coordinate(chess_pieces_opponent) do
     for { piece_tile_id, piece } <- chess_pieces_opponent, piece.role == "king" do
       piece_tile_id
     end
+  end
+
+  def king_and_mate(presume_tiles_attacker, opponent_king_location) do
+    for x <- 1..6 do
+      if x < 5 do
+        Enum.reduce_while(presume_tiles_attacker |> elem(x), [], fn
+          (x, acc) ->
+            mate = x |> elem(0)
+            element = x |> elem(1)
+            if opponent_king_location not in element do
+              { :cont, [ { :nope, [] } | acc ] }
+            else
+              { :cont, [ { mate, element } | acc ] }
+            end
+        end)
+      else
+        mate = presume_tiles_attacker |> elem(x) |> Enum.fetch(0) |> elem(1) |> elem(0)
+        element = presume_tiles_attacker |> elem(x) |> Enum.fetch(0) |> elem(1) |> elem(1)
+        if opponent_king_location in element do
+          [ { mate, element } ]
+        else
+          [ { :nope, [] } ]
+        end
+      end
+    end
+  end
+
+  def mate_steps(the_mate_coordinate, opponent_king_location) do
+    mate_coordinate_alpha = Atom.to_string(the_mate_coordinate) |> String.first()
+    mate_coordinate_alpha = for x <- 0..7 do
+      if mate_coordinate_alpha == @alpha_list |> Enum.at(x) do
+        96 + x + 1
+      end
+    end |> Enum.find(fn x -> x != nil end )
+    mate_coordinate_no = Atom.to_string(the_mate_coordinate) |> String.last() |> String.to_integer()
+
+    opponent_king_coordinate_alpha = Atom.to_string(opponent_king_location) |> String.first()
+    opponent_king_coordinate_alpha = for x <- 0..7 do
+      if opponent_king_coordinate_alpha == @alpha_list |> Enum.at(x) do
+        96 + x + 1
+      end
+    end |> Enum.find(fn x -> x != nil end )
+    opponent_king_coordinate_no = Atom.to_string(opponent_king_location) |> String.last() |> String.to_integer()
+
+    IO.puts("mate_coordinate: #{mate_coordinate_alpha} #{mate_coordinate_no}")
+    IO.puts("king_coordinate: #{opponent_king_coordinate_alpha} #{opponent_king_coordinate_no}")
+
+    alpha_diff = opponent_king_coordinate_alpha - mate_coordinate_alpha
+    no_diff = opponent_king_coordinate_no - mate_coordinate_no
+
+    left_or_right_switch = cond do
+        alpha_diff in -2..-7  -> :left
+        alpha_diff in 7..2    -> :right
+        alpha_diff == -1      -> :close_to_king_left
+        alpha_diff == 1       -> :close_to_king_right
+        alpha_diff == 0       -> :up_down
+      end
+    up_or_down_switch = cond do
+        no_diff in 7..2   -> :up
+        no_diff in -2..-7 -> :down
+        no_diff == -1     -> :close_to_king_down
+        no_diff == 1      -> :close_to_king_up
+        no_diff == 0      -> :left_right
+      end
+    IO.inspect up_or_down_switch
+    IO.inspect left_or_right_switch
+    case {  up_or_down_switch, left_or_right_switch } do
+      { :up, :up_down } -> mate_steps_up_down(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 1, 7)
+      { :down, :up_down } -> mate_steps_up_down(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, -1, -7)
+      { :left_right, :left } -> mate_steps_left_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, -1, -7)
+      { :left_right, :right } -> mate_steps_left_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 1, 7)
+      { :up, :left } -> mate_steps_up_left_down_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 1, 7)
+      { :down, :right } -> mate_steps_up_left_down_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, -1, -7)
+      { :down, :left } -> mate_steps_up_right_down_left(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, -1, -7)
+      { :up, :right } -> mate_steps_up_right_down_left(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 1, 7)
+      { _, _ } -> [:ok]
+    end
+
+  end
+
+  def mate_steps_up_down(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, x, y) do
+    Enum.reduce_while(x..y, [], fn
+      (x, acc) ->
+        mate_steps_atom = String.to_atom(<<mate_coordinate_alpha>><>Integer.to_string(mate_coordinate_no + x))
+        if mate_steps_atom == opponent_king_location do
+          { :halt, acc }
+        else
+          { :cont, [mate_steps_atom | acc] }
+        end
+    end)
+  end
+
+  def mate_steps_left_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, x, y) do
+    Enum.reduce_while(x..y, [], fn
+      (x, acc) ->
+        IO.inspect mate_steps_atom = String.to_atom(<<mate_coordinate_alpha + x>><>Integer.to_string(mate_coordinate_no))
+        if mate_steps_atom == opponent_king_location do
+          { :halt, acc }
+        else
+          { :cont, [mate_steps_atom | acc] }
+        end
+    end)
+  end
+
+  def mate_steps_up_left_down_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, x, y) do
+    Enum.reduce_while(x..y, [], fn
+      (x, acc) ->
+        mate_steps_atom = String.to_atom(<<mate_coordinate_alpha - x>><>Integer.to_string(mate_coordinate_no + x))
+        if mate_steps_atom == opponent_king_location do
+          { :halt, acc }
+        else
+          { :cont, [mate_steps_atom | acc] }
+        end
+    end)
+  end
+
+  def mate_steps_up_right_down_left(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, x, y) do
+    Enum.reduce_while(x..y, [], fn
+      (x, acc) ->
+        mate_steps_atom = String.to_atom(<<mate_coordinate_alpha + x>><>Integer.to_string(mate_coordinate_no + x))
+        if mate_steps_atom == opponent_king_location do
+          { :halt, acc }
+        else
+          { :cont, [mate_steps_atom | acc] }
+        end
+    end)
   end
 
 end

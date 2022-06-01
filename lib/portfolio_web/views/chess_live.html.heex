@@ -1,6 +1,6 @@
 <section phx-window-keydown="key_press" phx-window-keyup="tile_selection" class="bg-[#242526] h-full text-[#e6e6e6] flex flex-col justify-center">
     <!-- WRAPPER -->
-    <div class="flex flex-wrap justify-center">
+    <div class="flex flex-wrap flex-col justify-center">
     <% @chess_board == @chess_board_overlay %>
         <div class="w-[800px] h-[800px] mx-auto text-center flex justify-center items-center">
             <div class="relative w-full h-full flex flex-col-reverse">
@@ -49,8 +49,8 @@
 
             </div>
         </div>
-        <div class="w-[800px] bg-black mx-auto mt-2 text-left p-2 flex justify-between">
-            <div class="w-full">
+        <div class="h-10 w-[800px] bg-black mx-auto mt-2 text-left p-2 flex justify-between">
+            <div class="">
                 <span>SELECTOR COORDINATE: </span>
                 <span class="font-bold uppercase text-red-500">
                     <%= if @sel_alpha < "a"  or @sel_alpha > "h"
@@ -61,7 +61,7 @@
                     <% end %>
                 </span>
             </div>
-            <div class="w-full">
+            <div class="">
                 <%= if @check_condition_black == true do %>
                     <span>CHECK CONDITION: </span>
                     <span class="font-bold uppercase text-red-500">
@@ -73,6 +73,16 @@
                     <span class="font-bold uppercase text-red-500">
                     <span> WHITE </span>
                     </span>
+                <% end %>
+            </div>
+            <div class="">
+                <%= unless @black_king_mate == nil do %>
+                <span>MATE: </span>
+                <span class="font-bold uppercase text-red-500"><%= @black_king_mate %></span>
+                <% end %>
+                <%= unless @white_king_mate == nil do %>
+                <span>MATE: </span>
+                <span class="font-bold uppercase text-red-500"><%= @white_king_mate %></span>
                 <% end %>
             </div>
 

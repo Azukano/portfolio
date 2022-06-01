@@ -15,10 +15,12 @@ defmodule PortfolioWeb.ChessLive do
       selection_toggle: false,
       chess_board_overlay: elem(Chess.spawn_pieces, 2),
       past_pone_tuple_combo: { nil, nil, false, nil },
-      presume_tiles_white: Chess.presume_tiles(elem(Chess.spawn_pieces, 0), elem(Chess.spawn_pieces, 1), :chess_pieces_white, elem(Chess.spawn_pieces, 2)),
-      presume_tiles_black: Chess.presume_tiles(elem(Chess.spawn_pieces, 1), elem(Chess.spawn_pieces, 0), :chess_pieces_black, elem(Chess.spawn_pieces, 2)),
+      presume_tiles_white: Chess.presume_tiles(elem(Chess.spawn_pieces, 0), elem(Chess.spawn_pieces, 1), :chess_pieces_white, elem(Chess.spawn_pieces, 2)) |> elem(0),
+      presume_tiles_black: Chess.presume_tiles(elem(Chess.spawn_pieces, 1), elem(Chess.spawn_pieces, 0), :chess_pieces_black, elem(Chess.spawn_pieces, 2)) |> elem(0),
       check_condition_white: false,
-      check_condition_black: false)
+      check_condition_black: false,
+      black_king_mate: nil,
+      white_king_mate: nil)
     {:ok, socket}
   end
 
@@ -145,9 +147,24 @@ defmodule PortfolioWeb.ChessLive do
       # king checkmate
       opponent_king_location = Chess.locate_king_coordinate(updated_pieces_coordinate_opponent) |> Enum.fetch!(0) #will crash if king is captured!
       attacker_king_location = Chess.locate_king_coordinate(updated_pieces_coordinate_attacker) |> Enum.fetch!(0)
-      presume_tiles_attacker = Chess.presume_tiles(updated_pieces_coordinate_attacker, updated_pieces_coordinate_opponent, chess_piece_side, updated_tiles_occupant)
-      presume_tiles_opponent = Chess.presume_tiles(updated_pieces_coordinate_opponent, updated_pieces_coordinate_attacker, chess_piece_opponent, updated_tiles_occupant)
+      presume_tiles_attacker = Chess.presume_tiles(updated_pieces_coordinate_attacker, updated_pieces_coordinate_opponent, chess_piece_side, updated_tiles_occupant) |> elem(0)
+      presume_tiles_opponent = Chess.presume_tiles(updated_pieces_coordinate_opponent, updated_pieces_coordinate_attacker, chess_piece_opponent, updated_tiles_occupant) |> elem(0)
 
+      king_and_mate = Chess.king_and_mate(Chess.presume_tiles(updated_pieces_coordinate_attacker, updated_pieces_coordinate_opponent, chess_piece_side, updated_tiles_occupant), opponent_king_location)
+      the_mate = unless king_and_mate |> List.flatten() |> Enum.filter(& (&1) |> elem(0) != :nope) == [] do
+        king_and_mate |> List.flatten() |> Enum.filter(& (&1) |> elem(0) != :nope) |> List.first() |> elem(0)
+      end
+      the_mate_coordinate =
+        unless the_mate == nil do
+          for { k, v} <- updated_pieces_coordinate_attacker, v.role_id == Atom.to_string(the_mate) do
+            k
+          end
+        end
+
+      the_mate_coordinate = unless the_mate_coordinate == nil do List.first(the_mate_coordinate) end
+      unless the_mate_coordinate == nil do
+        IO.inspect mate_steps = Chess.mate_steps(the_mate_coordinate, opponent_king_location) |> Enum.reverse
+      end
       # player point of view for attacker/opponent side last layer function, returns value new socket!
       if chess_piece_side == :chess_pieces_white do
         socket = assign(socket,
@@ -161,7 +178,9 @@ defmodule PortfolioWeb.ChessLive do
           past_pone_tuple_combo: past_pone_tuple_combo,
           presume_tiles_white: presume_tiles_attacker,
           check_condition_black: opponent_king_location in presume_tiles_attacker,
-          check_condition_white: attacker_king_location in presume_tiles_opponent )
+          check_condition_white: attacker_king_location in presume_tiles_opponent,
+          black_king_mate: the_mate,
+          black_king_mate_coordinate: the_mate_coordinate )
 
         { :noreply, socket }
       else
@@ -176,7 +195,9 @@ defmodule PortfolioWeb.ChessLive do
           past_pone_tuple_combo: past_pone_tuple_combo,
           presume_tiles_black: presume_tiles_attacker,
           check_condition_white: opponent_king_location in presume_tiles_attacker,
-          check_condition_black: attacker_king_location in presume_tiles_opponent )
+          check_condition_black: attacker_king_location in presume_tiles_opponent,
+          white_king_mate: the_mate,
+          white_king_mate_coordinate: the_mate_coordinate )
 
         { :noreply, socket }
       end
