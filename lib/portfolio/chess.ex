@@ -1100,18 +1100,16 @@ defmodule Portfolio.Chess do
         no_diff == 1      -> :close_to_king_up
         no_diff == 0      -> :left_right
       end
-    IO.inspect up_or_down_switch
-    IO.inspect left_or_right_switch
     case {  up_or_down_switch, left_or_right_switch } do
-      { :up, :up_down } -> mate_steps_up_down(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 1, 7)
-      { :down, :up_down } -> mate_steps_up_down(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, -1, -7)
-      { :left_right, :left } -> mate_steps_left_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, -1, -7)
-      { :left_right, :right } -> mate_steps_left_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 1, 7)
-      { :up, :left } -> mate_steps_up_left_down_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 1, 7)
-      { :down, :right } -> mate_steps_up_left_down_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, -1, -7)
-      { :down, :left } -> mate_steps_up_right_down_left(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, -1, -7)
-      { :up, :right } -> mate_steps_up_right_down_left(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 1, 7)
-      { _, _ } -> [:ok]
+      { :up, :up_down } -> mate_steps_up_down(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 0, 7)
+      { :down, :up_down } -> mate_steps_up_down(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 0, -7)
+      { :left_right, :left } -> mate_steps_left_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 0, -7)
+      { :left_right, :right } -> mate_steps_left_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 0, 7)
+      { :up, :left } -> mate_steps_up_left_down_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 0, 7)
+      { :down, :right } -> mate_steps_up_left_down_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 0, -7)
+      { :down, :left } -> mate_steps_up_right_down_left(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 0, -7)
+      { :up, :right } -> mate_steps_up_right_down_left(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, 0, 7)
+      { _, _ } -> [the_mate_coordinate]
     end
 
   end

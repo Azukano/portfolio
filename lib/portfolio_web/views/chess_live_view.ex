@@ -163,7 +163,7 @@ defmodule PortfolioWeb.ChessLive do
 
       the_mate_coordinate = unless the_mate_coordinate == nil do List.first(the_mate_coordinate) end
       unless the_mate_coordinate == nil do
-        IO.inspect mate_steps = Chess.mate_steps(the_mate_coordinate, opponent_king_location) |> Enum.reverse
+        mate_steps = Chess.mate_steps(the_mate_coordinate, opponent_king_location) |> Enum.reverse
       end
       # player point of view for attacker/opponent side last layer function, returns value new socket!
       if chess_piece_side == :chess_pieces_white do
