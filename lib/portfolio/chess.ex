@@ -304,8 +304,11 @@ defmodule Portfolio.Chess do
   end
 
   #ROOK TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, check_condition, kings_mate)
   when attacker_piece_role == "rook" do
+
+    IO.inspect check_condition
+    IO.inspect kings_mate
 
     alpha_binary = for x <- 0..7 do
       if sel_alpha == @alpha_list |> Enum.at(x) do

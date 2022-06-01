@@ -162,8 +162,8 @@ defmodule PortfolioWeb.ChessLive do
         end
 
       the_mate_coordinate = unless the_mate_coordinate == nil do List.first(the_mate_coordinate) end
-      unless the_mate_coordinate == nil do
-        mate_steps = Chess.mate_steps(the_mate_coordinate, opponent_king_location) |> Enum.reverse
+      mate_steps = unless the_mate_coordinate == nil do
+        Chess.mate_steps(the_mate_coordinate, opponent_king_location) |> Enum.reverse
       end
       # player point of view for attacker/opponent side last layer function, returns value new socket!
       if chess_piece_side == :chess_pieces_white do
@@ -179,7 +179,7 @@ defmodule PortfolioWeb.ChessLive do
           presume_tiles_white: presume_tiles_attacker,
           check_condition_black: opponent_king_location in presume_tiles_attacker,
           check_condition_white: attacker_king_location in presume_tiles_opponent,
-          black_king_mate: the_mate,
+          black_king_mate: { the_mate, mate_steps },
           black_king_mate_coordinate: the_mate_coordinate )
 
         { :noreply, socket }
@@ -196,7 +196,7 @@ defmodule PortfolioWeb.ChessLive do
           presume_tiles_black: presume_tiles_attacker,
           check_condition_white: opponent_king_location in presume_tiles_attacker,
           check_condition_black: attacker_king_location in presume_tiles_opponent,
-          white_king_mate: the_mate,
+          white_king_mate: { the_mate, mate_steps },
           white_king_mate_coordinate: the_mate_coordinate )
 
         { :noreply, socket }
@@ -303,7 +303,9 @@ defmodule PortfolioWeb.ChessLive do
             socket.assigns.chess_board,
             attacker_piece_role,
             socket.assigns.chess_pieces_white,
-            socket.assigns.chess_pieces_black
+            socket.assigns.chess_pieces_black,
+            socket.assigns.check_condition_white,
+            socket.assigns.white_king_mate
           )
         else
           Chess.tile_shade_red(
@@ -312,7 +314,9 @@ defmodule PortfolioWeb.ChessLive do
             socket.assigns.chess_board,
             attacker_piece_role,
             socket.assigns.chess_pieces_black,
-            socket.assigns.chess_pieces_white
+            socket.assigns.chess_pieces_white,
+            socket.assigns.check_condition_black,
+            socket.assigns.black_king_mate
           )
         end
         attacker_piece_occupant_id =
