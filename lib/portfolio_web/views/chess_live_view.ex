@@ -165,6 +165,7 @@ defmodule PortfolioWeb.ChessLive do
       mate_steps = unless the_mate_coordinate == nil do
         Chess.mate_steps(the_mate_coordinate, opponent_king_location) |> Enum.reverse
       end
+
       # player point of view for attacker/opponent side last layer function, returns value new socket!
       if chess_piece_side == :chess_pieces_white do
         socket = assign(socket,
@@ -261,7 +262,9 @@ defmodule PortfolioWeb.ChessLive do
             socket.assigns.chess_pieces_white,
             socket.assigns.chess_pieces_black,
             false,
-            socket.assigns.past_pone_tuple_combo
+            socket.assigns.past_pone_tuple_combo,
+            socket.assigns.check_condition_white,
+            socket.assigns.white_king_mate
           )
         else
           Chess.tile_shade_red(
@@ -272,7 +275,9 @@ defmodule PortfolioWeb.ChessLive do
             socket.assigns.chess_pieces_black,
             socket.assigns.chess_pieces_white,
             true,
-            socket.assigns.past_pone_tuple_combo
+            socket.assigns.past_pone_tuple_combo,
+            socket.assigns.check_condition_black,
+            socket.assigns.black_king_mate
           )
         end
         attacker_piece_occupant_id =
@@ -346,7 +351,9 @@ defmodule PortfolioWeb.ChessLive do
             sel_no,
             socket.assigns.chess_board,
             attacker_piece_role,
-            socket.assigns.chess_pieces_white
+            socket.assigns.chess_pieces_white,
+            socket.assigns.check_condition_white,
+            socket.assigns.white_king_mate
           )
         else
           Chess.tile_shade_red(
@@ -354,7 +361,9 @@ defmodule PortfolioWeb.ChessLive do
             sel_no,
             socket.assigns.chess_board,
             attacker_piece_role,
-            socket.assigns.chess_pieces_black
+            socket.assigns.chess_pieces_black,
+            socket.assigns.check_condition_black,
+            socket.assigns.black_king_mate
           )
         end
         attacker_piece_occupant_id = socket
@@ -384,7 +393,9 @@ defmodule PortfolioWeb.ChessLive do
             socket.assigns.chess_board,
             attacker_piece_role,
             socket.assigns.chess_pieces_white,
-            socket.assigns.chess_pieces_black
+            socket.assigns.chess_pieces_black,
+            socket.assigns.check_condition_white,
+            socket.assigns.white_king_mate
           )
         else
           Chess.tile_shade_red(
@@ -393,7 +404,9 @@ defmodule PortfolioWeb.ChessLive do
             socket.assigns.chess_board,
             attacker_piece_role,
             socket.assigns.chess_pieces_black,
-            socket.assigns.chess_pieces_white
+            socket.assigns.chess_pieces_white,
+            socket.assigns.check_condition_black,
+            socket.assigns.black_king_mate
           )
         end
         attacker_piece_occupant_id =
@@ -424,7 +437,9 @@ defmodule PortfolioWeb.ChessLive do
             socket.assigns.chess_board,
             attacker_piece_role,
             socket.assigns.chess_pieces_white,
-            socket.assigns.chess_pieces_black
+            socket.assigns.chess_pieces_black,
+            socket.assigns.check_condition_white,
+            socket.assigns.white_king_mate
           )
         else
           Chess.tile_shade_red(
@@ -433,7 +448,9 @@ defmodule PortfolioWeb.ChessLive do
             socket.assigns.chess_board,
             attacker_piece_role,
             socket.assigns.chess_pieces_black,
-            socket.assigns.chess_pieces_white
+            socket.assigns.chess_pieces_white,
+            socket.assigns.check_condition_black,
+            socket.assigns.black_king_mate
           )
         end
         attacker_piece_occupant_id =

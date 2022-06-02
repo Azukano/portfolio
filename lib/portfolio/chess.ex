@@ -192,7 +192,7 @@ defmodule Portfolio.Chess do
              chess_pieces -> socket.assigns.ches_pieces to check what pieces are tiles occupied.
   """
   #PONE TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, black_pone, past_pone_tuple_combo)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, black_pone, past_pone_tuple_combo, check_condition, kings_mate)
   when attacker_piece_role == "pone" do
 
     alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
@@ -208,6 +208,9 @@ defmodule Portfolio.Chess do
       { true, 7 } -> 2
       { true, _ } -> 1
     end
+
+    mate_step =
+      unless kings_mate == { nil, nil } or check_condition == false do elem(kings_mate, 1) else @valid_tile_list end
 
     targets_atom_list = Enum.reduce_while(0..pone_step, 0, fn #generator starts with 0 for acc initiation to [] important!
     (x, acc) when x < 1 and acc == 0 ->
@@ -273,6 +276,8 @@ defmodule Portfolio.Chess do
         targets_atom_list
       end
 
+    targets_atom_list = for x <- targets_atom_list, x in mate_step do x end
+
     unless Enum.filter(targets_atom_list, & !is_nil(&1)) == [] do
       Enum.reduce(targets_atom_list, 0, fn (tile_id, acc) ->
         pone_step1 = if tile_id != nil do
@@ -307,26 +312,28 @@ defmodule Portfolio.Chess do
   def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, check_condition, kings_mate)
   when attacker_piece_role == "rook" do
 
-    IO.inspect check_condition
-    IO.inspect kings_mate
-
     alpha_binary = for x <- 0..7 do
       if sel_alpha == @alpha_list |> Enum.at(x) do
         96 + x + 1
       end
     end |> Enum.find(fn x -> x != nil end )
 
+    mate_step =
+      unless kings_mate == { nil, nil } or check_condition == false do elem(kings_mate, 1) else @valid_tile_list end
+
     #1st&2nd WAY UP (+) DOWN (-) ROW coordinate_no/sel_no
-    targets_atom_list_up = moves_up(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
-    targets_atom_list_down = moves_down(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
+    targets_atom_list_up = moves_up(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, mate_step)
+    targets_atom_list_down = moves_down(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, mate_step)
     #3rd&4th WAY LEFT (-) RIGHT (+) COLUMN coordinate_alpha/sel_alpha
-    targets_atom_list_left = moves_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
-    targets_atom_list_right = moves_right(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
+    targets_atom_list_left = moves_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, mate_step)
+    targets_atom_list_right = moves_right(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, mate_step)
 
     targets_atom_list = targets_atom_list_up
     |> Enum.concat(targets_atom_list_down)
     |> Enum.concat(targets_atom_list_left)
     |> Enum.concat(targets_atom_list_right)
+
+    targets_atom_list = for x <- targets_atom_list, x in mate_step do x end
 
     unless Enum.filter(targets_atom_list, & !is_nil(&1)) == [] do
       Enum.reduce(targets_atom_list, 0, fn
@@ -358,7 +365,7 @@ defmodule Portfolio.Chess do
     end
   end
 
-  defp moves_up(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, presume_tile_mode \\ false) do
+  defp moves_up(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, mate_steps, presume_tile_mode \\ false) do
     Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
       (x, acc) when x == 0 and acc == 0 ->
         {:cont, []}
@@ -382,7 +389,7 @@ defmodule Portfolio.Chess do
     end)
   end
 
-  defp moves_down(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, presume_tile_mode \\ false) do
+  defp moves_down(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, mate_steps, presume_tile_mode \\ false) do
     Enum.reduce_while(0..-7, 0, fn #generator starts with 0 for acc initiation to [] important!
       (x, acc) when x == 0 and acc == 0 ->
         {:cont, []}
@@ -406,7 +413,7 @@ defmodule Portfolio.Chess do
     end)
   end
 
-  defp moves_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, presume_tile_mode \\ false) do
+  defp moves_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, mate_steps, presume_tile_mode \\ false) do
     Enum.reduce_while(0..-7, 0, fn #generator starts with 0 for acc initiation to [] important!
       (x, acc) when x == 0 and acc == 0 ->
         {:cont, []}
@@ -430,7 +437,7 @@ defmodule Portfolio.Chess do
     end)
   end
 
-  defp moves_right(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, presume_tile_mode \\ false) do
+  defp moves_right(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, mate_steps, presume_tile_mode \\ false) do
     Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
       (x, acc) when x == 0 and acc == 0 ->
         {:cont, []}
@@ -467,7 +474,7 @@ defmodule Portfolio.Chess do
   end
 
   #BISHOP TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, check_condition, kings_mate)
   when attacker_piece_role == "bishop" do
 
     alpha_binary = for x <- 0..7 do
@@ -475,6 +482,9 @@ defmodule Portfolio.Chess do
         96 + x + 1
       end
     end |> Enum.find(fn x -> x != nil end )
+
+    mate_step =
+      unless kings_mate == { nil, nil } or check_condition == false do elem(kings_mate, 1) else @valid_tile_list end
 
     #1st WAY DIAGONAL UP-LEFT (-) coordinate_alpha/sel_alpha (+) coordinate_no/sel_no
     targets_atom_list_up_left = moves_up_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
@@ -489,6 +499,8 @@ defmodule Portfolio.Chess do
     |> Enum.concat(targets_atom_list_up_right)
     |> Enum.concat(targets_atom_list_down_right)
     |> Enum.concat(targets_atom_list_down_left)
+
+    targets_atom_list = for x <- targets_atom_list, x in mate_step do x end
 
     unless Enum.filter(targets_atom_list, & !is_nil(&1)) == [] do
       Enum.reduce(targets_atom_list, 0, fn (tile_id, acc) ->
@@ -635,7 +647,7 @@ defmodule Portfolio.Chess do
   end
 
   #QUEEN MOVESET
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, check_condition, kings_mate)
   when attacker_piece_role == "queen" do
 
     alpha_binary = for x <- 0..7 do
@@ -644,12 +656,15 @@ defmodule Portfolio.Chess do
       end
     end |> Enum.find(fn x -> x != nil end )
 
+    mate_step =
+      unless kings_mate == { nil, nil } or check_condition == false do elem(kings_mate, 1) else @valid_tile_list end
+
     #1st&2nd WAY UP (+) DOWN (-) ROW coordinate_no/sel_no
-    targets_atom_list_up = moves_up(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
-    targets_atom_list_down = moves_down(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
+    targets_atom_list_up = moves_up(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, @valid_tile_list)
+    targets_atom_list_down = moves_down(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, @valid_tile_list)
     #3rd&4th WAY LEFT (-) RIGHT (+) COLUMN coordinate_alpha/sel_alpha
-    targets_atom_list_left = moves_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
-    targets_atom_list_right = moves_right(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
+    targets_atom_list_left = moves_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, @valid_tile_list)
+    targets_atom_list_right = moves_right(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, @valid_tile_list)
 
     targets_atom_list = targets_atom_list_up
     |> Enum.concat(targets_atom_list_down)
@@ -670,6 +685,8 @@ defmodule Portfolio.Chess do
     |> Enum.concat(targets_atom_list_up_right)
     |> Enum.concat(targets_atom_list_down_right)
     |> Enum.concat(targets_atom_list_down_left)
+
+    targets_atom_list = for x <- targets_atom_list, x in mate_step do x end
 
     unless Enum.filter(targets_atom_list, & !is_nil(&1)) == [] do
       Enum.reduce(targets_atom_list, 0, fn (tile_id, acc) ->
@@ -772,7 +789,7 @@ defmodule Portfolio.Chess do
   end
 
   #KNIGHT MOVESET
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, check_condition, kings_mate)
   when attacker_piece_role == "knight" do
 
     alpha_binary = for x <- 0..7 do
@@ -781,7 +798,12 @@ defmodule Portfolio.Chess do
       end
     end |> Enum.find(fn x -> x != nil end )
 
+    mate_step =
+      unless kings_mate == { nil, nil } or check_condition == false do elem(kings_mate, 1) else @valid_tile_list end
+
     targets_atom_list = move_knight(alpha_binary, sel_no, chess_pieces_attacker)
+
+    targets_atom_list = for x <- targets_atom_list, x in mate_step do x end
 
     unless Enum.filter(targets_atom_list, & !is_nil(&1)) == [] do
       Enum.reduce(targets_atom_list, 0, fn (tile_id, acc) ->
@@ -930,11 +952,11 @@ defmodule Portfolio.Chess do
       piece_id = chess_board[String.to_atom(<<piece_coordinate_alpha>><>Integer.to_string(piece_coordinate_no))].occupant
 
       #1st&2nd WAY UP (+) DOWN (-) ROW coordinate_no/sel_no
-      piece_moves_up = moves_up(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
-      piece_moves_down = moves_down(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_up = moves_up(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, @valid_tile_list, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_down = moves_down(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, @valid_tile_list, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
       #3rd&4th WAY LEFT (-) RIGHT (+) COLUMN coordinate_alpha/sel_alpha
-      piece_moves_left = moves_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
-      piece_moves_right = moves_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_left = moves_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, @valid_tile_list, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_right = moves_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, @valid_tile_list, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
 
       piece_moves = piece_moves_up
       |> Enum.concat(piece_moves_down)
@@ -977,10 +999,10 @@ defmodule Portfolio.Chess do
       piece_coordinate_no = Atom.to_string(piece_tile_id) |> String.last() |> String.to_integer()
       piece_id = chess_board[String.to_atom(<<piece_coordinate_alpha>><>Integer.to_string(piece_coordinate_no))].occupant
 
-      piece_moves_up = moves_up(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
-      piece_moves_down = moves_down(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
-      piece_moves_left = moves_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
-      piece_moves_right = moves_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_up = moves_up(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, @valid_tile_list, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_down = moves_down(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, @valid_tile_list, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_left = moves_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, @valid_tile_list, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
+      piece_moves_right = moves_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, @valid_tile_list, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
       piece_moves_up_left = moves_up_left(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
       piece_moves_up_right = moves_up_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
       piece_moves_down_right = moves_down_right(piece_coordinate_alpha, piece_coordinate_no, chess_pieces_attacker, chess_pieces_opponent, true) |> Enum.reverse() |> Enum.filter(& !is_nil(&1))
@@ -1041,6 +1063,11 @@ defmodule Portfolio.Chess do
     end
   end
 
+  @doc """
+  find king's mate
+  1st arity presume_tiles_attacker (1st presume)
+  2nd arity atom king's location
+  """
   def king_and_mate(presume_tiles_attacker, opponent_king_location) do
     for x <- 1..6 do
       if x < 5 do
@@ -1083,8 +1110,8 @@ defmodule Portfolio.Chess do
     end |> Enum.find(fn x -> x != nil end )
     opponent_king_coordinate_no = Atom.to_string(opponent_king_location) |> String.last() |> String.to_integer()
 
-    IO.puts("mate_coordinate: #{mate_coordinate_alpha} #{mate_coordinate_no}")
-    IO.puts("king_coordinate: #{opponent_king_coordinate_alpha} #{opponent_king_coordinate_no}")
+    #IO.puts("mate_coordinate: #{mate_coordinate_alpha} #{mate_coordinate_no}")
+    #IO.puts("king_coordinate: #{opponent_king_coordinate_alpha} #{opponent_king_coordinate_no}")
 
     alpha_diff = opponent_king_coordinate_alpha - mate_coordinate_alpha
     no_diff = opponent_king_coordinate_no - mate_coordinate_no
@@ -1132,7 +1159,7 @@ defmodule Portfolio.Chess do
   def mate_steps_left_right(mate_coordinate_alpha, mate_coordinate_no, opponent_king_location, x, y) do
     Enum.reduce_while(x..y, [], fn
       (x, acc) ->
-        IO.inspect mate_steps_atom = String.to_atom(<<mate_coordinate_alpha + x>><>Integer.to_string(mate_coordinate_no))
+        mate_steps_atom = String.to_atom(<<mate_coordinate_alpha + x>><>Integer.to_string(mate_coordinate_no))
         if mate_steps_atom == opponent_king_location do
           { :halt, acc }
         else
