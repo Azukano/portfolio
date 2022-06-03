@@ -78,30 +78,6 @@ defmodule PortfolioWeb.ChessLive do
       updated_pieces_coordinate_opponent =
         Chess.update_chess_pieces_opponent(target_coordinate, socket.assigns[chess_pieces_opponent], socket.assigns.past_pone_tuple_combo)
 
-      move_occupant =
-        socket
-        |> Map.get(:assigns)
-        |> Map.get(:chess_board)
-        |> Map.get(target_coordinate)
-        |> Map.put(:occupant, socket.assigns.attacker_piece_occupant_id)
-
-      remove_attacker_old_coordinate =
-        socket
-        |> Map.get(:assigns)
-        |> Map.get(:chess_board)
-        |> Map.get(attacker_piece_coordinate)
-        |> Map.put(:occupant, nil)
-
-      remove_past_pone =
-        if socket.assigns.past_pone_tuple_combo |> elem(2) == true
-        and socket.assigns.past_pone_tuple_combo |> elem(0) == target_coordinate do
-          socket
-          |> Map.get(:assigns)
-          |> Map.get(:chess_board)
-          |> Map.get(socket.assigns.past_pone_tuple_combo |> elem(1))
-          |> Map.put(:occupant, nil)
-        end
-
       updated_tiles_occupant =
         Chess.update_chess_board(attacker_piece_coordinate, target_coordinate, socket.assigns.chess_board, socket.assigns.attacker_piece_role, socket.assigns.past_pone_tuple_combo)
 
@@ -112,22 +88,6 @@ defmodule PortfolioWeb.ChessLive do
       attacker_king_location = Chess.locate_king_coordinate(updated_pieces_coordinate_attacker) |> Enum.fetch!(0)
       presume_tiles_attacker = Chess.presume_tiles(updated_pieces_coordinate_attacker, updated_pieces_coordinate_opponent, chess_piece_side, updated_tiles_occupant) |> elem(0)
       presume_tiles_opponent = Chess.presume_tiles(updated_pieces_coordinate_opponent, updated_pieces_coordinate_attacker, chess_pieces_opponent, updated_tiles_occupant) |> elem(0)
-
-      king_and_mate = Chess.king_and_mate(Chess.presume_tiles(updated_pieces_coordinate_attacker, updated_pieces_coordinate_opponent, chess_piece_side, updated_tiles_occupant), opponent_king_location)
-      the_mate = unless king_and_mate |> List.flatten() |> Enum.filter(& (&1) |> elem(0) != :nope) == [] do
-        king_and_mate |> List.flatten() |> Enum.filter(& (&1) |> elem(0) != :nope) |> List.first() |> elem(0)
-      end
-      the_mate_coordinate =
-        unless the_mate == nil do
-          for { k, v} <- updated_pieces_coordinate_attacker, v.role_id == Atom.to_string(the_mate) do
-            k
-          end
-        end
-
-      the_mate_coordinate = unless the_mate_coordinate == nil do List.first(the_mate_coordinate) end
-      mate_steps = unless the_mate_coordinate == nil do
-        Chess.mate_steps(the_mate_coordinate, opponent_king_location) |> Enum.reverse
-      end
 
       # player point of view for attacker/opponent side last layer function, returns value new socket!
       if chess_piece_side == :chess_pieces_white do
@@ -143,8 +103,9 @@ defmodule PortfolioWeb.ChessLive do
           presume_tiles_white: presume_tiles_attacker,
           check_condition_black: opponent_king_location in presume_tiles_attacker,
           check_condition_white: attacker_king_location in presume_tiles_opponent,
-          black_king_mate: { the_mate, mate_steps },
-          black_king_mate_coordinate: the_mate_coordinate )
+          # black_king_mate: { the_mate, mate_steps },
+          # black_king_mate_coordinate: the_mate_coordinate
+          )
 
         { :noreply, socket }
       else
@@ -160,8 +121,9 @@ defmodule PortfolioWeb.ChessLive do
           presume_tiles_black: presume_tiles_attacker,
           check_condition_white: opponent_king_location in presume_tiles_attacker,
           check_condition_black: attacker_king_location in presume_tiles_opponent,
-          white_king_mate: { the_mate, mate_steps },
-          white_king_mate_coordinate: the_mate_coordinate )
+          # white_king_mate: { the_mate, mate_steps },
+          # white_king_mate_coordinate: the_mate_coordinate
+          )
 
         { :noreply, socket }
       end
@@ -179,6 +141,20 @@ defmodule PortfolioWeb.ChessLive do
   def handle_event("tile_selection", %{"key" => key_up}, socket)
     when key_up == "Enter" and socket.assigns.selection_toggle == false do
 
+    move_tile_selection(socket)
+
+  end
+
+  def handle_event("tile_selection", %{"" => key_up}, socket)do
+    socket.assigns.selection_toggle == false
+
+
+
+    move_tile_selection(socket)
+
+  end
+
+  def move_tile_selection(socket) do
     old_chess_board = socket.assigns.chess_board
     old_chess_board_overlay = socket.assigns.chess_board_overlay
 
@@ -520,3 +496,20 @@ defmodule PortfolioWeb.ChessLive do
   end
 
 end
+
+
+      # king_and_mate = Chess.king_and_mate(Chess.presume_tiles(updated_pieces_coordinate_attacker, updated_pieces_coordinate_opponent, chess_piece_side, updated_tiles_occupant), opponent_king_location)
+      # the_mate = unless king_and_mate |> List.flatten() |> Enum.filter(& (&1) |> elem(0) != :nope) == [] do
+      #   king_and_mate |> List.flatten() |> Enum.filter(& (&1) |> elem(0) != :nope) |> List.first() |> elem(0)
+      # end
+      # the_mate_coordinate =
+      #   unless the_mate == nil do
+      #     for { k, v} <- updated_pieces_coordinate_attacker, v.role_id == Atom.to_string(the_mate) do
+      #       k
+      #     end
+      #   end
+
+      # the_mate_coordinate = unless the_mate_coordinate == nil do List.first(the_mate_coordinate) end
+      # mate_steps = unless the_mate_coordinate == nil do
+      #   Chess.mate_steps(the_mate_coordinate, opponent_king_location) |> Enum.reverse
+      # end
