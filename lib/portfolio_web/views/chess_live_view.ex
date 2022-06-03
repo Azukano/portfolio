@@ -20,7 +20,8 @@ defmodule PortfolioWeb.ChessLive do
       check_condition_white: false,
       check_condition_black: false,
       black_king_mate: nil,
-      white_king_mate: nil)
+      white_king_mate: nil,
+      player_turn: :chess_pieces_white)
     {:ok, socket}
   end
 
@@ -128,6 +129,7 @@ defmodule PortfolioWeb.ChessLive do
           presume_tiles_white: presume_tiles_attacker,
           check_condition_black: opponent_king_location in presume_tiles_attacker,
           check_condition_white: attacker_king_location in presume_tiles_opponent,
+          player_turn: :chess_pieces_black
           # black_king_mate: { the_mate, mate_steps },
           # black_king_mate_coordinate: the_mate_coordinate
           )
@@ -146,6 +148,7 @@ defmodule PortfolioWeb.ChessLive do
           presume_tiles_black: presume_tiles_attacker,
           check_condition_white: opponent_king_location in presume_tiles_attacker,
           check_condition_black: attacker_king_location in presume_tiles_opponent,
+          player_turn: :chess_pieces_white
           # white_king_mate: { the_mate, mate_steps },
           # white_king_mate_coordinate: the_mate_coordinate
           )
@@ -202,290 +205,299 @@ defmodule PortfolioWeb.ChessLive do
 
     target_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
 
-    attacker_piece_side =
-      case { Map.has_key?(socket.assigns.chess_pieces_white, target_coordinate), Map.has_key?(socket.assigns.chess_pieces_black, target_coordinate) } do
-        { true, _ } -> :chess_pieces_white
-        { _, true } -> :chess_pieces_black
-        { _, _} -> nil
+    IO.inspect Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board)
+
+    if Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board) == socket.assigns.player_turn do
+      attacker_piece_side =
+        case { Map.has_key?(socket.assigns.chess_pieces_white, target_coordinate), Map.has_key?(socket.assigns.chess_pieces_black, target_coordinate) } do
+          { true, _ } -> :chess_pieces_white
+          { _, true } -> :chess_pieces_black
+          { _, _} -> nil
+        end
+
+      attacker_piece_role = case attacker_piece_side do
+        :chess_pieces_white ->
+          socket
+          |> Map.get(:assigns)
+          |> Map.get(:chess_pieces_white)
+          |> Map.get(target_coordinate)
+          |> Map.get(:role)
+        :chess_pieces_black ->
+          socket
+          |> Map.get(:assigns)
+          |> Map.get(:chess_pieces_black)
+          |> Map.get(target_coordinate)
+          |> Map.get(:role)
+        _ ->
+          nil
       end
 
-    attacker_piece_role = case attacker_piece_side do
-      :chess_pieces_white ->
-        socket
-        |> Map.get(:assigns)
-        |> Map.get(:chess_pieces_white)
-        |> Map.get(target_coordinate)
-        |> Map.get(:role)
-      :chess_pieces_black ->
-        socket
-        |> Map.get(:assigns)
-        |> Map.get(:chess_pieces_black)
-        |> Map.get(target_coordinate)
-        |> Map.get(:role)
-      _ ->
-        nil
+      validate_tile_occupancy = if attacker_piece_role != nil do true else false end
+
+      case {validate_tile_occupancy, attacker_piece_role}  do
+        { true, "pone" } ->
+          pone_shaded =
+          if attacker_piece_side == :chess_pieces_white do
+            Chess.tile_shade_red(
+              sel_alpha,
+              sel_no,
+              socket.assigns.chess_board,
+              attacker_piece_role,
+              socket.assigns.chess_pieces_white,
+              socket.assigns.chess_pieces_black,
+              false,
+              socket.assigns.past_pone_tuple_combo
+            )
+          else
+            Chess.tile_shade_red(
+              sel_alpha,
+              sel_no,
+              socket.assigns.chess_board,
+              attacker_piece_role,
+              socket.assigns.chess_pieces_black,
+              socket.assigns.chess_pieces_white,
+              true,
+              socket.assigns.past_pone_tuple_combo
+            )
+          end
+          attacker_piece_occupant_id =
+            socket
+            |> Map.get(:assigns)
+            |> Map.get(:chess_board)
+            |> Map.get(target_coordinate)
+            |> Map.get(:occupant)
+          socket = assign( socket,
+          selection_toggle: :true,
+          chess_board_overlay: pone_shaded,
+          old_chess_board_overlay: old_chess_board_overlay,
+          old_chess_board: old_chess_board,
+          attacker_piece_coordinate_no: sel_no,
+          attacker_piece_coordinate_alpha: sel_alpha,
+          attacker_piece_coordinate: target_coordinate,
+          attacker_piece_role: attacker_piece_role,
+          attacker_piece_occupant_id: attacker_piece_occupant_id,
+          attacker_piece_side: attacker_piece_side )
+
+          {:noreply, socket}
+        { true, "rook" } ->
+          rook_shaded =
+          if attacker_piece_side == :chess_pieces_white do
+            Chess.tile_shade_red(
+              sel_alpha,
+              sel_no,
+              socket.assigns.chess_board,
+              attacker_piece_role,
+              socket.assigns.chess_pieces_white,
+              socket.assigns.chess_pieces_black,
+              attacker_piece_side
+            )
+          else
+            Chess.tile_shade_red(
+              sel_alpha,
+              sel_no,
+              socket.assigns.chess_board,
+              attacker_piece_role,
+              socket.assigns.chess_pieces_black,
+              socket.assigns.chess_pieces_white,
+              attacker_piece_side
+            )
+          end
+          attacker_piece_occupant_id =
+            socket
+            |> Map.get(:assigns)
+            |> Map.get(:chess_board)
+            |> Map.get(target_coordinate)
+            |> Map.get(:occupant)
+          socket = assign( socket,
+          selection_toggle: :true,
+          chess_board_overlay: rook_shaded,
+          old_chess_board_overlay: old_chess_board_overlay,
+          old_chess_board: old_chess_board,
+          attacker_piece_coordinate_no: sel_no,
+          attacker_piece_coordinate_alpha: sel_alpha,
+          attacker_piece_coordinate: target_coordinate,
+          attacker_piece_role: attacker_piece_role,
+          attacker_piece_occupant_id: attacker_piece_occupant_id,
+          attacker_piece_side: attacker_piece_side )
+
+          {:noreply, socket}
+        { true, "knight" } ->
+          knight_shaded =
+          if attacker_piece_side == :chess_pieces_white do
+            Chess.tile_shade_red(
+              sel_alpha,
+              sel_no,
+              socket.assigns.chess_board,
+              attacker_piece_role,
+              socket.assigns.chess_pieces_white,
+              socket.assigns.chess_pieces_black,
+              attacker_piece_side
+            )
+          else
+            Chess.tile_shade_red(
+              sel_alpha,
+              sel_no,
+              socket.assigns.chess_board,
+              attacker_piece_role,
+              socket.assigns.chess_pieces_black,
+              socket.assigns.chess_pieces_white,
+              attacker_piece_side
+            )
+          end
+          attacker_piece_occupant_id = socket
+          |> Map.get(:assigns)
+          |> Map.get(:chess_board)
+          |> Map.get(target_coordinate)
+          |> Map.get(:occupant)
+          socket = assign( socket,
+          selection_toggle: :true,
+          chess_board_overlay: knight_shaded,
+          old_chess_board_overlay: old_chess_board_overlay,
+          old_chess_board: old_chess_board,
+          attacker_piece_coordinate_no: sel_no,
+          attacker_piece_coordinate_alpha: sel_alpha,
+          attacker_piece_coordinate: target_coordinate,
+          attacker_piece_role: attacker_piece_role,
+          attacker_piece_occupant_id: attacker_piece_occupant_id,
+          attacker_piece_side: attacker_piece_side )
+
+          {:noreply, socket}
+        { true, "bishop" } ->
+          bishop_shaded =
+          if attacker_piece_side == :chess_pieces_white do
+            Chess.tile_shade_red(
+              sel_alpha,
+              sel_no,
+              socket.assigns.chess_board,
+              attacker_piece_role,
+              socket.assigns.chess_pieces_white,
+              socket.assigns.chess_pieces_black,
+              attacker_piece_side
+            )
+          else
+            Chess.tile_shade_red(
+              sel_alpha,
+              sel_no,
+              socket.assigns.chess_board,
+              attacker_piece_role,
+              socket.assigns.chess_pieces_black,
+              socket.assigns.chess_pieces_white,
+              attacker_piece_side
+            )
+          end
+          attacker_piece_occupant_id =
+            socket
+            |> Map.get(:assigns)
+            |> Map.get(:chess_board)
+            |> Map.get(target_coordinate)
+            |> Map.get(:occupant)
+          socket = assign( socket,
+          selection_toggle: :true,
+          chess_board_overlay: bishop_shaded,
+          old_chess_board_overlay: old_chess_board_overlay,
+          old_chess_board: old_chess_board,
+          attacker_piece_coordinate_no: sel_no,
+          attacker_piece_coordinate_alpha: sel_alpha,
+          attacker_piece_coordinate: target_coordinate,
+          attacker_piece_role: attacker_piece_role,
+          attacker_piece_occupant_id: attacker_piece_occupant_id,
+          attacker_piece_side: attacker_piece_side )
+
+          {:noreply, socket}
+        { true, "queen" } ->
+          queen_shaded =
+          if attacker_piece_side == :chess_pieces_white do
+            Chess.tile_shade_red(
+              sel_alpha,
+              sel_no,
+              socket.assigns.chess_board,
+              attacker_piece_role,
+              socket.assigns.chess_pieces_white,
+              socket.assigns.chess_pieces_black,
+              attacker_piece_side
+            )
+          else
+            Chess.tile_shade_red(
+              sel_alpha,
+              sel_no,
+              socket.assigns.chess_board,
+              attacker_piece_role,
+              socket.assigns.chess_pieces_black,
+              socket.assigns.chess_pieces_white,
+              attacker_piece_side
+            )
+          end
+          attacker_piece_occupant_id =
+            socket
+            |> Map.get(:assigns)
+            |> Map.get(:chess_board)
+            |> Map.get(target_coordinate)
+            |> Map.get(:occupant)
+          socket = assign( socket,
+          selection_toggle: :true,
+          chess_board_overlay: queen_shaded,
+          old_chess_board_overlay: old_chess_board_overlay,
+          old_chess_board: old_chess_board,
+          attacker_piece_coordinate_no: sel_no,
+          attacker_piece_coordinate_alpha: sel_alpha,
+          attacker_piece_coordinate: target_coordinate,
+          attacker_piece_role: attacker_piece_role,
+          attacker_piece_occupant_id: attacker_piece_occupant_id,
+          attacker_piece_side: attacker_piece_side )
+
+          {:noreply, socket}
+        { true, "king" } ->
+          king_shaded =
+          if attacker_piece_side == :chess_pieces_white do
+            Chess.tile_shade_red(
+              sel_alpha,
+              sel_no,
+              socket.assigns.chess_board,
+              attacker_piece_role,
+              socket.assigns.chess_pieces_white,
+              socket.assigns.chess_pieces_black,
+              attacker_piece_side
+            )
+          else
+            Chess.tile_shade_red(
+              sel_alpha,
+              sel_no,
+              socket.assigns.chess_board,
+              attacker_piece_role,
+              socket.assigns.chess_pieces_black,
+              socket.assigns.chess_pieces_white,
+              attacker_piece_side
+            )
+          end
+          attacker_piece_occupant_id =
+            socket
+            |> Map.get(:assigns)
+            |> Map.get(:chess_board)
+            |> Map.get(target_coordinate)
+            |> Map.get(:occupant)
+          socket = assign( socket,
+          selection_toggle: :true,
+          chess_board_overlay: king_shaded,
+          old_chess_board_overlay: old_chess_board_overlay,
+          old_chess_board: old_chess_board,
+          attacker_piece_coordinate_no: sel_no,
+          attacker_piece_coordinate_alpha: sel_alpha,
+          attacker_piece_coordinate: target_coordinate,
+          attacker_piece_role: attacker_piece_role,
+          attacker_piece_occupant_id: attacker_piece_occupant_id,
+          attacker_piece_side: attacker_piece_side )
+
+          {:noreply, socket}
+        { false, _ } ->
+          IO.puts "nil tile/invalid coordinate"
+          {:noreply, socket}
+      end
+    else
+      IO.puts "piece invalid"
+      {:noreply, socket}
     end
 
-    validate_tile_occupancy = if attacker_piece_role != nil do true else false end
 
-    case {validate_tile_occupancy, attacker_piece_role}  do
-      { true, "pone" } ->
-        pone_shaded =
-        if attacker_piece_side == :chess_pieces_white do
-          Chess.tile_shade_red(
-            sel_alpha,
-            sel_no,
-            socket.assigns.chess_board,
-            attacker_piece_role,
-            socket.assigns.chess_pieces_white,
-            socket.assigns.chess_pieces_black,
-            false,
-            socket.assigns.past_pone_tuple_combo
-          )
-        else
-          Chess.tile_shade_red(
-            sel_alpha,
-            sel_no,
-            socket.assigns.chess_board,
-            attacker_piece_role,
-            socket.assigns.chess_pieces_black,
-            socket.assigns.chess_pieces_white,
-            true,
-            socket.assigns.past_pone_tuple_combo
-          )
-        end
-        attacker_piece_occupant_id =
-          socket
-          |> Map.get(:assigns)
-          |> Map.get(:chess_board)
-          |> Map.get(target_coordinate)
-          |> Map.get(:occupant)
-        socket = assign( socket,
-        selection_toggle: :true,
-        chess_board_overlay: pone_shaded,
-        old_chess_board_overlay: old_chess_board_overlay,
-        old_chess_board: old_chess_board,
-        attacker_piece_coordinate_no: sel_no,
-        attacker_piece_coordinate_alpha: sel_alpha,
-        attacker_piece_coordinate: target_coordinate,
-        attacker_piece_role: attacker_piece_role,
-        attacker_piece_occupant_id: attacker_piece_occupant_id,
-        attacker_piece_side: attacker_piece_side )
-
-        {:noreply, socket}
-      { true, "rook" } ->
-        rook_shaded =
-        if attacker_piece_side == :chess_pieces_white do
-          Chess.tile_shade_red(
-            sel_alpha,
-            sel_no,
-            socket.assigns.chess_board,
-            attacker_piece_role,
-            socket.assigns.chess_pieces_white,
-            socket.assigns.chess_pieces_black,
-            attacker_piece_side
-          )
-        else
-          Chess.tile_shade_red(
-            sel_alpha,
-            sel_no,
-            socket.assigns.chess_board,
-            attacker_piece_role,
-            socket.assigns.chess_pieces_black,
-            socket.assigns.chess_pieces_white,
-            attacker_piece_side
-          )
-        end
-        attacker_piece_occupant_id =
-          socket
-          |> Map.get(:assigns)
-          |> Map.get(:chess_board)
-          |> Map.get(target_coordinate)
-          |> Map.get(:occupant)
-        socket = assign( socket,
-        selection_toggle: :true,
-        chess_board_overlay: rook_shaded,
-        old_chess_board_overlay: old_chess_board_overlay,
-        old_chess_board: old_chess_board,
-        attacker_piece_coordinate_no: sel_no,
-        attacker_piece_coordinate_alpha: sel_alpha,
-        attacker_piece_coordinate: target_coordinate,
-        attacker_piece_role: attacker_piece_role,
-        attacker_piece_occupant_id: attacker_piece_occupant_id,
-        attacker_piece_side: attacker_piece_side )
-
-        {:noreply, socket}
-      { true, "knight" } ->
-        knight_shaded =
-        if attacker_piece_side == :chess_pieces_white do
-          Chess.tile_shade_red(
-            sel_alpha,
-            sel_no,
-            socket.assigns.chess_board,
-            attacker_piece_role,
-            socket.assigns.chess_pieces_white,
-            socket.assigns.chess_pieces_black,
-            attacker_piece_side
-          )
-        else
-          Chess.tile_shade_red(
-            sel_alpha,
-            sel_no,
-            socket.assigns.chess_board,
-            attacker_piece_role,
-            socket.assigns.chess_pieces_black,
-            socket.assigns.chess_pieces_white,
-            attacker_piece_side
-          )
-        end
-        attacker_piece_occupant_id = socket
-        |> Map.get(:assigns)
-        |> Map.get(:chess_board)
-        |> Map.get(target_coordinate)
-        |> Map.get(:occupant)
-        socket = assign( socket,
-        selection_toggle: :true,
-        chess_board_overlay: knight_shaded,
-        old_chess_board_overlay: old_chess_board_overlay,
-        old_chess_board: old_chess_board,
-        attacker_piece_coordinate_no: sel_no,
-        attacker_piece_coordinate_alpha: sel_alpha,
-        attacker_piece_coordinate: target_coordinate,
-        attacker_piece_role: attacker_piece_role,
-        attacker_piece_occupant_id: attacker_piece_occupant_id,
-        attacker_piece_side: attacker_piece_side )
-
-        {:noreply, socket}
-      { true, "bishop" } ->
-        bishop_shaded =
-        if attacker_piece_side == :chess_pieces_white do
-          Chess.tile_shade_red(
-            sel_alpha,
-            sel_no,
-            socket.assigns.chess_board,
-            attacker_piece_role,
-            socket.assigns.chess_pieces_white,
-            socket.assigns.chess_pieces_black,
-            attacker_piece_side
-          )
-        else
-          Chess.tile_shade_red(
-            sel_alpha,
-            sel_no,
-            socket.assigns.chess_board,
-            attacker_piece_role,
-            socket.assigns.chess_pieces_black,
-            socket.assigns.chess_pieces_white,
-            attacker_piece_side
-          )
-        end
-        attacker_piece_occupant_id =
-          socket
-          |> Map.get(:assigns)
-          |> Map.get(:chess_board)
-          |> Map.get(target_coordinate)
-          |> Map.get(:occupant)
-        socket = assign( socket,
-        selection_toggle: :true,
-        chess_board_overlay: bishop_shaded,
-        old_chess_board_overlay: old_chess_board_overlay,
-        old_chess_board: old_chess_board,
-        attacker_piece_coordinate_no: sel_no,
-        attacker_piece_coordinate_alpha: sel_alpha,
-        attacker_piece_coordinate: target_coordinate,
-        attacker_piece_role: attacker_piece_role,
-        attacker_piece_occupant_id: attacker_piece_occupant_id,
-        attacker_piece_side: attacker_piece_side )
-
-        {:noreply, socket}
-      { true, "queen" } ->
-        queen_shaded =
-        if attacker_piece_side == :chess_pieces_white do
-          Chess.tile_shade_red(
-            sel_alpha,
-            sel_no,
-            socket.assigns.chess_board,
-            attacker_piece_role,
-            socket.assigns.chess_pieces_white,
-            socket.assigns.chess_pieces_black,
-            attacker_piece_side
-          )
-        else
-          Chess.tile_shade_red(
-            sel_alpha,
-            sel_no,
-            socket.assigns.chess_board,
-            attacker_piece_role,
-            socket.assigns.chess_pieces_black,
-            socket.assigns.chess_pieces_white,
-            attacker_piece_side
-          )
-        end
-        attacker_piece_occupant_id =
-          socket
-          |> Map.get(:assigns)
-          |> Map.get(:chess_board)
-          |> Map.get(target_coordinate)
-          |> Map.get(:occupant)
-        socket = assign( socket,
-        selection_toggle: :true,
-        chess_board_overlay: queen_shaded,
-        old_chess_board_overlay: old_chess_board_overlay,
-        old_chess_board: old_chess_board,
-        attacker_piece_coordinate_no: sel_no,
-        attacker_piece_coordinate_alpha: sel_alpha,
-        attacker_piece_coordinate: target_coordinate,
-        attacker_piece_role: attacker_piece_role,
-        attacker_piece_occupant_id: attacker_piece_occupant_id,
-        attacker_piece_side: attacker_piece_side )
-
-        {:noreply, socket}
-      { true, "king" } ->
-        king_shaded =
-        if attacker_piece_side == :chess_pieces_white do
-          Chess.tile_shade_red(
-            sel_alpha,
-            sel_no,
-            socket.assigns.chess_board,
-            attacker_piece_role,
-            socket.assigns.chess_pieces_white,
-            socket.assigns.chess_pieces_black,
-            attacker_piece_side
-          )
-        else
-          Chess.tile_shade_red(
-            sel_alpha,
-            sel_no,
-            socket.assigns.chess_board,
-            attacker_piece_role,
-            socket.assigns.chess_pieces_black,
-            socket.assigns.chess_pieces_white,
-            attacker_piece_side
-          )
-        end
-        attacker_piece_occupant_id =
-          socket
-          |> Map.get(:assigns)
-          |> Map.get(:chess_board)
-          |> Map.get(target_coordinate)
-          |> Map.get(:occupant)
-        socket = assign( socket,
-        selection_toggle: :true,
-        chess_board_overlay: king_shaded,
-        old_chess_board_overlay: old_chess_board_overlay,
-        old_chess_board: old_chess_board,
-        attacker_piece_coordinate_no: sel_no,
-        attacker_piece_coordinate_alpha: sel_alpha,
-        attacker_piece_coordinate: target_coordinate,
-        attacker_piece_role: attacker_piece_role,
-        attacker_piece_occupant_id: attacker_piece_occupant_id,
-        attacker_piece_side: attacker_piece_side )
-
-        {:noreply, socket}
-      { false, _ } ->
-        IO.puts "nil tile/invalid coordinate"
-        {:noreply, socket}
-    end
   end
 
   def handle_event("tile_selection", %{"key" => key_up}, socket) do

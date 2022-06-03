@@ -1106,4 +1106,13 @@ defmodule Portfolio.Chess do
 
   end
 
+  def determine_chess_piece_side(chess_piece_coordinate, chess_board) do
+    for { k, v } <- chess_board, k == chess_piece_coordinate do
+      unless v.occupant == nil do
+        prefix_chess_piece = String.first(v.occupant)
+        if(prefix_chess_piece == "w", do: :chess_pieces_white, else: :chess_pieces_black)
+      end
+    end |> Enum.fetch(0) |> elem(1)
+  end
+
 end
