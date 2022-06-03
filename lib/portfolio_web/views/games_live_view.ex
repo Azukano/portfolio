@@ -11,13 +11,13 @@ defmodule PortfolioWeb.GamesLive do
   end
 
   def render(_params, _session, socket) do
-    socket = assign(socket, :brightness, 10)
+    socket = assign(socket, brightness: 10)
     {:ok, socket}
   end
 
   @impl true
   def handle_event("on", _, socket) do
-    socket = assign(socket, :brightness, 100)
+    socket = assign(socket, brightness: 100)
     {:noreply, socket}
   end
 

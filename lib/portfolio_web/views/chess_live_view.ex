@@ -35,6 +35,33 @@ defmodule PortfolioWeb.ChessLive do
   def handle_event("tile_selection", %{"key" => key_up}, socket)
     when key_up == "Enter" and socket.assigns.selection_toggle == true do
 
+    move_to_red_tile(socket)
+
+  end
+
+  def handle_event("tile_click", %{"sel_no" => sel_no, "sel_alpha" => sel_alpha}, socket)
+    when socket.assigns.selection_toggle == true do
+
+    sel_alpha_pointer =
+      case sel_alpha do
+        "a" -> 1
+        "b" -> 2
+        "c" -> 3
+        "d" -> 4
+        "e" -> 5
+        "f" -> 6
+        "g" -> 7
+        "h" -> 8
+        _ -> 0
+      end
+
+    socket = assign(socket, sel_alpha: sel_alpha, sel_no: String.to_integer(sel_no), sel_alpha_pointer: sel_alpha_pointer)
+    IO.inspect socket.assigns.sel_alpha
+    IO.inspect socket.assigns.sel_no
+    move_to_red_tile(socket)
+  end
+
+  def move_to_red_tile(socket) do
     sel_no = socket.assigns.sel_no
     target_coordinate = String.to_atom(socket.assigns.sel_alpha<>Integer.to_string(sel_no))
     attacker_piece_coordinate = socket.assigns.attacker_piece_coordinate # important! this is the orign coordinate of target_piece to be moved
@@ -63,11 +90,9 @@ defmodule PortfolioWeb.ChessLive do
     end
 
     chess_piece_side = socket.assigns.attacker_piece_side
-    chess_pieces_opponent = if chess_piece_side == :chess_pieces_white do
-      :chess_pieces_black
-    else
-      :chess_pieces_white
-    end
+    chess_pieces_opponent =
+      if(chess_piece_side == :chess_pieces_white, do: :chess_pieces_black, else: :chess_pieces_white)
+
 
     if validate_color_tile == :red do
 
@@ -84,8 +109,8 @@ defmodule PortfolioWeb.ChessLive do
       # pastpone
       past_pone_tuple_combo = Chess.past_pone(socket.assigns.attacker_piece_role, sel_no, attacker_piece_coordinate_no, attacker_piece_coordinate_alpha, target_coordinate, chess_piece_side)
       # king checkmate
-      opponent_king_location = Chess.locate_king_coordinate(updated_pieces_coordinate_opponent) |> Enum.fetch!(0) #will crash if king is captured!
-      attacker_king_location = Chess.locate_king_coordinate(updated_pieces_coordinate_attacker) |> Enum.fetch!(0)
+      opponent_king_location = Chess.locate_king_coordinate(updated_pieces_coordinate_opponent) #will crash if king is captured!
+      attacker_king_location = Chess.locate_king_coordinate(updated_pieces_coordinate_attacker) #will crash if king is captured!
       presume_tiles_attacker = Chess.presume_tiles(updated_pieces_coordinate_attacker, updated_pieces_coordinate_opponent, chess_piece_side, updated_tiles_occupant) |> elem(0)
       presume_tiles_opponent = Chess.presume_tiles(updated_pieces_coordinate_opponent, updated_pieces_coordinate_attacker, chess_pieces_opponent, updated_tiles_occupant) |> elem(0)
 
@@ -137,6 +162,7 @@ defmodule PortfolioWeb.ChessLive do
     end
   end
 
+
   # first keyup enter press
   def handle_event("tile_selection", %{"key" => key_up}, socket)
     when key_up == "Enter" and socket.assigns.selection_toggle == false do
@@ -145,16 +171,29 @@ defmodule PortfolioWeb.ChessLive do
 
   end
 
-  def handle_event("tile_selection", %{"" => key_up}, socket)do
-    socket.assigns.selection_toggle == false
+  def handle_event("tile_click", %{"sel_no" => sel_no, "sel_alpha" => sel_alpha}, socket)
+    when socket.assigns.selection_toggle == false do
 
+    sel_alpha_pointer =
+      case sel_alpha do
+        "a" -> 1
+        "b" -> 2
+        "c" -> 3
+        "d" -> 4
+        "e" -> 5
+        "f" -> 6
+        "g" -> 7
+        "h" -> 8
+        _ -> 0
+      end
 
+    socket = assign(socket, sel_alpha: sel_alpha, sel_no: String.to_integer(sel_no), sel_alpha_pointer: sel_alpha_pointer)
 
     move_tile_selection(socket)
-
   end
 
   def move_tile_selection(socket) do
+
     old_chess_board = socket.assigns.chess_board
     old_chess_board_overlay = socket.assigns.chess_board_overlay
 
