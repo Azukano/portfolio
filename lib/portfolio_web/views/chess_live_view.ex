@@ -43,18 +43,7 @@ defmodule PortfolioWeb.ChessLive do
   def handle_event("tile_click", %{"sel_no" => sel_no, "sel_alpha" => sel_alpha}, socket)
     when socket.assigns.selection_toggle == true do
 
-    sel_alpha_pointer =
-      case sel_alpha do
-        "a" -> 1
-        "b" -> 2
-        "c" -> 3
-        "d" -> 4
-        "e" -> 5
-        "f" -> 6
-        "g" -> 7
-        "h" -> 8
-        _ -> 0
-      end
+    sel_alpha_pointer = determine_sel_alpha_pointer(sel_alpha)
 
     socket = assign(socket, sel_alpha: sel_alpha, sel_no: String.to_integer(sel_no), sel_alpha_pointer: sel_alpha_pointer)
     move_to_red_tile(socket)
@@ -67,12 +56,13 @@ defmodule PortfolioWeb.ChessLive do
     attacker_piece_coordinate_no = socket.assigns.attacker_piece_coordinate_no
     attacker_piece_coordinate_alpha = socket.assigns.attacker_piece_coordinate_alpha
 
-    validate_coordinate_tile = if socket.assigns.sel_alpha < "a" or socket.assigns.sel_alpha > "h"
-      or sel_no < 1 or sel_no > 8 do
+    validate_coordinate_tile =
+      if socket.assigns.sel_alpha < "a" or socket.assigns.sel_alpha > "h"
+      or sel_no in 1..8 do
       false
-    else
-      true
-    end
+      else
+        true
+      end
 
     validate_color_tile = if validate_coordinate_tile == true do
       case socket
@@ -91,7 +81,6 @@ defmodule PortfolioWeb.ChessLive do
     chess_piece_side = socket.assigns.attacker_piece_side
     chess_pieces_opponent =
       if(chess_piece_side == :chess_pieces_white, do: :chess_pieces_black, else: :chess_pieces_white)
-
 
     if validate_color_tile == :red do
 
@@ -175,22 +164,26 @@ defmodule PortfolioWeb.ChessLive do
   def handle_event("tile_click", %{"sel_no" => sel_no, "sel_alpha" => sel_alpha}, socket)
     when socket.assigns.selection_toggle == false do
 
-    sel_alpha_pointer =
-      case sel_alpha do
-        "a" -> 1
-        "b" -> 2
-        "c" -> 3
-        "d" -> 4
-        "e" -> 5
-        "f" -> 6
-        "g" -> 7
-        "h" -> 8
-        _ -> 0
-      end
+    sel_alpha_pointer = determine_sel_alpha_pointer(sel_alpha)
+
 
     socket = assign(socket, sel_alpha: sel_alpha, sel_no: String.to_integer(sel_no), sel_alpha_pointer: sel_alpha_pointer)
 
     move_tile_selection(socket)
+  end
+
+  def determine_sel_alpha_pointer(sel_alpha) do
+    case sel_alpha do
+      "a" -> 1
+      "b" -> 2
+      "c" -> 3
+      "d" -> 4
+      "e" -> 5
+      "f" -> 6
+      "g" -> 7
+      "h" -> 8
+      _ -> 0
+    end
   end
 
   def move_tile_selection(socket) do
@@ -207,8 +200,6 @@ defmodule PortfolioWeb.ChessLive do
 
     if Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board, :self) == socket.assigns.player_turn do
       attacker_piece_side = Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board, :self)
-
-      opponent_piece_side = Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board, :opponent)
 
       attacker_piece_role =
         case attacker_piece_side do
