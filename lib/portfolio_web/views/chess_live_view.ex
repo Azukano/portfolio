@@ -332,7 +332,7 @@ defmodule PortfolioWeb.ChessLive do
               attacker_piece_role,
               socket.assigns.chess_pieces_white,
               socket.assigns.chess_pieces_black,
-              attacker_piece_side
+              opponent_piece_side
             )
           else
             Chess.tile_shade_red(
@@ -342,7 +342,7 @@ defmodule PortfolioWeb.ChessLive do
               attacker_piece_role,
               socket.assigns.chess_pieces_black,
               socket.assigns.chess_pieces_white,
-              attacker_piece_side
+              opponent_piece_side
             )
           end
           attacker_piece_occupant_id = socket

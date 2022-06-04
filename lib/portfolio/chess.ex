@@ -712,7 +712,7 @@ defmodule Portfolio.Chess do
   end
 
   #KNIGHT MOVESET
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, attacker_chess_piece_side)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, opponent_chess_piece_side)
   when attacker_piece_role == "knight" do
 
     alpha_binary = for x <- 0..7 do
@@ -732,7 +732,7 @@ defmodule Portfolio.Chess do
       chess_board =
         update_chess_board(String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no)), x, chess_board, attacker_piece_role)
       presume_tiles =
-        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, attacker_chess_piece_side, chess_board) |> elem(0)
+        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_chess_piece_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
       unless attacker_king_coordinate in presume_tiles do
         x
