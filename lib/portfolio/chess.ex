@@ -202,8 +202,8 @@ defmodule Portfolio.Chess do
     end |> Enum.find(fn x -> x != nil end )
     target_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
 
-    attacker_pone_side = determine_chess_piece_side(target_coordinate, chess_board, :self)
-    opponent_pone_side = determine_chess_piece_side(target_coordinate, chess_board, :opponent)
+    attacker_piece_side = determine_chess_piece_side(target_coordinate, chess_board, :self)
+    opponent_piece_side = determine_chess_piece_side(target_coordinate, chess_board, :opponent)
     pone_step = case { determine_chess_piece_side(target_coordinate, chess_board, :self), sel_no } do
       { :chess_pieces_white, 2 } -> 2
       { :chess_pieces_white, _ } -> 1
@@ -233,11 +233,11 @@ defmodule Portfolio.Chess do
       end
     end)
 
-    black_white_pone_pov = if attacker_pone_side == :chess_pieces_white do 1 else -1 end
+    black_white_pone_pov = if attacker_piece_side == :chess_pieces_white do 1 else -1 end
 
     # pone attack up-left / up-right first 2 pattern match is for past-pone another 2 is for normal attack
     targets_atom_list =
-      if attacker_pone_side != past_pone_tuple_combo |> elem(3) and
+      if attacker_piece_side != past_pone_tuple_combo |> elem(3) and
       (Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)))
       or String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)) == past_pone_tuple_combo |> elem(0)) do
         [String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)) | targets_atom_list]
@@ -246,7 +246,7 @@ defmodule Portfolio.Chess do
       end
 
     targets_atom_list =
-      if attacker_pone_side != past_pone_tuple_combo |> elem(3) and
+      if attacker_piece_side != past_pone_tuple_combo |> elem(3) and
       (Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov)))
       or String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov)) == past_pone_tuple_combo |> elem(0)) do
         [String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov)) | targets_atom_list]
@@ -273,13 +273,13 @@ defmodule Portfolio.Chess do
     targets_atom_list = for x <- targets_atom_list do
       attacker_king_coordinate = locate_king_coordinate(chess_pieces_attacker)
       chess_pieces_attacker =
-        update_chess_pieces_attacker(String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no)), x, chess_pieces_attacker)
+        update_chess_pieces_attacker(target_coordinate, x, chess_pieces_attacker)
       chess_pieces_opponent =
         update_chess_pieces_opponent(x, chess_pieces_opponent)
       chess_board =
-        update_chess_board(String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no)), x, chess_board, attacker_piece_role)
+        update_chess_board(target_coordinate, x, chess_board, attacker_piece_role)
       presume_tiles =
-        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_pone_side, chess_board) |> elem(0)
+        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_piece_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
       unless attacker_king_coordinate in presume_tiles do
         x
@@ -291,7 +291,7 @@ defmodule Portfolio.Chess do
   end
 
   #ROOK TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, attacker_chess_piece_side)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent)
   when attacker_piece_role == "rook" do
 
     alpha_binary = for x <- 0..7 do
@@ -300,6 +300,7 @@ defmodule Portfolio.Chess do
       end
     end |> Enum.find(fn x -> x != nil end )
     target_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
+    opponent_piece_side = determine_chess_piece_side(target_coordinate, chess_board, :opponent)
 
     #1st&2nd WAY UP (+) DOWN (-) ROW coordinate_no/sel_no
     targets_atom_list_up = moves_up(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
@@ -324,7 +325,7 @@ defmodule Portfolio.Chess do
       chess_board =
         update_chess_board(target_coordinate, x, chess_board, attacker_piece_role)
       presume_tiles =
-        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, attacker_chess_piece_side, chess_board) |> elem(0)
+        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_piece_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
       unless attacker_king_coordinate in presume_tiles do
         x
@@ -444,7 +445,7 @@ defmodule Portfolio.Chess do
   end
 
   #BISHOP TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, opponent_chess_piece_side)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent)
   when attacker_piece_role == "bishop" do
 
     alpha_binary = for x <- 0..7 do
@@ -453,6 +454,7 @@ defmodule Portfolio.Chess do
       end
     end |> Enum.find(fn x -> x != nil end )
     target_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
+    opponent_piece_side = determine_chess_piece_side(target_coordinate, chess_board, :opponent)
 
     #1st WAY DIAGONAL UP-LEFT (-) coordinate_alpha/sel_alpha (+) coordinate_no/sel_no
     targets_atom_list_up_left = moves_up_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
@@ -476,8 +478,8 @@ defmodule Portfolio.Chess do
         update_chess_pieces_opponent(x, chess_pieces_opponent)
       chess_board =
         update_chess_board(target_coordinate, x, chess_board, attacker_piece_role)
-      IO.inspect presume_tiles =
-        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_chess_piece_side, chess_board) |> elem(0)
+      presume_tiles =
+        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_piece_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
       unless attacker_king_coordinate in presume_tiles do
         x
@@ -604,7 +606,7 @@ defmodule Portfolio.Chess do
   end
 
   #QUEEN MOVESET
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, attacker_chess_piece_side)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent)
   when attacker_piece_role == "queen" do
 
     alpha_binary = for x <- 0..7 do
@@ -613,6 +615,7 @@ defmodule Portfolio.Chess do
       end
     end |> Enum.find(fn x -> x != nil end )
     target_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
+    opponent_piece_side = determine_chess_piece_side(target_coordinate, chess_board, :opponent)
 
     #1st&2nd WAY UP (+) DOWN (-) ROW coordinate_no/sel_no
     targets_atom_list_up = moves_up(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
@@ -650,7 +653,7 @@ defmodule Portfolio.Chess do
       chess_board =
         update_chess_board(target_coordinate, x, chess_board, attacker_piece_role)
       presume_tiles =
-        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, attacker_chess_piece_side, chess_board) |> elem(0)
+        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_piece_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
       unless attacker_king_coordinate in presume_tiles do
         x
@@ -662,7 +665,7 @@ defmodule Portfolio.Chess do
   end
 
   #KING MOVESET
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, attacker_piece_side)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent)
   when attacker_piece_role == "king" do
 
     alpha_binary = for x <- 0..7 do
@@ -672,14 +675,21 @@ defmodule Portfolio.Chess do
     end |> Enum.find(fn x -> x != nil end )
     target_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
 
-    opponent_piece_side = if attacker_piece_side == :chess_pieces_white do :chess_pieces_black else :chess_pieces_white end
+
 
     chess_pieces_attacker_no_king = chess_pieces_attacker |> Map.delete(target_coordinate)
     chess_board_removed_king = chess_board |> Map.delete(target_coordinate)
 
-    presume_tiles_opponent = presume_tiles(chess_pieces_opponent, chess_pieces_attacker_no_king, opponent_piece_side, chess_board_removed_king) |> elem(0)
+    presume_tiles_opponent =
+      presume_tiles(
+        chess_pieces_opponent,
+        chess_pieces_attacker_no_king,
+        determine_chess_piece_side(target_coordinate, chess_board, :opponent),
+        chess_board_removed_king
+        ) |> elem(0)
 
-    targets_atom_list = move_king(alpha_binary, sel_no, chess_pieces_attacker, presume_tiles_opponent)
+    targets_atom_list =
+      move_king(alpha_binary, sel_no, chess_pieces_attacker, presume_tiles_opponent)
 
     tile_shade_red(alpha_binary, sel_no, targets_atom_list, chess_board)
 
@@ -708,7 +718,7 @@ defmodule Portfolio.Chess do
   end
 
   #KNIGHT MOVESET
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, opponent_chess_piece_side)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent)
   when attacker_piece_role == "knight" do
 
     alpha_binary = for x <- 0..7 do
@@ -717,6 +727,7 @@ defmodule Portfolio.Chess do
       end
     end |> Enum.find(fn x -> x != nil end )
     target_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
+    opponent_piece_side = determine_chess_piece_side(target_coordinate, chess_board, :opponent)
 
     targets_atom_list = move_knight(alpha_binary, sel_no, chess_pieces_attacker) |> Enum.filter(& !is_nil(&1))
 
@@ -729,7 +740,7 @@ defmodule Portfolio.Chess do
       chess_board =
         update_chess_board(target_coordinate, x, chess_board, attacker_piece_role)
       presume_tiles =
-        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_chess_piece_side, chess_board) |> elem(0)
+        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_piece_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
       unless attacker_king_coordinate in presume_tiles do
         x
@@ -1010,16 +1021,17 @@ defmodule Portfolio.Chess do
     iex> Chess.update_chess_pieces_attacker(:a2, :a4, chess_pieces_attacker)
     %{:a4, %ChessPieces{role: "pone", ...}}
   """
-  def locate_king_coordinate(chess_pieces_opponent) do
-    for { piece_tile_id, piece } <- chess_pieces_opponent, piece.role == "king" do
+  def locate_king_coordinate(chess_pieces) do
+    for { piece_tile_id, piece } <- chess_pieces, piece.role == "king" do
       piece_tile_id
     end |> Enum.fetch(0) |> elem(1)
   end
 
   def determine_chess_piece_side(chess_piece_coordinate, chess_board, which_side_switch) do
-    for { k, v } <- chess_board, k == chess_piece_coordinate do
-      unless v.occupant == nil do
-        prefix_chess_piece = String.first(v.occupant)
+    unless chess_piece_coordinate not in @valid_tile_list do
+      unless chess_board[chess_piece_coordinate].occupant == nil do
+        IO.inspect prefix_chess_piece = String.first(chess_board[chess_piece_coordinate].occupant)
+
         case { prefix_chess_piece, which_side_switch } do
           { "w", :opponent } -> :chess_pieces_black
           { "w", :self } -> :chess_pieces_white
@@ -1027,7 +1039,7 @@ defmodule Portfolio.Chess do
           { "b", :self } -> :chess_pieces_black
         end
       end
-    end |> Enum.fetch(0) |> elem(1)
+    end
   end
 
   #######################################################################################################
