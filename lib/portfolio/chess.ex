@@ -286,7 +286,7 @@ defmodule Portfolio.Chess do
       end
     end
 
-    tile_shade_red(alpha_binary, sel_no, targets_atom_list, chess_board)
+    tile_shade_red(target_coordinate , targets_atom_list, chess_board)
 
   end
 
@@ -332,15 +332,13 @@ defmodule Portfolio.Chess do
       end
     end
 
-    tile_shade_red(alpha_binary, sel_no, targets_atom_list, chess_board)
+    tile_shade_red(target_coordinate , targets_atom_list, chess_board)
 
   end
 
   defp moves_up(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, presume_tile_mode \\ false) do
-    Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
-      (x, acc) when x == 0 and acc == 0 ->
-        {:cont, []}
-      (x, acc) when acc != 0 ->
+    Enum.reduce_while(1..7, [], fn #generator starts with 0 for acc initiation to [] important!
+      (x, acc) ->
         target_atom = move_up_down(alpha_binary, sel_no, x)
         # main conditional statement checks if there is ally piece ON ITS WAY IMPORTANT!
         unless Map.has_key?(chess_pieces_attacker, target_atom) or target_atom not in @valid_tile_list do
@@ -361,10 +359,8 @@ defmodule Portfolio.Chess do
   end
 
   defp moves_down(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, presume_tile_mode \\ false) do
-    Enum.reduce_while(0..-7, 0, fn #generator starts with 0 for acc initiation to [] important!
-      (x, acc) when x == 0 and acc == 0 ->
-        {:cont, []}
-      (x, acc) when acc != 0 ->
+    Enum.reduce_while(-1..-7, [], fn #generator starts with 0 for acc initiation to [] important!
+      (x, acc) ->
         target_atom = move_up_down(alpha_binary, sel_no, x)
         # main conditional statement checks if there is ally piece ON ITS WAY IMPORTANT!
         unless Map.has_key?(chess_pieces_attacker, target_atom) or target_atom not in @valid_tile_list do
@@ -385,10 +381,8 @@ defmodule Portfolio.Chess do
   end
 
   defp moves_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, presume_tile_mode \\ false) do
-    Enum.reduce_while(0..-7, 0, fn #generator starts with 0 for acc initiation to [] important!
-      (x, acc) when x == 0 and acc == 0 ->
-        {:cont, []}
-      (x, acc) when acc != 0 ->
+    Enum.reduce_while(-1..-7, [], fn #generator starts with 0 for acc initiation to [] important!
+      (x, acc) ->
         target_atom = move_left_right(alpha_binary, sel_no, x)
         # main conditional statement checks if there is ally piece ON ITS WAY IMPORTANT!
         unless Map.has_key?(chess_pieces_attacker, target_atom) or target_atom not in @valid_tile_list do
@@ -409,9 +403,7 @@ defmodule Portfolio.Chess do
   end
 
   defp moves_right(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, presume_tile_mode \\ false) do
-    Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
-      (x, acc) when x == 0 and acc == 0 ->
-        {:cont, []}
+    Enum.reduce_while(1..7, [], fn #generator starts with 0 for acc initiation to [] important!
       (x, acc) when acc != 0 ->
         target_atom = move_left_right(alpha_binary, sel_no, x)
         # main conditional statement checks if there is ally piece ON ITS WAY IMPORTANT!
@@ -486,16 +478,14 @@ defmodule Portfolio.Chess do
       end
     end
 
-    tile_shade_red(alpha_binary, sel_no, targets_atom_list, chess_board)
+    tile_shade_red(target_coordinate , targets_atom_list, chess_board)
 
   end
 
   defp moves_up_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, presume_tile_mode \\ false) do
 
-    Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
-    (x, acc) when x == 0 and acc == 0 ->
-      {:cont, []}
-    (x, acc) when x > 0 and acc != 0 ->
+    Enum.reduce_while(1..7, [], fn #generator starts with 0 for acc initiation to [] important!
+    (x, acc) ->
       target_atom = move_up_left(alpha_binary, sel_no, x)
       unless Map.has_key?(chess_pieces_attacker, target_atom) or target_atom not in @valid_tile_list do
         unless Map.has_key?(chess_pieces_opponent, target_atom) or target_atom not in @valid_tile_list do
@@ -514,10 +504,7 @@ defmodule Portfolio.Chess do
   end
 
   defp moves_up_right(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, presume_tile_mode \\ false) do
-
-    Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
-    (x, acc) when x == 0 and acc == 0 ->
-      {:cont, []}
+    Enum.reduce_while(1..7, [], fn #generator starts with 0 for acc initiation to [] important!
     (x, acc) when x > 0 and acc != 0 ->
       target_atom = move_up_right(alpha_binary, sel_no, x)
       unless Map.has_key?(chess_pieces_attacker, target_atom) or target_atom not in @valid_tile_list do
@@ -537,10 +524,8 @@ defmodule Portfolio.Chess do
   end
 
   defp moves_down_right(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, presume_tile_mode \\ false) do
-    Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
-    (x, acc) when x == 0 and acc == 0 ->
-      {:cont, []}
-    (x, acc) when x > 0 and acc != 0 ->
+    Enum.reduce_while(1..7, [], fn #generator starts with 0 for acc initiation to [] important!
+    (x, acc) ->
       target_atom = move_down_right(alpha_binary, sel_no, x)
       unless Map.has_key?(chess_pieces_attacker, target_atom) or target_atom not in @valid_tile_list do
         unless Map.has_key?(chess_pieces_opponent, target_atom) or target_atom not in @valid_tile_list do
@@ -559,10 +544,7 @@ defmodule Portfolio.Chess do
   end
 
   defp moves_down_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent, presume_tile_mode \\ false) do
-
-    Enum.reduce_while(0..7, 0, fn #generator starts with 0 for acc initiation to [] important!
-    (x, acc) when x == 0 and acc == 0 ->
-      {:cont, []}
+    Enum.reduce_while(1..7, [], fn #generator starts with 0 for acc initiation to [] important!
     (x, acc) when x > 0 and acc != 0 ->
       target_atom = move_down_left(alpha_binary, sel_no, x)
       unless Map.has_key?(chess_pieces_attacker, target_atom) or target_atom not in @valid_tile_list do
@@ -660,7 +642,7 @@ defmodule Portfolio.Chess do
       end
     end
 
-    tile_shade_red(alpha_binary, sel_no, targets_atom_list, chess_board)
+    tile_shade_red(target_coordinate , targets_atom_list, chess_board)
 
   end
 
@@ -691,7 +673,7 @@ defmodule Portfolio.Chess do
     targets_atom_list =
       move_king(alpha_binary, sel_no, chess_pieces_attacker, presume_tiles_opponent)
 
-    tile_shade_red(alpha_binary, sel_no, targets_atom_list, chess_board)
+    tile_shade_red(target_coordinate , targets_atom_list, chess_board)
 
   end
 
@@ -747,7 +729,7 @@ defmodule Portfolio.Chess do
       end
     end
 
-    tile_shade_red(alpha_binary, sel_no, targets_atom_list, chess_board)
+    tile_shade_red(target_coordinate , targets_atom_list, chess_board)
 
   end
 
@@ -791,34 +773,40 @@ defmodule Portfolio.Chess do
     end |> Enum.filter(& !is_nil(&1))
   end
 
-  defp tile_shade_red(alpha_binary, sel_no, targets_atom_list, chess_board) do
+  defp tile_shade_red(target_coordinate , targets_atom_list, chess_board) do
     unless Enum.filter(targets_atom_list, & !is_nil(&1)) == [] do
-      Enum.reduce(targets_atom_list, 0, fn (tile_id, acc) ->
-        piece_step = if tile_id != nil do
-          chess_board
-          |> Map.get(tile_id)
-          |> Map.put(:color, :red)
-        else
-          nil
-        end
-        if acc == 0 and piece_step != nil do
-          chess_board |> Map.put(tile_id, piece_step)
-        else
-          if piece_step != nil do
-            acc |> Map.put(tile_id, piece_step)
+      chess_board = Enum.reduce(targets_atom_list, 0, fn
+        (tile_id, acc) ->
+          piece_step =
+            if tile_id != nil do
+            chess_board
+            |> Map.get(tile_id)
+            |> Map.put(:color, :red)
+            else
+              nil
+            end
+          if acc == 0 and piece_step != nil do
+            chess_board |> Map.put(tile_id, piece_step)
           else
-            acc
+            if piece_step != nil do
+              acc |> Map.put(tile_id, piece_step)
+            else
+              acc
+            end
           end
-        end
-      end)
+        end)
+      red_shade_count = targets_atom_list |> Enum.filter(& !is_nil(&1)) |> Enum.count()
+      { chess_board, red_shade_count }
+
     else
       # ELSE STATEMENT pone_step1 = nil, move list returned [] empty list
       piece_step =
         chess_board
-        |> Map.get(String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no)))
+        |> Map.get(target_coordinate)
         |> Map.put(:color, :"#8F00FF")
-      chess_board
-      |> Map.put(String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no)), piece_step)
+      chess_board = chess_board
+      |> Map.put(target_coordinate, piece_step)
+      { chess_board, 0 }
     end
   end
 
@@ -1030,7 +1018,7 @@ defmodule Portfolio.Chess do
   def determine_chess_piece_side(chess_piece_coordinate, chess_board, which_side_switch) do
     unless chess_piece_coordinate not in @valid_tile_list do
       unless chess_board[chess_piece_coordinate].occupant == nil do
-        IO.inspect prefix_chess_piece = String.first(chess_board[chess_piece_coordinate].occupant)
+        prefix_chess_piece = String.first(chess_board[chess_piece_coordinate].occupant)
 
         case { prefix_chess_piece, which_side_switch } do
           { "w", :opponent } -> :chess_pieces_black
@@ -1130,6 +1118,27 @@ defmodule Portfolio.Chess do
       |> Map.put(origin_coordinate, remove_piece_old_occupant)
     end
 
+  end
+
+  def count_available_tiles(chess_board, chess_pieces_attacker, chess_pieces_opponent, past_pone_tuple_combo) do
+    for { k, v } <- chess_pieces_opponent do
+      piece_coordinate_alpha =
+        k
+        |> Atom.to_string()
+        |> String.first()
+      piece_coordinate_no =
+        k
+        |> Atom.to_string()
+        |> String.last()
+        |> String.to_integer()
+      piece_role =
+        v.role
+      if piece_role == "pone" do
+        tile_shade_red(piece_coordinate_alpha, piece_coordinate_no, chess_board, piece_role, chess_pieces_opponent, chess_pieces_attacker, past_pone_tuple_combo)
+      else
+        tile_shade_red(piece_coordinate_alpha, piece_coordinate_no, chess_board, piece_role, chess_pieces_opponent, chess_pieces_attacker)
+      end |> elem(1)
+    end
   end
 
 end

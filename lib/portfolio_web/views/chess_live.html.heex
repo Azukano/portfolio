@@ -59,7 +59,7 @@
             </div>
         </div>
         <div class="h-6 xs:h-10 w-[360px] xs:w-[540px] md:w-[800px] bg-black mx-auto mt-2 text-left px-1 p-0 xs:p-2 flex justify-between">
-            <div class="text-xs xs:text-base flex items-center">
+            <div class="w-[1/3] text-xs xs:text-base">
                 <span class="">SELECTOR COORDINATE: </span>
                 <span class="font-bold uppercase text-red-500">
                     <%= if @sel_alpha < "a"  or @sel_alpha > "h"
@@ -70,21 +70,39 @@
                     <% end %>
                 </span>
             </div>
-            <div class="text-xs xs:text-base flex items-center">
-                <%= if @check_condition_black == true do %>
+            <div class="w-[1/3] text-xs xs:text-base">
+                <%= if @check_mate == nil do %>
+                    <%= if @player_turn == :chess_pieces_white do %>
+                        <span class="font-bold uppercase text-red-500">WHITE</span><span>'s</span>
+                        <span> TURN </span>
+                    <% else %>
+                    <span class="font-bold uppercase text-red-500">BLACK</span><span>'s</span>
+                    <span> TURN </span>
+                    <% end %>
+                <% else %>
+                    <%= if @check_mate == :chess_pieces_white do %>
+                        <span>CHECKMATE:</span>
+                        <span class="font-bold uppercase text-red-500"> WHITE :( </span>
+                    <% else %>
+                        <span>CHECKMATE:</span>
+                        <span class="font-bold uppercase text-red-500"> BLACK :( </span>
+                    <% end %>
+                <% end %>
+            </div>
+            <div class="w-[1/3] text-xs xs:text-base">
+                <%= if @check_condition_black == true and @check_mate == nil do %>
                     <span>CHECK CONDITION: </span>
                     <span class="font-bold uppercase text-red-500">
                     <span> BLACK </span>
                     </span>
                 <% end %>
-                <%= if @check_condition_white == true do %>
+                <%= if @check_condition_white == true and @check_mate == nil do %>
                     <span>CHECK CONDITION: </span>
                     <span class="font-bold uppercase text-red-500">
                     <span> WHITE </span>
                     </span>
                 <% end %>
             </div>
-            
         </div>
     </div>
 </section>

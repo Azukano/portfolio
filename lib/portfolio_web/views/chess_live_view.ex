@@ -21,7 +21,8 @@ defmodule PortfolioWeb.ChessLive do
       check_condition_black: false,
       black_king_mate: nil,
       white_king_mate: nil,
-      player_turn: :chess_pieces_white)
+      player_turn: :chess_pieces_white,
+      check_mate: nil )
     {:ok, socket}
   end
 
@@ -43,7 +44,7 @@ defmodule PortfolioWeb.ChessLive do
   def handle_event("tile_click", %{"sel_no" => sel_no, "sel_alpha" => sel_alpha}, socket)
     when socket.assigns.selection_toggle == true do
 
-    sel_alpha_pointer = determine_sel_alpha_pointer(sel_alpha)
+    sel_alpha_pointer = get_sel_alpha_pointer(sel_alpha)
 
     socket = assign(socket, sel_alpha: sel_alpha, sel_no: String.to_integer(sel_no), sel_alpha_pointer: sel_alpha_pointer)
     move_to_red_tile(socket)
@@ -56,13 +57,12 @@ defmodule PortfolioWeb.ChessLive do
     attacker_piece_coordinate_no = socket.assigns.attacker_piece_coordinate_no
     attacker_piece_coordinate_alpha = socket.assigns.attacker_piece_coordinate_alpha
 
-    validate_coordinate_tile =
-      if socket.assigns.sel_alpha < "a" or socket.assigns.sel_alpha > "h"
-      or sel_no in 1..8 do
+    validate_coordinate_tile = if socket.assigns.sel_alpha < "a" or socket.assigns.sel_alpha > "h"
+      or sel_no < 1 or sel_no > 8 do
       false
-      else
-        true
-      end
+    else
+      true
+    end
 
     validate_color_tile = if validate_coordinate_tile == true do
       case socket
@@ -81,6 +81,7 @@ defmodule PortfolioWeb.ChessLive do
     chess_piece_side = socket.assigns.attacker_piece_side
     chess_pieces_opponent =
       if(chess_piece_side == :chess_pieces_white, do: :chess_pieces_black, else: :chess_pieces_white)
+
 
     if validate_color_tile == :red do
 
@@ -101,6 +102,8 @@ defmodule PortfolioWeb.ChessLive do
       attacker_king_location = Chess.locate_king_coordinate(updated_pieces_coordinate_attacker) #will crash if king is captured!
       presume_tiles_attacker = Chess.presume_tiles(updated_pieces_coordinate_attacker, updated_pieces_coordinate_opponent, chess_piece_side, updated_tiles_occupant) |> elem(0)
       presume_tiles_opponent = Chess.presume_tiles(updated_pieces_coordinate_opponent, updated_pieces_coordinate_attacker, chess_pieces_opponent, updated_tiles_occupant) |> elem(0)
+      count_avail_tile = Chess.count_available_tiles(updated_tiles_occupant, updated_pieces_coordinate_attacker, updated_pieces_coordinate_opponent, past_pone_tuple_combo)
+      check_mate = if List.foldl(count_avail_tile, 0, fn x, acc -> x + acc end) == 0, do: Chess.determine_chess_piece_side(target_coordinate, updated_tiles_occupant, :opponent)
 
       # player point of view for attacker/opponent side last layer function, returns value new socket!
       if chess_piece_side == :chess_pieces_white do
@@ -116,7 +119,8 @@ defmodule PortfolioWeb.ChessLive do
           presume_tiles_white: presume_tiles_attacker,
           check_condition_black: opponent_king_location in presume_tiles_attacker,
           check_condition_white: attacker_king_location in presume_tiles_opponent,
-          player_turn: :chess_pieces_black
+          player_turn: :chess_pieces_black,
+          check_mate: check_mate
           # black_king_mate: { the_mate, mate_steps },
           # black_king_mate_coordinate: the_mate_coordinate
           )
@@ -135,7 +139,8 @@ defmodule PortfolioWeb.ChessLive do
           presume_tiles_black: presume_tiles_attacker,
           check_condition_white: opponent_king_location in presume_tiles_attacker,
           check_condition_black: attacker_king_location in presume_tiles_opponent,
-          player_turn: :chess_pieces_white
+          player_turn: :chess_pieces_white,
+          check_mate: check_mate
           # white_king_mate: { the_mate, mate_steps },
           # white_king_mate_coordinate: the_mate_coordinate
           )
@@ -161,18 +166,7 @@ defmodule PortfolioWeb.ChessLive do
 
   end
 
-  def handle_event("tile_click", %{"sel_no" => sel_no, "sel_alpha" => sel_alpha}, socket)
-    when socket.assigns.selection_toggle == false do
-
-    sel_alpha_pointer = determine_sel_alpha_pointer(sel_alpha)
-
-
-    socket = assign(socket, sel_alpha: sel_alpha, sel_no: String.to_integer(sel_no), sel_alpha_pointer: sel_alpha_pointer)
-
-    move_tile_selection(socket)
-  end
-
-  def determine_sel_alpha_pointer(sel_alpha) do
+  def get_sel_alpha_pointer(sel_alpha) do
     case sel_alpha do
       "a" -> 1
       "b" -> 2
@@ -186,6 +180,16 @@ defmodule PortfolioWeb.ChessLive do
     end
   end
 
+  def handle_event("tile_click", %{"sel_no" => sel_no, "sel_alpha" => sel_alpha}, socket)
+    when socket.assigns.selection_toggle == false do
+
+    sel_alpha_pointer = get_sel_alpha_pointer(sel_alpha)
+
+    socket = assign(socket, sel_alpha: sel_alpha, sel_no: String.to_integer(sel_no), sel_alpha_pointer: sel_alpha_pointer)
+
+    move_tile_selection(socket)
+  end
+
   def move_tile_selection(socket) do
 
     old_chess_board = socket.assigns.chess_board
@@ -195,8 +199,6 @@ defmodule PortfolioWeb.ChessLive do
     sel_no = socket.assigns.sel_no
 
     target_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
-
-    Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board, :self)
 
     if Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board, :self) == socket.assigns.player_turn do
       attacker_piece_side = Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board, :self)
@@ -244,7 +246,7 @@ defmodule PortfolioWeb.ChessLive do
               socket.assigns.chess_pieces_white,
               socket.assigns.past_pone_tuple_combo
             )
-          end
+          end |> elem(0)
           attacker_piece_occupant_id =
             socket
             |> Map.get(:assigns)
@@ -284,7 +286,7 @@ defmodule PortfolioWeb.ChessLive do
               socket.assigns.chess_pieces_black,
               socket.assigns.chess_pieces_white
             )
-          end
+          end |> elem(0)
           attacker_piece_occupant_id =
             socket
             |> Map.get(:assigns)
@@ -324,7 +326,7 @@ defmodule PortfolioWeb.ChessLive do
               socket.assigns.chess_pieces_black,
               socket.assigns.chess_pieces_white
             )
-          end
+          end |> elem(0)
           attacker_piece_occupant_id = socket
           |> Map.get(:assigns)
           |> Map.get(:chess_board)
@@ -363,7 +365,7 @@ defmodule PortfolioWeb.ChessLive do
               socket.assigns.chess_pieces_black,
               socket.assigns.chess_pieces_white
             )
-          end
+          end |> elem(0)
           attacker_piece_occupant_id =
             socket
             |> Map.get(:assigns)
@@ -403,7 +405,7 @@ defmodule PortfolioWeb.ChessLive do
               socket.assigns.chess_pieces_black,
               socket.assigns.chess_pieces_white
             )
-          end
+          end |> elem(0)
           attacker_piece_occupant_id =
             socket
             |> Map.get(:assigns)
@@ -443,7 +445,7 @@ defmodule PortfolioWeb.ChessLive do
               socket.assigns.chess_pieces_black,
               socket.assigns.chess_pieces_white
             )
-          end
+          end |> elem(0)
           attacker_piece_occupant_id =
             socket
             |> Map.get(:assigns)
