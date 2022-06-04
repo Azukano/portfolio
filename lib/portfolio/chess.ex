@@ -233,16 +233,19 @@ defmodule Portfolio.Chess do
 
     black_white_pone_pov = if black_pone == false do 1 else -1 end
 
-    pone_side =
+    attacker_pone_side =
       if black_pone == true do
         :chess_pieces_black
       else
         :chess_pieces_white
       end
 
+    opponent_pone_side =
+      if(attacker_pone_side == :chess_pieces_white, do: :chess_pieces_black, else: :chess_pieces_white)
+
     # pone attack up-left / up-right first 2 pattern match is for past-pone another 2 is for normal attack
     targets_atom_list =
-      if pone_side != past_pone_tuple_combo |> elem(3) and
+      if attacker_pone_side != past_pone_tuple_combo |> elem(3) and
       (Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)))
       or String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)) == past_pone_tuple_combo |> elem(0)) do
         [String.to_atom(<<alpha_binary - 1>><>Integer.to_string(sel_no + black_white_pone_pov)) | targets_atom_list]
@@ -251,7 +254,7 @@ defmodule Portfolio.Chess do
       end
 
     targets_atom_list =
-      if pone_side != past_pone_tuple_combo |> elem(3) and
+      if attacker_pone_side != past_pone_tuple_combo |> elem(3) and
       (Map.has_key?(chess_pieces_opponent, String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov)))
       or String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov)) == past_pone_tuple_combo |> elem(0)) do
         [String.to_atom(<<alpha_binary + 1>><>Integer.to_string(sel_no + black_white_pone_pov)) | targets_atom_list]
@@ -284,7 +287,7 @@ defmodule Portfolio.Chess do
       chess_board =
         update_chess_board(String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no)), x, chess_board, attacker_piece_role)
       presume_tiles =
-        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, pone_side, chess_board) |> elem(0)
+        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_pone_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
       unless attacker_king_coordinate in presume_tiles do
         x
@@ -448,7 +451,7 @@ defmodule Portfolio.Chess do
   end
 
   #BISHOP TILE RED SHADE
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, attacker_chess_piece_side)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, opponent_chess_piece_side)
   when attacker_piece_role == "bishop" do
 
     alpha_binary = for x <- 0..7 do
@@ -466,7 +469,7 @@ defmodule Portfolio.Chess do
     #4th WAY DIAGONAL DOWN-LEFT (-) coordinate_alpha/sel_alpha (-) coordinate_no/sel_no
     targets_atom_list_down_left = moves_down_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
 
-    IO.inspect targets_atom_list = targets_atom_list_up_left
+    targets_atom_list = targets_atom_list_up_left
     |> Enum.concat(targets_atom_list_up_right)
     |> Enum.concat(targets_atom_list_down_right)
     |> Enum.concat(targets_atom_list_down_left) |> Enum.filter(& !is_nil(&1))
@@ -479,8 +482,8 @@ defmodule Portfolio.Chess do
         update_chess_pieces_opponent(x, chess_pieces_opponent)
       chess_board =
         update_chess_board(String.to_atom(<<alpha_binary>><>Integer.to_string(sel_no)), x, chess_board, attacker_piece_role)
-      presume_tiles =
-        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, attacker_chess_piece_side, chess_board) |> elem(0)
+      IO.inspect presume_tiles =
+        presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_chess_piece_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
       unless attacker_king_coordinate in presume_tiles do
         x
@@ -637,7 +640,7 @@ defmodule Portfolio.Chess do
     #4th WAY DIAGONAL DOWN-LEFT (-) coordinate_alpha/sel_alpha (-) coordinate_no/sel_no
     targets_atom_list_down_left = moves_down_left(alpha_binary, sel_no, chess_pieces_attacker, chess_pieces_opponent)
 
-    IO.inspect targets_atom_list = targets_atom_list
+    targets_atom_list = targets_atom_list
     |> Enum.concat(targets_atom_list_up_left)
     |> Enum.concat(targets_atom_list_up_right)
     |> Enum.concat(targets_atom_list_down_right)
@@ -865,6 +868,8 @@ defmodule Portfolio.Chess do
       piece_id = chess_board[String.to_atom(<<piece_coordinate_alpha>><>Integer.to_string(piece_coordinate_no))].occupant
       { String.to_atom(piece_id), move_attack_pone(piece_coordinate_alpha, piece_coordinate_no, chess_piece_side) }
     end
+
+    IO.inspect presume_tiles_pone
 
     presume_tiles_knight = for { piece_tile_id, piece } <- chess_pieces_attacker, piece.role == "knight" do
       piece_coordinate_alpha = Atom.to_string(piece_tile_id) |> String.first()
