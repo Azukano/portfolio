@@ -203,39 +203,32 @@ defmodule PortfolioWeb.ChessLive do
 
     target_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
 
-    Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board)
+    if Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board, :self) == socket.assigns.player_turn do
+      attacker_piece_side = Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board, :self)
 
-    if Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board) == socket.assigns.player_turn do
-      attacker_piece_side =
-        case { Map.has_key?(socket.assigns.chess_pieces_white, target_coordinate), Map.has_key?(socket.assigns.chess_pieces_black, target_coordinate) } do
-          { true, _ } -> :chess_pieces_white
-          { _, true } -> :chess_pieces_black
-          { _, _} -> nil
+      opponent_piece_side = Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board, :opponent)
+
+      attacker_piece_role =
+        case attacker_piece_side do
+          :chess_pieces_white ->
+            socket
+            |> Map.get(:assigns)
+            |> Map.get(:chess_pieces_white)
+            |> Map.get(target_coordinate)
+            |> Map.get(:role)
+          :chess_pieces_black ->
+            socket
+            |> Map.get(:assigns)
+            |> Map.get(:chess_pieces_black)
+            |> Map.get(target_coordinate)
+            |> Map.get(:role)
+          _ ->
+            nil
         end
-
-      opponent_piece_side = if(attacker_piece_side == :chess_pieces_white, do: :chess_pieces_black, else: :chess_pieces_white)
-
-
-      attacker_piece_role = case attacker_piece_side do
-        :chess_pieces_white ->
-          socket
-          |> Map.get(:assigns)
-          |> Map.get(:chess_pieces_white)
-          |> Map.get(target_coordinate)
-          |> Map.get(:role)
-        :chess_pieces_black ->
-          socket
-          |> Map.get(:assigns)
-          |> Map.get(:chess_pieces_black)
-          |> Map.get(target_coordinate)
-          |> Map.get(:role)
-        _ ->
-          nil
-      end
 
       validate_tile_occupancy = if attacker_piece_role != nil do true else false end
 
-      case {validate_tile_occupancy, attacker_piece_role}  do
+      case { validate_tile_occupancy, attacker_piece_role } do
         { true, "pone" } ->
           pone_shaded =
           if attacker_piece_side == :chess_pieces_white do
@@ -246,7 +239,6 @@ defmodule PortfolioWeb.ChessLive do
               attacker_piece_role,
               socket.assigns.chess_pieces_white,
               socket.assigns.chess_pieces_black,
-              false,
               socket.assigns.past_pone_tuple_combo
             )
           else
@@ -257,7 +249,6 @@ defmodule PortfolioWeb.ChessLive do
               attacker_piece_role,
               socket.assigns.chess_pieces_black,
               socket.assigns.chess_pieces_white,
-              true,
               socket.assigns.past_pone_tuple_combo
             )
           end
