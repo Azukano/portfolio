@@ -195,9 +195,8 @@ defmodule Portfolio.Chess do
   def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, past_pone_tuple_combo)
   when attacker_piece_role == "pone" do
 
-    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
-      if sel_alpha == alpha_list |> Enum.at(x) do
+      if sel_alpha == @alpha_list |> Enum.at(x) do
         96 + x + 1
       end
     end |> Enum.find(fn x -> x != nil end )
@@ -295,9 +294,8 @@ defmodule Portfolio.Chess do
   def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, attacker_chess_piece_side)
   when attacker_piece_role == "rook" do
 
-    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
-      if sel_alpha == alpha_list |> Enum.at(x) do
+      if sel_alpha == @alpha_list |> Enum.at(x) do
         96 + x + 1
       end
     end |> Enum.find(fn x -> x != nil end )
@@ -449,9 +447,8 @@ defmodule Portfolio.Chess do
   def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, opponent_chess_piece_side)
   when attacker_piece_role == "bishop" do
 
-    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
-      if sel_alpha == alpha_list |> Enum.at(x) do
+      if sel_alpha == @alpha_list |> Enum.at(x) do
         96 + x + 1
       end
     end |> Enum.find(fn x -> x != nil end )
@@ -610,9 +607,8 @@ defmodule Portfolio.Chess do
   def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, attacker_chess_piece_side)
   when attacker_piece_role == "queen" do
 
-    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
-      if sel_alpha == alpha_list |> Enum.at(x) do
+      if sel_alpha == @alpha_list |> Enum.at(x) do
         96 + x + 1
       end
     end |> Enum.find(fn x -> x != nil end )
@@ -715,9 +711,8 @@ defmodule Portfolio.Chess do
   def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, opponent_chess_piece_side)
   when attacker_piece_role == "knight" do
 
-    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     alpha_binary = for x <- 0..7 do
-      if sel_alpha == alpha_list |> Enum.at(x) do
+      if sel_alpha == @alpha_list |> Enum.at(x) do
         96 + x + 1
       end
     end |> Enum.find(fn x -> x != nil end )
