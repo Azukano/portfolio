@@ -80,12 +80,19 @@
                     <span> TURN </span>
                     <% end %>
                 <% else %>
-                    <%= if @check_mate == :chess_pieces_white do %>
+                    <%= case @check_mate do %>
+                    <% :chess_pieces_white -> %>
                         <span>CHECKMATE:</span>
-                        <span class="font-bold uppercase text-red-500"> WHITE :( </span>
-                    <% else %>
+                        <span class="font-bold uppercase text-red-500"> WHITE </span>
+                        <span> :( </span>
+                    <% :chess_pieces_black -> %>
                         <span>CHECKMATE:</span>
-                        <span class="font-bold uppercase text-red-500"> BLACK :( </span>
+                        <span class="font-bold uppercase text-red-500"> BLACK </span>
+                        <span> :( </span>
+                    <% :stale_mate -> %>
+                        <span>CHECKMATE:</span>
+                        <span class="font-bold uppercase text-red-500"> STALEMATE </span> 
+                        <span> :( </span>
                     <% end %>
                 <% end %>
             </div>
