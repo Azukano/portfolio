@@ -1030,6 +1030,9 @@ defmodule Portfolio.Chess do
     end
   end
 
+  def valid_tile_list, do: @valid_tile_list
+  def alpha_list, do: @alpha_list
+
   #######################################################################################################
   # UPDATING MAPS SECTION, USED BY SOCKET UPDATE LIVE VIEW PAGE AS A HELPER                             #
   #######################################################################################################
