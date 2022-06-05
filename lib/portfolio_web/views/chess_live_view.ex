@@ -103,12 +103,13 @@ defmodule PortfolioWeb.ChessLive do
       presume_tiles_attacker = Chess.presume_tiles(updated_pieces_coordinate_attacker, updated_pieces_coordinate_opponent, chess_piece_side, updated_tiles_occupant) |> elem(0)
       presume_tiles_opponent = Chess.presume_tiles(updated_pieces_coordinate_opponent, updated_pieces_coordinate_attacker, chess_pieces_opponent, updated_tiles_occupant) |> elem(0)
       count_avail_tile = Chess.count_available_tiles(updated_tiles_occupant, updated_pieces_coordinate_attacker, updated_pieces_coordinate_opponent, past_pone_tuple_combo)
-      check_mate = if List.foldl(count_avail_tile, 0, fn x, acc -> x + acc end) == 0, do: Chess.determine_chess_piece_side(target_coordinate, updated_tiles_occupant, :opponent)
+      check_mate =
         case { List.foldl(count_avail_tile, 0, fn x, acc -> x + acc end), opponent_king_location in presume_tiles_attacker } do
           { 0, true } -> Chess.determine_chess_piece_side(target_coordinate, updated_tiles_occupant, :opponent)
           { 0, _ } -> :stale_mate
           { _, _ } -> :continue
         end
+      IO.inspect check_mate
       # player point of view for attacker/opponent side last layer function, returns value new socket!
       if chess_piece_side == :chess_pieces_white do
         socket = assign(socket,
