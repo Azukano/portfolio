@@ -709,9 +709,10 @@ defmodule Portfolio.Chess do
   def castling_left(origin_coordinate, attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside) do
     black_or_white_left_rook =
       if(attacker_piece_side == :chess_pieces_white, do: "w-r1", else: "b-r1")
-    black_or_white_right_king =
+    black_or_white_king =
       if(attacker_piece_side == :chess_pieces_white, do: "w-k1", else: "b-k1")
-    if black_or_white_right_king not in did_king_made_a_move_before and black_or_white_left_rook not in rooks_set_aside
+
+    if black_or_white_king not in did_king_made_a_move_before and black_or_white_left_rook not in rooks_set_aside
     and (String.to_atom("d"<>Integer.to_string(castling_row_of_effect)) not in presume_tiles_opponent)
     and (String.to_atom("c"<>Integer.to_string(castling_row_of_effect)) not in presume_tiles_opponent)
     and (chess_board |> Map.get(String.to_atom("d"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil)
@@ -729,9 +730,10 @@ defmodule Portfolio.Chess do
   def castling_right(origin_coordinate, attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside) do
     black_or_white_right_rook =
       if(attacker_piece_side == :chess_pieces_white, do: "w-r2", else: "b-r2")
-    black_or_white_right_king =
+    black_or_white_king =
       if(attacker_piece_side == :chess_pieces_white, do: "w-k1", else: "b-k1")
-    if black_or_white_right_king not in did_king_made_a_move_before and black_or_white_right_rook not in rooks_set_aside
+
+    if black_or_white_king not in did_king_made_a_move_before and black_or_white_right_rook not in rooks_set_aside
     and (String.to_atom("g"<>Integer.to_string(castling_row_of_effect)) not in presume_tiles_opponent)
     and (String.to_atom("f"<>Integer.to_string(castling_row_of_effect)) not in presume_tiles_opponent)
     and (chess_board |> Map.get(String.to_atom("g"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil)

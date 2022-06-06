@@ -1,5 +1,8 @@
 # Portfolio
 
+Pre requisite:
+  * install NPM dependencies `cd ./assets` `npm install`
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
@@ -22,14 +25,16 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 
   * Tiles Module
   ** struct will be composed of ChessTiles.id? with values 
-      [:alpha => "A..H", :no => "1..8", :color => "black/white could be boolean"]
+      [:alpha => "a..h", :no => "1..8", :color => "black/white could be boolean"]
       %Portfolio.ChessTiles{alpha: "A", color: :BLACK/:WHITE, no: 1} done 
   ** make another module in here I save another map that will order the tiles. done
-  ** render maps structure to html
+  ** render maps structure to html done
 
 ____ GET THE KEYS: a1 
 ____ GET THE COLOR: BLACK
 _____________________ PUT THEM IN LIST*
+
+# Acknowledgement
 
 ## Chess Tile Survey
   * With/out border  - 7 dia, adan, jhon, risa, cyber28, santi, adam, michou
@@ -37,3 +42,7 @@ _____________________ PUT THEM IN LIST*
   * undecided        - 1 ayleen
   * w/o border ! lower exposure   - gerald
   * w/o border ! lower contrast   - jez
+
+## Software Testers
+  * Rudy Mulang 
+  * vy of chess discord community
