@@ -1113,9 +1113,6 @@ defmodule Portfolio.Chess do
       end
     end |> Enum.find(fn x -> x != nil end )
 
-    IO.inspect target_coordinate_alpha, label: "target"
-    IO.inspect origin_coordinate_alpha, label: "origin"
-
     cond do
       target_coordinate_alpha - origin_coordinate_alpha < -1  -> { :true, :to_the_left }
       target_coordinate_alpha - origin_coordinate_alpha > 1 -> { :true, :to_the_right }
@@ -1144,19 +1141,31 @@ defmodule Portfolio.Chess do
     %{:a4, %ChessPieces{role: "pone", ...}}
   """
   def update_chess_pieces_attacker(origin_coordinate, new_coordinate, chess_pieces_attacker, castling_mode \\ false) do
+
+    origin_coordinate_no = Atom.to_string(origin_coordinate) |> String.last() |> String.to_integer()
     new_coordinate_alpha = Atom.to_string(new_coordinate) |> String.first()
     new_coordinate_no = Atom.to_string(new_coordinate) |> String.last()
-    black_white_rook_coordinate_no =
-      if get_chess_piece_side(origin_coordinate, chess_pieces_attacker, :self) == :chess_pieces_white do
-        8
-      else
-        1
+    rook_coordinate_no = origin_coordinate_no
+    rook_origin_coordinate_alpha_binary =
+      case castling_mode do
+        :to_the_left -> 97
+        :to_the_right -> 104
+        _ -> nil
       end
-    left_right_rook_alpha =
-      if castling_mode == :to_the_left do
-        "a"
-      else
-        "h"
+    rook_destination_coordinate_alpha_binary =
+      case castling_mode do
+        :to_the_left -> 100
+        :to_the_right -> 102
+        _ -> nil
+      end
+    rook_origin_coordinate_atom =
+      unless is_nil(rook_origin_coordinate_alpha_binary) do
+        String.to_atom(<<rook_origin_coordinate_alpha_binary>><>Integer.to_string(rook_coordinate_no))
+      end
+
+    rook_destination_coordinate_atom =
+      unless is_nil(rook_destination_coordinate_alpha_binary) do
+        String.to_atom(<<rook_destination_coordinate_alpha_binary>><>Integer.to_string(rook_coordinate_no))
       end
 
     move_piece =
@@ -1170,29 +1179,17 @@ defmodule Portfolio.Chess do
       |> Map.delete(origin_coordinate)
       |> Map.put(new_coordinate, move_piece)
 
-    rook_atom_coordinate =
-      String.to_atom(left_right_rook_alpha<>black_white_rook_coordinate_no)
-    case castling_mode do
-      :to_the_left ->
-        move_piece =
-          updated_chess_pieces_attacker
-          |> Map.get(rook_atom_coordinate)
-          |> Map.put(:coordinate_alpha, left_right_rook_alpha)
-          |> Map.put(:coordinate_no, black_white_rook_coordinate_no)
-          updated_chess_pieces_attacker
-          |> Map.delete(rook_atom_coordinate)
-          |> Map.put(:d1, move_piece)
-      :to_the_right ->
-        move_piece =
-          updated_chess_pieces_attacker
-          |> Map.get(rook_atom_coordinate)
-          |> Map.put(:coordinate_alpha, left_right_rook_alpha)
-          |> Map.put(:coordinate_no, black_white_rook_coordinate_no)
+    if castling_mode == :to_the_left or castling_mode == :to_the_right do
+      move_piece =
         updated_chess_pieces_attacker
-        |> Map.delete(rook_atom_coordinate)
-        |> Map.put(:f1, move_piece)
-      _ ->
-        updated_chess_pieces_attacker
+        |> Map.get(rook_origin_coordinate_atom)
+        |> Map.put(:coordinate_alpha, <<rook_destination_coordinate_alpha_binary>>)
+        |> Map.put(:coordinate_no, rook_coordinate_no)
+      updated_chess_pieces_attacker
+      |> Map.delete(rook_origin_coordinate_atom)
+      |> Map.put(rook_destination_coordinate_atom, move_piece)
+    else
+      updated_chess_pieces_attacker
     end
   end
 
@@ -1226,6 +1223,42 @@ defmodule Portfolio.Chess do
   end
 
   def update_chess_board(origin_coordinate, new_coordinate, chess_board, attacker_piece_role, past_pone_tuple_combo, castling_mode \\ false) do
+    chess_piece_side = determine_chess_piece_side(origin_coordinate, chess_board, :self)
+
+    origin_coordinate_no = Atom.to_string(origin_coordinate) |> String.last() |> String.to_integer()
+
+    rook_coordinate_no = origin_coordinate_no
+    rook_origin_coordinate_alpha_binary =
+      case castling_mode do
+        :to_the_left -> 97
+        :to_the_right -> 104
+        _ -> nil
+      end
+    rook_destination_coordinate_alpha_binary =
+      case castling_mode do
+        :to_the_left -> 100
+        :to_the_right -> 102
+        _ -> nil
+      end
+    rook_origin_coordinate_atom =
+      unless is_nil(rook_origin_coordinate_alpha_binary) do
+        String.to_atom(<<rook_origin_coordinate_alpha_binary>><>Integer.to_string(rook_coordinate_no))
+      end
+    rook_destination_coordinate_atom =
+      unless is_nil(rook_destination_coordinate_alpha_binary) do
+        String.to_atom(<<rook_destination_coordinate_alpha_binary>><>Integer.to_string(rook_coordinate_no))
+      end
+
+    rook_piece_id =
+      case { castling_mode, chess_piece_side } do
+        { :to_the_left, :chess_pieces_white } -> "w-r1"
+        { :to_the_right, :chess_pieces_white } -> "w-r2"
+        { :to_the_left, :chess_pieces_black } -> "b-r1"
+        { :to_the_right, :chess_pieces_black } -> "b-r1"
+        _                                     -> nil
+      end
+
+
     piece_id = chess_board[origin_coordinate].occupant
 
     move_piece =
@@ -1253,25 +1286,16 @@ defmodule Portfolio.Chess do
         |> Map.put(origin_coordinate, remove_piece_old_occupant)
       end
 
-    case castling_mode do
-      :to_the_left ->
-        move_piece =
-          new_chess_board[:d1] |> Map.put(:occupant, "w-r1")
-        remove_piece_old_occupant =
-          new_chess_board[:a1] |> Map.put(:occupant, nil)
-        new_chess_board
-        |> Map.put(:d1, move_piece)
-        |> Map.put(:a1, remove_piece_old_occupant)
-      :to_the_right ->
-        move_piece =
-          new_chess_board[:f1] |> Map.put(:occupant, "w-r2")
-        remove_piece_old_occupant =
-          new_chess_board[:h1] |> Map.put(:occupant, nil)
-        new_chess_board
-        |> Map.put(:f1, move_piece)
-        |> Map.put(:h1, remove_piece_old_occupant)
-      _ ->
-        new_chess_board
+    if castling_mode == :to_the_left or castling_mode == :to_the_right do
+      move_piece =
+        new_chess_board[rook_destination_coordinate_atom] |> Map.put(:occupant, rook_piece_id)
+      remove_piece_old_occupant =
+        new_chess_board[rook_origin_coordinate_atom] |> Map.put(:occupant, nil)
+      new_chess_board
+      |> Map.put(rook_destination_coordinate_atom, move_piece)
+      |> Map.put(rook_origin_coordinate_atom, remove_piece_old_occupant)
+    else
+      new_chess_board
     end
   end
 
