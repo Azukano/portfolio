@@ -23,10 +23,10 @@ defmodule PortfolioWeb.ChessLive do
       white_king_mate: nil,
       player_turn: :chess_pieces_white,
       check_mate: nil,
-      white_king_made_move: false,
-      black_king_made_move: false,
-      white_rooks_made_move: [],
-      black_rooks_made_move: [] )
+      king_made_first_move: [],
+      white_rooks_that_made_move: [],
+      black_rooks_that_made_move: []
+    )
     {:ok, socket}
   end
 
@@ -91,15 +91,26 @@ defmodule PortfolioWeb.ChessLive do
 
     if validate_color_tile == :red do
 
-      updated_pieces_coordinate_attacker =
-        Chess.update_chess_pieces_attacker(attacker_piece_coordinate, target_coordinate, socket.assigns[chess_piece_side])
+      rook_id = if Chess.is_rook?(attacker_piece_role), do: Chess.determine_chess_piece_id(attacker_piece_coordinate, socket.assigns.chess_board)
+      king_id = if Chess.is_king?(attacker_piece_role), do: Chess.determine_chess_piece_id(attacker_piece_coordinate, socket.assigns.chess_board)
 
+      king_made_castling =
+        if Chess.is_king?(attacker_piece_role) do
+          Chess.king_made_two_steps(attacker_piece_coordinate, target_coordinate) |> elem(1)
+        else
+          false
+        end
+
+      updated_pieces_coordinate_attacker =
+          Chess.update_chess_pieces_attacker(attacker_piece_coordinate, target_coordinate, socket.assigns[chess_piece_side], king_made_castling)
       #remove opponent piece from entire map (DELETE OPPONENT)
       updated_pieces_coordinate_opponent =
         Chess.update_chess_pieces_opponent(target_coordinate, socket.assigns[chess_pieces_opponent], socket.assigns.past_pone_tuple_combo)
 
       updated_tiles_occupant =
-        Chess.update_chess_board(attacker_piece_coordinate, target_coordinate, socket.assigns.chess_board, attacker_piece_role, socket.assigns.past_pone_tuple_combo)
+        Chess.update_chess_board(attacker_piece_coordinate, target_coordinate, socket.assigns.chess_board, attacker_piece_role, socket.assigns.past_pone_tuple_combo, king_made_castling)
+
+
 
       # pastpone
       past_pone_tuple_combo = Chess.past_pone(attacker_piece_role, sel_no, attacker_piece_coordinate_no, attacker_piece_coordinate_alpha, target_coordinate, chess_piece_side)
@@ -115,7 +126,6 @@ defmodule PortfolioWeb.ChessLive do
           { 0, _ } -> :stale_mate
           { _, _ } -> :continue
         end
-      IO.inspect check_mate
       # player point of view for attacker/opponent side last layer function, returns value new socket!
       if chess_piece_side == :chess_pieces_white do
         socket = assign(socket,
@@ -131,10 +141,18 @@ defmodule PortfolioWeb.ChessLive do
           check_condition_black: opponent_king_location in presume_tiles_attacker,
           check_condition_white: attacker_king_location in presume_tiles_opponent,
           player_turn: :chess_pieces_black,
-          check_mate: check_mate
-          # black_king_mate: { the_mate, mate_steps },
-          # black_king_mate_coordinate: the_mate_coordinate
-          )
+          check_mate: check_mate,
+          white_rooks_that_made_move:
+            if(Chess.is_rook?(attacker_piece_role) and rook_id not in socket.assigns.white_rooks_that_made_move,
+              do: [rook_id | socket.assigns.white_rooks_that_made_move],
+              else: socket.assigns.white_rooks_that_made_move
+            ),
+          king_made_first_move:
+            if(Chess.is_king?(attacker_piece_role) and king_id not in socket.assigns.king_made_first_move,
+              do: [king_id | socket.assigns.king_made_first_move],
+              else: socket.assigns.king_made_first_move
+            )
+        )
 
         { :noreply, socket }
       else
@@ -151,10 +169,18 @@ defmodule PortfolioWeb.ChessLive do
           check_condition_white: opponent_king_location in presume_tiles_attacker,
           check_condition_black: attacker_king_location in presume_tiles_opponent,
           player_turn: :chess_pieces_white,
-          check_mate: check_mate
-          # white_king_mate: { the_mate, mate_steps },
-          # white_king_mate_coordinate: the_mate_coordinate
-          )
+          check_mate: check_mate,
+          black_rooks_that_made_move:
+            if(Chess.is_rook?(attacker_piece_role) and rook_id not in socket.assigns.black_rooks_that_made_move,
+            do: [rook_id | socket.assigns.black_rooks_that_made_move],
+            else: socket.assigns.black_rooks_that_made_move
+            ),
+          king_made_first_move:
+            if(Chess.is_king?(attacker_piece_role) and king_id not in socket.assigns.king_made_first_move,
+              do: [king_id | socket.assigns.king_made_first_move],
+              else: socket.assigns.king_made_first_move
+            )
+      )
 
         { :noreply, socket }
       end
@@ -430,7 +456,9 @@ defmodule PortfolioWeb.ChessLive do
               socket.assigns.chess_board,
               attacker_piece_role,
               socket.assigns.chess_pieces_white,
-              socket.assigns.chess_pieces_black
+              socket.assigns.chess_pieces_black,
+              socket.assigns.king_made_first_move,
+              socket.assigns.white_rooks_that_made_move
             )
           else
             Chess.tile_shade_red(
@@ -439,7 +467,9 @@ defmodule PortfolioWeb.ChessLive do
               socket.assigns.chess_board,
               attacker_piece_role,
               socket.assigns.chess_pieces_black,
-              socket.assigns.chess_pieces_white
+              socket.assigns.chess_pieces_white,
+              socket.assigns.king_made_first_move,
+              socket.assigns.black_rooks_that_made_move
             )
           end |> elem(0)
           attacker_piece_occupant_id =

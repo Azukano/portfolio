@@ -277,7 +277,7 @@ defmodule Portfolio.Chess do
       chess_pieces_opponent =
         update_chess_pieces_opponent(x, chess_pieces_opponent)
       chess_board =
-        update_chess_board(target_coordinate, x, chess_board, attacker_piece_role)
+        update_chess_board(target_coordinate, x, chess_board, attacker_piece_role, { nil, nil, false, nil} )
       presume_tiles =
         presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_piece_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
@@ -323,7 +323,7 @@ defmodule Portfolio.Chess do
       chess_pieces_opponent =
         update_chess_pieces_opponent(x, chess_pieces_opponent)
       chess_board =
-        update_chess_board(target_coordinate, x, chess_board, attacker_piece_role)
+        update_chess_board(target_coordinate, x, chess_board, attacker_piece_role, { nil, nil, false, nil} )
       presume_tiles =
         presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_piece_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
@@ -469,7 +469,7 @@ defmodule Portfolio.Chess do
       chess_pieces_opponent =
         update_chess_pieces_opponent(x, chess_pieces_opponent)
       chess_board =
-        update_chess_board(target_coordinate, x, chess_board, attacker_piece_role)
+        update_chess_board(target_coordinate, x, chess_board, attacker_piece_role, { nil, nil, false, nil} )
       presume_tiles =
         presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_piece_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
@@ -633,7 +633,7 @@ defmodule Portfolio.Chess do
       chess_pieces_opponent =
         update_chess_pieces_opponent(x, chess_pieces_opponent)
       chess_board =
-        update_chess_board(target_coordinate, x, chess_board, attacker_piece_role)
+        update_chess_board(target_coordinate, x, chess_board, attacker_piece_role, { nil, nil, false, nil} )
       presume_tiles =
         presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_piece_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
@@ -647,7 +647,7 @@ defmodule Portfolio.Chess do
   end
 
   #KING MOVESET
-  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent)
+  def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent, did_king_made_a_move_before, rooks_set_aside)
   when attacker_piece_role == "king" do
 
     alpha_binary = for x <- 0..7 do
@@ -656,8 +656,8 @@ defmodule Portfolio.Chess do
       end
     end |> Enum.find(fn x -> x != nil end )
     target_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
-
-
+    attacker_piece_side = determine_chess_piece_side(target_coordinate, chess_board, :self)
+    castling_row_of_effect = if(attacker_piece_side == :chess_pieces_white, do: 1, else: 8)
 
     chess_pieces_attacker_no_king = chess_pieces_attacker |> Map.delete(target_coordinate)
     chess_board_removed_king = chess_board |> Map.delete(target_coordinate)
@@ -672,6 +672,13 @@ defmodule Portfolio.Chess do
 
     targets_atom_list =
       move_king(alpha_binary, sel_no, chess_pieces_attacker, presume_tiles_opponent)
+
+    castling_left =
+      castling_left(attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside)
+    castling_right =
+      castling_right(attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside)
+
+    targets_atom_list = [ castling_left, castling_right | targets_atom_list]
 
     tile_shade_red(target_coordinate , targets_atom_list, chess_board)
 
@@ -699,6 +706,43 @@ defmodule Portfolio.Chess do
     end
   end
 
+  def castling_left(attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside) do
+    black_or_white_left_rook =
+      if(attacker_piece_side == :chess_pieces_white, do: "w-r1", else: "b-r1")
+    black_or_white_right_king =
+      if(attacker_piece_side == :chess_pieces_white, do: "w-k1", else: "b-k1")
+    if black_or_white_right_king not in did_king_made_a_move_before and black_or_white_left_rook not in rooks_set_aside
+    and (String.to_atom("d"<>Integer.to_string(castling_row_of_effect)) not in presume_tiles_opponent)
+    and (String.to_atom("c"<>Integer.to_string(castling_row_of_effect)) not in presume_tiles_opponent)
+    and (chess_board |> Map.get(String.to_atom("d"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil)
+    and (chess_board |> Map.get(String.to_atom("c"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil)
+    and (chess_board |> Map.get(String.to_atom("b"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil) do
+      if attacker_piece_side == :chess_pieces_white do
+        :c1
+      else
+        :c8
+      end
+    end
+  end
+
+  def castling_right(attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside) do
+    black_or_white_right_rook =
+      if(attacker_piece_side == :chess_pieces_white, do: "w-r2", else: "b-r2")
+    black_or_white_right_king =
+      if(attacker_piece_side == :chess_pieces_white, do: "w-k1", else: "b-k1")
+    if black_or_white_right_king not in did_king_made_a_move_before and black_or_white_right_rook not in rooks_set_aside
+    and (String.to_atom("g"<>Integer.to_string(castling_row_of_effect)) not in presume_tiles_opponent)
+    and (String.to_atom("f"<>Integer.to_string(castling_row_of_effect)) not in presume_tiles_opponent)
+    and (chess_board |> Map.get(String.to_atom("g"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil)
+    and (chess_board |> Map.get(String.to_atom("f"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil) do
+      if attacker_piece_side == :chess_pieces_white do
+        :g1
+      else
+        :g8
+      end
+    end
+  end
+
   #KNIGHT MOVESET
   def tile_shade_red(sel_alpha, sel_no, chess_board, attacker_piece_role, chess_pieces_attacker, chess_pieces_opponent)
   when attacker_piece_role == "knight" do
@@ -720,7 +764,7 @@ defmodule Portfolio.Chess do
       chess_pieces_opponent =
         update_chess_pieces_opponent(x, chess_pieces_opponent)
       chess_board =
-        update_chess_board(target_coordinate, x, chess_board, attacker_piece_role)
+        update_chess_board(target_coordinate, x, chess_board, attacker_piece_role, { nil, nil, false, nil} )
       presume_tiles =
         presume_tiles(chess_pieces_opponent, chess_pieces_attacker, opponent_piece_side, chess_board) |> elem(0)
       attacker_king_coordinate in presume_tiles
@@ -1030,8 +1074,54 @@ defmodule Portfolio.Chess do
     end
   end
 
+  def get_chess_piece_side(chess_piece_coordinate, chess_pieces, which_side_switch) do
+    prefix_chess_piece = String.first(chess_pieces[chess_piece_coordinate].role_id)
+    case { prefix_chess_piece, which_side_switch } do
+      { "w", :opponent } -> :chess_pieces_black
+      { "w", :self } -> :chess_pieces_white
+      { "b", :opponent } -> :chess_pieces_white
+      { "b", :self } -> :chess_pieces_black
+    end
+  end
+
+  def determine_chess_piece_id(chess_piece_coordinate, chess_board) do
+    chess_board
+    |> Map.get(chess_piece_coordinate)
+    |> Map.get(:occupant)
+  end
+
   def valid_tile_list, do: @valid_tile_list
   def alpha_list, do: @alpha_list
+
+  def is_rook?("rook"), do: true
+  def is_rook?(_), do: false
+  def is_king?("king"), do: true
+  def is_king?(_), do: false
+
+  def king_made_two_steps(origin_coordinate, target_coordinate) do
+    origin_coordinate_alpha = Atom.to_string(origin_coordinate) |> String.first()
+    origin_coordinate_alpha = for x <- 0..7 do
+      if origin_coordinate_alpha == @alpha_list |> Enum.at(x) do
+        96 + x + 1
+      end
+    end |> Enum.find(fn x -> x != nil end )
+
+    target_coordinate_alpha = Atom.to_string(target_coordinate) |> String.first()
+    target_coordinate_alpha = for x <- 0..7 do
+      if target_coordinate_alpha == @alpha_list |> Enum.at(x) do
+        96 + x + 1
+      end
+    end |> Enum.find(fn x -> x != nil end )
+
+    IO.inspect target_coordinate_alpha, label: "target"
+    IO.inspect origin_coordinate_alpha, label: "origin"
+
+    cond do
+      target_coordinate_alpha - origin_coordinate_alpha < -1  -> { :true, :to_the_left }
+      target_coordinate_alpha - origin_coordinate_alpha > 1 -> { :true, :to_the_right }
+      target_coordinate_alpha - origin_coordinate_alpha == 1 or -1 -> { :false, :false }
+    end
+  end
 
   #######################################################################################################
   # UPDATING MAPS SECTION, USED BY SOCKET UPDATE LIVE VIEW PAGE AS A HELPER                             #
@@ -1053,18 +1143,57 @@ defmodule Portfolio.Chess do
     iex> Chess.update_chess_pieces_attacker(:a2, :a4, chess_pieces_attacker)
     %{:a4, %ChessPieces{role: "pone", ...}}
   """
-  def update_chess_pieces_attacker(origin_coordinate, new_coordinate, chess_pieces_attacker) do
+  def update_chess_pieces_attacker(origin_coordinate, new_coordinate, chess_pieces_attacker, castling_mode \\ false) do
     new_coordinate_alpha = Atom.to_string(new_coordinate) |> String.first()
     new_coordinate_no = Atom.to_string(new_coordinate) |> String.last()
+    black_white_rook_coordinate_no =
+      if get_chess_piece_side(origin_coordinate, chess_pieces_attacker, :self) == :chess_pieces_white do
+        8
+      else
+        1
+      end
+    left_right_rook_alpha =
+      if castling_mode == :to_the_left do
+        "a"
+      else
+        "h"
+      end
+
     move_piece =
       chess_pieces_attacker
       |> Map.get(origin_coordinate)
       |> Map.put(:coordinate_alpha, new_coordinate_alpha)
       |> Map.put(:coordinate_no, new_coordinate_no)
 
-    chess_pieces_attacker
-    |> Map.delete(origin_coordinate)
-    |> Map.put(new_coordinate, move_piece)
+    updated_chess_pieces_attacker =
+      chess_pieces_attacker
+      |> Map.delete(origin_coordinate)
+      |> Map.put(new_coordinate, move_piece)
+
+    rook_atom_coordinate =
+      String.to_atom(left_right_rook_alpha<>black_white_rook_coordinate_no)
+    case castling_mode do
+      :to_the_left ->
+        move_piece =
+          updated_chess_pieces_attacker
+          |> Map.get(rook_atom_coordinate)
+          |> Map.put(:coordinate_alpha, left_right_rook_alpha)
+          |> Map.put(:coordinate_no, black_white_rook_coordinate_no)
+          updated_chess_pieces_attacker
+          |> Map.delete(rook_atom_coordinate)
+          |> Map.put(:d1, move_piece)
+      :to_the_right ->
+        move_piece =
+          updated_chess_pieces_attacker
+          |> Map.get(rook_atom_coordinate)
+          |> Map.put(:coordinate_alpha, left_right_rook_alpha)
+          |> Map.put(:coordinate_no, black_white_rook_coordinate_no)
+        updated_chess_pieces_attacker
+        |> Map.delete(rook_atom_coordinate)
+        |> Map.put(:f1, move_piece)
+      _ ->
+        updated_chess_pieces_attacker
+    end
   end
 
   @doc """
@@ -1096,12 +1225,14 @@ defmodule Portfolio.Chess do
     end
   end
 
-  def update_chess_board(origin_coordinate, new_coordinate, chess_board, attacker_piece_role, past_pone_tuple_combo \\ { nil, nil, false, nil} ) do
+  def update_chess_board(origin_coordinate, new_coordinate, chess_board, attacker_piece_role, past_pone_tuple_combo, castling_mode \\ false) do
     piece_id = chess_board[origin_coordinate].occupant
+
     move_piece =
       chess_board[new_coordinate] |> Map.put(:occupant, piece_id)
     remove_piece_old_occupant =
       chess_board[origin_coordinate] |> Map.put(:occupant, nil)
+
     remove_past_pone =
       if past_pone_tuple_combo |> elem(2) == true
       and past_pone_tuple_combo |> elem(0) == new_coordinate do
@@ -1110,18 +1241,41 @@ defmodule Portfolio.Chess do
         |> Map.put(:occupant, nil)
       end
 
-    if remove_past_pone != nil and attacker_piece_role == "pone" do
-      chess_board
-      |> Map.put(new_coordinate, move_piece)
-      |> Map.put(origin_coordinate, remove_piece_old_occupant)
-      |> Map.put(past_pone_tuple_combo |> elem(1), remove_past_pone)
-    else
-      chess_board
-      |> Map.put(new_coordinate, move_piece)
-      |> Map.put(origin_coordinate, remove_piece_old_occupant)
-    end
+    new_chess_board =
+      if remove_past_pone != nil and attacker_piece_role == "pone" do
+        chess_board
+        |> Map.put(new_coordinate, move_piece)
+        |> Map.put(origin_coordinate, remove_piece_old_occupant)
+        |> Map.put(past_pone_tuple_combo |> elem(1), remove_past_pone)
+      else
+        chess_board
+        |> Map.put(new_coordinate, move_piece)
+        |> Map.put(origin_coordinate, remove_piece_old_occupant)
+      end
 
+    case castling_mode do
+      :to_the_left ->
+        move_piece =
+          new_chess_board[:d1] |> Map.put(:occupant, "w-r1")
+        remove_piece_old_occupant =
+          new_chess_board[:a1] |> Map.put(:occupant, nil)
+        new_chess_board
+        |> Map.put(:d1, move_piece)
+        |> Map.put(:a1, remove_piece_old_occupant)
+      :to_the_right ->
+        move_piece =
+          new_chess_board[:f1] |> Map.put(:occupant, "w-r2")
+        remove_piece_old_occupant =
+          new_chess_board[:h1] |> Map.put(:occupant, nil)
+        new_chess_board
+        |> Map.put(:f1, move_piece)
+        |> Map.put(:h1, remove_piece_old_occupant)
+      _ ->
+        new_chess_board
+    end
   end
+
+  #######################################################################################################
 
   def count_available_tiles(chess_board, chess_pieces_attacker, chess_pieces_opponent, past_pone_tuple_combo) do
     for { k, v } <- chess_pieces_opponent do
@@ -1139,7 +1293,11 @@ defmodule Portfolio.Chess do
       if piece_role == "pone" do
         tile_shade_red(piece_coordinate_alpha, piece_coordinate_no, chess_board, piece_role, chess_pieces_opponent, chess_pieces_attacker, past_pone_tuple_combo)
       else
-        tile_shade_red(piece_coordinate_alpha, piece_coordinate_no, chess_board, piece_role, chess_pieces_opponent, chess_pieces_attacker)
+        if piece_role == "king" do
+          tile_shade_red(piece_coordinate_alpha, piece_coordinate_no, chess_board, piece_role, chess_pieces_opponent, chess_pieces_attacker, ["w-k1", "b-k1"], ["w-r1", "w-r2", "b-r1", "b-r2"])
+        else
+          tile_shade_red(piece_coordinate_alpha, piece_coordinate_no, chess_board, piece_role, chess_pieces_opponent, chess_pieces_attacker)
+        end
       end |> elem(1)
     end
   end
