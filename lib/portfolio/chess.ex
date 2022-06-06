@@ -674,9 +674,9 @@ defmodule Portfolio.Chess do
       move_king(alpha_binary, sel_no, chess_pieces_attacker, presume_tiles_opponent)
 
     castling_left =
-      castling_left(attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside)
+      castling_left(target_coordinate, attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside)
     castling_right =
-      castling_right(attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside)
+      castling_right(target_coordinate, attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside)
 
     targets_atom_list = [ castling_left, castling_right | targets_atom_list]
 
@@ -706,7 +706,7 @@ defmodule Portfolio.Chess do
     end
   end
 
-  def castling_left(attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside) do
+  def castling_left(origin_coordinate, attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside) do
     black_or_white_left_rook =
       if(attacker_piece_side == :chess_pieces_white, do: "w-r1", else: "b-r1")
     black_or_white_right_king =
@@ -716,7 +716,8 @@ defmodule Portfolio.Chess do
     and (String.to_atom("c"<>Integer.to_string(castling_row_of_effect)) not in presume_tiles_opponent)
     and (chess_board |> Map.get(String.to_atom("d"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil)
     and (chess_board |> Map.get(String.to_atom("c"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil)
-    and (chess_board |> Map.get(String.to_atom("b"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil) do
+    and (chess_board |> Map.get(String.to_atom("b"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil)
+    and origin_coordinate not in presume_tiles_opponent do
       if attacker_piece_side == :chess_pieces_white do
         :c1
       else
@@ -725,7 +726,7 @@ defmodule Portfolio.Chess do
     end
   end
 
-  def castling_right(attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside) do
+  def castling_right(origin_coordinate, attacker_piece_side, chess_board, presume_tiles_opponent, castling_row_of_effect, did_king_made_a_move_before, rooks_set_aside) do
     black_or_white_right_rook =
       if(attacker_piece_side == :chess_pieces_white, do: "w-r2", else: "b-r2")
     black_or_white_right_king =
@@ -734,7 +735,8 @@ defmodule Portfolio.Chess do
     and (String.to_atom("g"<>Integer.to_string(castling_row_of_effect)) not in presume_tiles_opponent)
     and (String.to_atom("f"<>Integer.to_string(castling_row_of_effect)) not in presume_tiles_opponent)
     and (chess_board |> Map.get(String.to_atom("g"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil)
-    and (chess_board |> Map.get(String.to_atom("f"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil) do
+    and (chess_board |> Map.get(String.to_atom("f"<>Integer.to_string(castling_row_of_effect))) |> Map.get(:occupant) == nil)
+    and origin_coordinate not in presume_tiles_opponent do
       if attacker_piece_side == :chess_pieces_white do
         :g1
       else
