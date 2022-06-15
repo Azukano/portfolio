@@ -88,4 +88,4 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 ## Software Testers
   * Rudy Mulang 
   * vy of chess discord community
-  * HeroBlood of Russia Dragon Nest Community
+  * HeroBloods/HeroBloody of Russia Dragon Nest Community
