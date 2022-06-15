@@ -36,4 +36,10 @@ defmodule PortfolioWeb.GamesLive do
     {:noreply, socket}
   end
 
+  def handle_event("flash", _, socket) do
+    IO.puts "FLASH"
+    socket = put_flash(socket, :info, "It worked!")
+    {:noreply, socket}
+  end
+
 end

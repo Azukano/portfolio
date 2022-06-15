@@ -4,6 +4,7 @@ defmodule Portfolio.Chess do
   require Integer
 
   @alpha_list ["a", "b", "c", "d", "e", "f", "g", "h"]
+  @numeric_list ['1', '2', '3', '4', '5', '6', '7', '8', '9']
   @valid_tile_list [
     :a1, :b1, :c1, :d1, :e1, :f1, :g1, :h1,
     :a2, :b2, :c2, :d2, :e2, :f2, :g2, :h2,
@@ -39,25 +40,24 @@ defmodule Portfolio.Chess do
 
   def fill_board(i \\ 0, j \\ 0, k \\ 0, chess_board \\ %{}, overlay \\ :false) do
     # actual chess row and columns & color b/w
-    alpha_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
     no_range = 1..8
     color_tuple = {:black, :white, :nil}
 
     board = if overlay == :false do
       ChessTiles.tiles(
-       coordinate_alpha: elem(Enum.fetch(alpha_list, i), 1),
+       coordinate_alpha: elem(Enum.fetch(@alpha_list, i), 1),
        color: elem(color_tuple, j),
        coordinate_no: elem(Enum.fetch(no_range, k), 1),
        occupant: nil)
     else
       ChessTiles.tiles(
-       coordinate_alpha: elem(Enum.fetch(alpha_list, i), 1),
+       coordinate_alpha: elem(Enum.fetch(@alpha_list, i), 1),
        color: elem(color_tuple, 2),
        coordinate_no: elem(Enum.fetch(no_range, k), 1))
     end
 
     # !IMPORTANT Map.put 2nd arg :a1 concatinated alpha + no
-    chess_board = Map.put(chess_board, String.to_atom(elem(Enum.fetch(alpha_list, i), 1) <> Integer.to_string(elem(Enum.fetch(no_range, k), 1))), board)
+    chess_board = Map.put(chess_board, String.to_atom(elem(Enum.fetch(@alpha_list, i), 1) <> Integer.to_string(elem(Enum.fetch(no_range, k), 1))), board)
 
     #call itself to iterate
     fill_board(i + 1, j + 1, k, chess_board, overlay)
@@ -1096,6 +1096,7 @@ defmodule Portfolio.Chess do
 
   def valid_tile_list, do: @valid_tile_list
   def alpha_list, do: @alpha_list
+  def numeric_list, do: @numeric_list
 
   def is_rook?("rook"), do: true
   def is_rook?(_), do: false
@@ -1122,6 +1123,15 @@ defmodule Portfolio.Chess do
       target_coordinate_alpha - origin_coordinate_alpha > 1 -> { :true, :to_the_right }
       target_coordinate_alpha - origin_coordinate_alpha == 1 or -1 -> { :false, :false }
     end
+  end
+
+  def chess_role_count_and_role_id(chess_pieces, target_role) do
+    for { _k, v } <- chess_pieces, v.role == target_role do
+      v.role_id
+    end
+    |> List.last()
+    |> String.to_charlist()
+    |> List.update_at(3, &(&1 +1))
   end
 
   #######################################################################################################
@@ -1195,6 +1205,11 @@ defmodule Portfolio.Chess do
     else
       updated_chess_pieces_attacker
     end
+  end
+
+  def update_chess_pieces_attacker_pone_promote(origin_coordinate, chess_pieces_attacker, target_role, pone_promotion_initial_piece) do
+    new_pone_role = chess_pieces_attacker[origin_coordinate] |> Map.put(:role, target_role) |> Map.put(:role_id, pone_promotion_initial_piece)
+    chess_pieces_attacker |> Map.delete(origin_coordinate) |> Map.put(origin_coordinate, new_pone_role)
   end
 
   @doc """
@@ -1301,6 +1316,11 @@ defmodule Portfolio.Chess do
     else
       new_chess_board
     end
+  end
+
+  def update_chess_board_pone_promotion(origin_coordinate, chess_board, new_pone_role) do
+    new_occupant = chess_board[origin_coordinate] |> Map.put(:occupant, new_pone_role)
+    chess_board |> Map.delete(origin_coordinate) |> Map.put(origin_coordinate, new_occupant)
   end
 
   #######################################################################################################

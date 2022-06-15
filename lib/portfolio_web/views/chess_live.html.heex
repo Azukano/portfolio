@@ -1,65 +1,82 @@
 <section 
-    phx-window-keydown="key_press" 
-    phx-window-keyup="tile_selection" 
-    class="bg-[#242526] h-full text-[#e6e6e6] flex flex-col justify-center"
-    >
+    class="bg-[#242526] h-full text-[#e6e6e6] flex flex-col justify-center">
     <!-- WRAPPER -->
     <div class="flex flex-wrap flex-col justify-center">
-    <% @chess_board == @chess_board_overlay %>
-        <div class="w-[360px] h-[360px] xs:w-[540px] xs:h-[540px] md:w-[800px] md:h-[800px] mx-auto text-center flex justify-center items-center">
-            <div class="relative w-full h-full flex flex-col-reverse">
-
-                <%= for no <- 1..8 do %>
-                <ul class="w-[360px] h-[45px] xs:w-[540px] xs:h-[67.5px] md:h-[100px] md:w-[800px] flex flex-wrap items-center justify-center">
-                    <%= for i <- 1..8, {_tile_id, tile} <- @chess_board, tile.coordinate_no == no, tile.coordinate_alpha == <<96+i>> do %>  
-                    <li class="relative h-full w-[12.5%] text-center py-0 xs:py-6  border border-[#c7c7c7]/25" 
-                        style={"background-color: #{tile.color}; background-image: url(/images/chess/chess-bg.jpg);"}
+        
+        <div class="bg-[#6e3010] p-0 sm-md:p-6 mx-auto">
+            <% modal_wheelie = if(@pone_promotion_modal_toggle, do: "Wheelie", else: "noWheelie") %>
+            <div class="w-screen h-[100vw] xs:h-[100vw] sm:w-[540px] sm:h-[540px] md:w-[600px] md:h-[600px] mx-auto text-center flex justify-center items-center border-2 border-[#242526]">
+                <div class="relative w-full h-full flex flex-col-reverse"        
+                 phx-window-keydown="key_press"
+                 phx-window-keyup="tile_selection"
+                 phx-hook={"#{modal_wheelie}"} id={"#{modal_wheelie}"}>
+    
+                    <%= for no <- 1..8 do %>
+                    <ul class="w-[100%] h-[12.5%] flex flex-wrap items-center justify-center">
+                        <%= for i <- 1..8, {_tile_id, tile} <- @chess_board, tile.coordinate_no == no, tile.coordinate_alpha == <<96+i>> do %>
+                        <% modal_opacity = if(@pone_promotion_modal_toggle, do: 50, else: 100) %>
+                        <!-- TILE -->
+                        <%= if @pone_promotion_modal_toggle and no == Atom.to_string(@selected_coordinate_atom) |> String.last |> String.to_integer
+                            and <<96+i>> == Atom.to_string(@selected_coordinate_atom) |> String.first  do %>
+                        <li class="relative h-full w-[12.5%] text-center py-0 xs:py-6  border border-[#c7c7c7]/25" 
+                        style={"background-color: #{tile.color}; background-image: url(/images/chess/chess-bg.jpg); opacity: 100%; z-index: 100;"}>
+                            <img src={"/images/chess/#{@pone_promotion_initial_piece}.svg"} alt={"#{@pone_promotion_initial_piece}.svg"}
+                        style="width: 100%; position: absolute; top: 0; z-index: 10"
                         phx-click="tile_click" phx-value-sel_no={tile.coordinate_no} phx-value-sel_alpha={tile.coordinate_alpha}>
-                    <!-- PUT PIECE LABEL/TILE SVG -->
-                        <%= unless tile.occupant == nil do %>
-                        <img src={"/images/chess/#{tile.occupant}.svg"} alt="#{tile.occupant}"
-                        style="width: 100%; position: absolute; top: 0; z-index: 10">
+                        </li>
+                        <% else %>
+                        <li class="relative h-full w-[12.5%] text-center py-0 xs:py-6  border border-[#c7c7c7]/25" 
+                        style={"background-color: #{tile.color}; background-image: url(/images/chess/chess-bg.jpg); opacity: #{modal_opacity}%;"}
+                        phx-click="tile_click" phx-value-sel_no={tile.coordinate_no} phx-value-sel_alpha={tile.coordinate_alpha}>
+                        <!-- PUT PIECE LABEL/TILE SVG -->
+                            <%= unless tile.occupant == nil do %>
+                            <img src={"/images/chess/#{tile.occupant}.svg"} alt={"#{tile.occupant}"}
+                            style="width: 100%; position: absolute; top: 0; z-index: 10">
+                            <% end %>
+                        <!-- SELECTION TILE SVG -->
+                        <%= if tile.coordinate_alpha == @sel_alpha and tile.coordinate_no == @sel_no do %>
+                            <svg style="position: absolute; right: calc(50% - 6.5px); top: 0; transform: rotate(180deg); z-index: 10;" width="14" height="13"
+                                viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 0L14 13H0L7 0Z" fill="#C4B5Fd" />
+                            </svg>
+                            <svg style="position: absolute; right: 0; top: calc(50% - 6.5px); transform: rotate(-90deg); z-index: 10" width="14" height="13"
+                                viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 0L14 13H0L7 0Z" fill="#C4B5Fd" />
+                            </svg>
+                            <svg style="position: absolute; left: 0; top: calc(50% - 6.5px); transform: rotate(90deg); z-index: 10" width="14" height="13"
+                                viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 0L14 13H0L7 0Z" fill="#C4B5Fd" />
+                            </svg>
+                            <svg style="position: absolute; left: calc(50% - 6.5px); bottom: 0; z-index: 10" width="14" height="13"
+                                viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 0L14 13H0L7 0Z" fill="#C4B5Fd" />
+                            </svg>
                         <% end %>
-                    <!-- SELECTION TILE SVG -->
-                    <%= if tile.coordinate_alpha == @sel_alpha and tile.coordinate_no == @sel_no do %>
-                        <svg style="position: absolute; right: calc(50% - 6.5px); top: 0; transform: rotate(180deg); z-index: 10;" width="14" height="13"
-                            viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 0L14 13H0L7 0Z" fill="#C4B5Fd" />
-                        </svg>
-                        <svg style="position: absolute; right: 0; top: calc(50% - 6.5px); transform: rotate(-90deg); z-index: 10" width="14" height="13"
-                            viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 0L14 13H0L7 0Z" fill="#C4B5Fd" />
-                        </svg>
-                        <svg style="position: absolute; left: 0; top: calc(50% - 6.5px); transform: rotate(90deg); z-index: 10" width="14" height="13"
-                            viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 0L14 13H0L7 0Z" fill="#C4B5Fd" />
-                        </svg>
-                        <svg style="position: absolute; left: calc(50% - 6.5px); bottom: 0; z-index: 10" width="14" height="13"
-                            viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 0L14 13H0L7 0Z" fill="#C4B5Fd" />
-                        </svg>
+                        </li>
+                        <% end %>
+    
+                        <% end %>
+                    </ul>
                     <% end %>
-                    </li>
-                    <% end %>
-                </ul>
-                <% end %>
-                <%= for no <- 1..8 do %>
-                <ul class="absolute h-[45px] xs:h-[67.5px] md:h-[100px] w-full flex flex-wrap items-center justify-center" style={"bottom: calc((12.5%*#{no}) - 12.5%)"}>
-                    <%= for i <- 1..8, {_tile_id, tile} <- @chess_board_overlay, tile.coordinate_no == no, tile.coordinate_alpha == <<96+i>> do %>  
-                    <% opacity = if tile.color == :black do 50 else 30 end %>
-                    <% z_index = if tile.color == :red do 100 else 0 end %>
+                    <%= for no <- 1..8 do %>
+                    <ul class="absolute h-[12.5%] w-full flex flex-wrap items-center justify-center" style={"bottom: calc((12.5%*#{no}) - 12.5%)"}>
+                        <%= for i <- 1..8, {_tile_id, tile} <- @chess_board_overlay, tile.coordinate_no == no, tile.coordinate_alpha == <<96+i>> do %>  
+                        <% opacity = if tile.color == :black do 50 else 30 end %>
+                        <% z_index = if tile.color == :red do 100 else 0 end %>
                         <li class="relative h-full w-[12.5%] text-center border border-[#c7c7c7] mix-blend-overlay contrast-75" 
                             style={"background-color: #{tile.color}; opacity: #{opacity}%; z-index: #{z_index}"}
                             phx-click="tile_click" phx-value-sel_no={tile.coordinate_no} phx-value-sel_alpha={tile.coordinate_alpha}>
                         </li>
+                        <% end %>
+                    </ul>
                     <% end %>
-                </ul>
-                <% end %>
-
+    
+                </div>
             </div>
         </div>
-        <div class="h-6 xs:h-10 w-[360px] xs:w-[540px] md:w-[800px] bg-black mx-auto mt-2 text-left px-1 p-0 xs:p-2 flex justify-between">
-            <div class="w-[1/3] text-xs xs:text-base">
+
+        <div class="mx-auto flex w-screen sm-md:w-[588px] md:w-[648px]">
+            <div class="grow-[1] text-xs xs:text-sm md:text-base text-left">
                 <span class="">SELECTOR COORDINATE: </span>
                 <span class="font-bold uppercase text-red-500">
                     <%= if @sel_alpha < "a"  or @sel_alpha > "h"
@@ -70,7 +87,7 @@
                     <% end %>
                 </span>
             </div>
-            <div class="w-[1/3] text-xs xs:text-base">
+            <div class="grow-[1] text-xs xs:text-sm md:text-base text-center">
                 <%= if @check_mate == nil or @check_mate == :continue do %>
                     <%= if @player_turn == :chess_pieces_white do %>
                         <span class="font-bold uppercase text-red-500">WHITE</span><span>'s</span>
@@ -95,24 +112,21 @@
                     <% end %>
                 <% end %>
             </div>
-            <div class="w-[1/3] text-xs xs:text-base">
-                <%= if @check_condition_black == true and @check_mate == nil do %>
+            <div class="grow-[1] md:w-[216px] text-xs xs:text-sm md:text-base text-right">
+                <%= if @check_condition_black == true and (@check_mate == nil or @check_mate == :continue) do %>
                     <span>CHECK CONDITION: </span>
                     <span class="font-bold uppercase text-red-500">
                     <span> BLACK </span>
                     </span>
                 <% end %>
-                <%= if @check_condition_white == true and @check_mate == nil do %>
+                <%= if @check_condition_white == true and (@check_mate == nil or @check_mate == :continue) do %>
                     <span>CHECK CONDITION: </span>
                     <span class="font-bold uppercase text-red-500">
                     <span> WHITE </span>
                     </span>
                 <% end %>
             </div>
-        </div>
+        </div> 
+
     </div>
 </section>
-<!--
-    <img src="/images/chess/black-king.svg" alt="b-king"
-        style="width: 100%; position: absolute; top: -8%">
--->

@@ -2,6 +2,8 @@ defmodule PortfolioWeb.ChessLive do
   require Integer
   use PortfolioWeb, :live_view
 
+  @role_list { "rook", "bishop", "knight", "queen" }
+
   alias Portfolio.Chess
 
   @impl true
@@ -25,7 +27,9 @@ defmodule PortfolioWeb.ChessLive do
       check_mate: nil,
       king_made_first_move: [],
       white_rooks_that_made_move: [],
-      black_rooks_that_made_move: []
+      black_rooks_that_made_move: [],
+      pone_promotion_modal_toggle: false,
+      pone_promotion_index_pointer: 0,
     )
     {:ok, socket}
   end
@@ -110,8 +114,6 @@ defmodule PortfolioWeb.ChessLive do
       updated_tiles_occupant =
         Chess.update_chess_board(attacker_piece_coordinate, target_coordinate, socket.assigns.chess_board, attacker_piece_role, socket.assigns.past_pone_tuple_combo, king_made_castling)
 
-
-
       # pastpone
       past_pone_tuple_combo = Chess.past_pone(attacker_piece_role, sel_no, attacker_piece_coordinate_no, attacker_piece_coordinate_alpha, target_coordinate, chess_piece_side)
       # king checkmate
@@ -126,6 +128,22 @@ defmodule PortfolioWeb.ChessLive do
           { 0, _ } -> :stale_mate
           { _, _ } -> :continue
         end
+
+      pone_reached_end =
+        if attacker_piece_role == "pone" and (target_coordinate |> Atom.to_string() |> String.last() |> String.to_integer() == 1 or
+        target_coordinate |> Atom.to_string() |> String.last() |> String.to_integer() == 8) do
+          :true
+        else
+          :false
+        end
+
+      pone_promotion_initial_piece =
+        if pone_reached_end do
+          for { _k, v } <- updated_pieces_coordinate_attacker, v.role == "rook" do
+            v.role_id
+          end |> List.last() |> String.to_charlist() |> List.update_at(3, &(&1 +1))
+        end
+
       # player point of view for attacker/opponent side last layer function, returns value new socket!
       if chess_piece_side == :chess_pieces_white do
         socket = assign(socket,
@@ -151,7 +169,10 @@ defmodule PortfolioWeb.ChessLive do
             if(Chess.is_king?(attacker_piece_role) and king_id not in socket.assigns.king_made_first_move,
               do: [king_id | socket.assigns.king_made_first_move],
               else: socket.assigns.king_made_first_move
-            )
+            ),
+          pone_promotion_modal_toggle: pone_reached_end,
+          pone_promotion_initial_piece: pone_promotion_initial_piece,
+          selected_coordinate_atom: target_coordinate
         )
 
         { :noreply, socket }
@@ -179,28 +200,114 @@ defmodule PortfolioWeb.ChessLive do
             if(Chess.is_king?(attacker_piece_role) and king_id not in socket.assigns.king_made_first_move,
               do: [king_id | socket.assigns.king_made_first_move],
               else: socket.assigns.king_made_first_move
-            )
+            ),
+          pone_promotion_modal_toggle: pone_reached_end,
+          pone_promotion_initial_piece: pone_promotion_initial_piece,
+          selected_coordinate_atom: target_coordinate
       )
-
-        { :noreply, socket }
+      { :noreply, socket }
       end
     else
       socket = assign(socket,
         selection_toggle: false,
         chess_board: socket.assigns.old_chess_board,
-        chess_board_overlay: socket.assigns.old_chess_board_overlay)
+        chess_board_overlay: socket.assigns.old_chess_board_overlay
+      )
 
       { :noreply, socket }
     end
   end
 
-
   # first keyup enter press
   def handle_event("tile_selection", %{"key" => key_up}, socket)
-    when key_up == "Enter" and socket.assigns.selection_toggle == false do
+    when key_up == "Enter" and socket.assigns.selection_toggle == false and not socket.assigns.pone_promotion_modal_toggle do
 
     move_tile_selection(socket)
 
+  end
+
+  def handle_event("tile_selection", %{"key" => key_up}, socket)
+  when key_up == "Enter" and socket.assigns.selection_toggle == false and socket.assigns.pone_promotion_modal_toggle do
+
+    IO.puts "first keyup enter press modal toggle on"
+
+    pone_modal_confirm(socket)
+
+  end
+
+  # pone promotion modal handle event
+  def handle_event("tile_click", %{"sel_no" => sel_no, "sel_alpha" => sel_alpha}, socket)
+  when socket.assigns.selection_toggle == false and socket.assigns.pone_promotion_modal_toggle == true do
+    IO.puts "modal on. click event"
+
+    pone_modal_confirm(socket)
+
+  end
+
+  def pone_modal_confirm(socket) do
+    chess_piece_side = Chess.determine_chess_piece_side(socket.assigns.selected_coordinate_atom, socket.assigns.chess_board, :self)
+    chess_pieces_opponent = Chess.determine_chess_piece_side(socket.assigns.selected_coordinate_atom, socket.assigns.chess_board, :opponent)
+    chess_pieces_attacker =
+      if chess_piece_side == :chess_pieces_white do
+        socket.assigns[:chess_pieces_white]
+      else
+        socket.assigns[:chess_pieces_black]
+      end
+    target_role = @role_list |> elem(socket.assigns.pone_promotion_index_pointer)
+    updated_pieces_promoted_pone =
+      Chess.update_chess_pieces_attacker_pone_promote(
+        socket.assigns.selected_coordinate_atom,
+        chess_pieces_attacker,
+        target_role,
+        List.to_string(socket.assigns.pone_promotion_initial_piece)
+      )
+
+    updated_board_promoted_pone =
+      Chess.update_chess_board_pone_promotion(socket.assigns.selected_coordinate_atom, socket.assigns.chess_board, List.to_string(socket.assigns.pone_promotion_initial_piece))
+
+    updated_pieces_coordinate_opponent =
+      if chess_piece_side == :chess_pieces_white do
+        socket.assigns[:chess_pieces_black]
+      else
+        socket.assigns[:chess_pieces_white]
+      end
+
+    opponent_king_location = Chess.locate_king_coordinate(updated_pieces_coordinate_opponent) #will crash if king is captured!
+    attacker_king_location = Chess.locate_king_coordinate(updated_pieces_promoted_pone) #will crash if king is captured!
+
+    presume_tiles_attacker = Chess.presume_tiles(updated_pieces_promoted_pone, updated_pieces_coordinate_opponent, chess_piece_side, updated_board_promoted_pone) |> elem(0)
+    presume_tiles_opponent = Chess.presume_tiles(updated_pieces_coordinate_opponent, updated_pieces_promoted_pone, chess_pieces_opponent, updated_board_promoted_pone) |> elem(0)
+
+    count_avail_tile = Chess.count_available_tiles(updated_board_promoted_pone, updated_pieces_promoted_pone, updated_pieces_coordinate_opponent, socket.assigns.past_pone_tuple_combo)
+    check_mate =
+      case { List.foldl(count_avail_tile, 0, fn x, acc -> x + acc end), opponent_king_location in presume_tiles_attacker } do
+        { 0, true } -> Chess.determine_chess_piece_side(socket.assigns.selected_coordinate_atom, updated_board_promoted_pone, :opponent)
+        { 0, _ } -> :stale_mate
+        { _, _ } -> :continue
+      end
+
+    socket =
+      if chess_piece_side == :chess_pieces_white do
+        assign(socket,
+        chess_pieces_white: updated_pieces_promoted_pone,
+        pone_promotion_modal_toggle: false,
+        chess_board: updated_board_promoted_pone,
+        check_condition_black: opponent_king_location in presume_tiles_attacker,
+        check_condition_white: attacker_king_location in presume_tiles_opponent,
+        check_mate: check_mate
+      )
+      else
+        assign(socket,
+        chess_pieces_black: updated_pieces_promoted_pone,
+        pone_promotion_modal_toggle: false,
+        chess_board: updated_board_promoted_pone,
+        check_condition_white: opponent_king_location in presume_tiles_attacker,
+        check_condition_black: attacker_king_location in presume_tiles_opponent,
+        check_mate: check_mate
+        )
+      end
+
+    { :noreply, socket }
   end
 
   def get_sel_alpha_pointer(sel_alpha) do
@@ -218,7 +325,7 @@ defmodule PortfolioWeb.ChessLive do
   end
 
   def handle_event("tile_click", %{"sel_no" => sel_no, "sel_alpha" => sel_alpha}, socket)
-    when socket.assigns.selection_toggle == false do
+    when socket.assigns.selection_toggle == false and socket.assigns.pone_promotion_modal_toggle == false do
 
     sel_alpha_pointer = get_sel_alpha_pointer(sel_alpha)
 
@@ -237,7 +344,6 @@ defmodule PortfolioWeb.ChessLive do
 
     target_coordinate = String.to_atom(sel_alpha<>Integer.to_string(sel_no))
     attacker_piece_side = Chess.determine_chess_piece_side(target_coordinate, socket.assigns.chess_board, :self)
-
 
     if attacker_piece_side == socket.assigns.player_turn do
 
@@ -499,10 +605,10 @@ defmodule PortfolioWeb.ChessLive do
       {:noreply, socket}
     end
 
-
   end
 
-  def handle_event("tile_selection", %{"key" => key_up}, socket) do
+  def handle_event("tile_selection", %{"key" => key_up}, socket)
+    when socket.assigns.pone_promotion_modal_toggle == false do
     sel_no = case key_up do
       "ArrowUp" ->
         if socket.assigns.sel_no < 9 do
@@ -540,6 +646,45 @@ defmodule PortfolioWeb.ChessLive do
         socket.assigns.sel_alpha_pointer
     end
     socket = assign(socket, sel_no: sel_no, sel_alpha: <<96+sel_alpha_pointer>>, sel_alpha_pointer: sel_alpha_pointer)
+    {:noreply, socket}
+  end
+
+  def handle_event("tile_selection", %{"key" => key_up}, socket)
+  when socket.assigns.pone_promotion_modal_toggle == true do
+    IO.puts "moving selection in modal pone promotion"
+
+    chess_piece_side =
+      if socket.assigns.player_turn == :chess_pieces_white do
+        :chess_pieces_black
+      else
+        :chess_pieces_white
+      end
+
+    index_pointer =
+      case key_up do
+        "ArrowLeft" ->
+          cond do
+            socket.assigns.pone_promotion_index_pointer - 1 in 0..3 -> socket.assigns.pone_promotion_index_pointer - 1
+            socket.assigns.pone_promotion_index_pointer - 1 not in 0..3 -> 3
+          end
+        "ArrowRight" ->
+          cond do
+            socket.assigns.pone_promotion_index_pointer + 1 in 0..3 -> socket.assigns.pone_promotion_index_pointer + 1
+            socket.assigns.pone_promotion_index_pointer + 1 not in 0..3 -> 0
+          end
+        _ -> 0
+      end
+
+    target_role = @role_list |> elem(index_pointer)
+
+    chess_pieces = socket.assigns[chess_piece_side]
+
+    chess_piece_role_id = Chess.chess_role_count_and_role_id(chess_pieces, target_role)
+
+    socket = assign(socket,
+      pone_promotion_index_pointer: index_pointer,
+      pone_promotion_initial_piece: chess_piece_role_id
+      )
     {:noreply, socket}
   end
 

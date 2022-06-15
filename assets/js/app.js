@@ -14,11 +14,24 @@ Alpine.start();
 //
 //     import "../vendor/some-package.js"
 //
-// Alternatively, you can `npm install some-package --prefix assets` and import
+// Alt*ernatively, you can `npm install some-package --prefix assets` and import
 // them using a path starting with the package name:
+///
+//     import "some-package"///////////
 //
-//     import "some-package"
-//
+const EVENT_ATTR = 'tile_selection'
+let Hooks = {}
+Hooks.Wheelie = {
+    mounted() {
+        this.el.addEventListener('wheel', (e) => {
+            if (e.deltaY < 0) {
+                this.pushEvent(EVENT_ATTR, {"key": "ArrowLeft"})
+            } else {
+                this.pushEvent(EVENT_ATTR, {"key": "ArrowRight"})
+            }
+        })
+    }
+}
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
@@ -27,8 +40,9 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
@@ -44,3 +58,6 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+// window.addEventListener('wheel', (e) => {
+//     console.log(e)
+//   })
