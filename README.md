@@ -72,6 +72,7 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   1st index which is the Rook. The order of chess piece is: Rook > Bishop > Knight > Queen.
     * Pone promotion extention: exceeding the pointer index will get it back to 1(Rook) or (4)Queen if you 
   hit the bottom index pointer to negative value.
+    * To confirm your wanted Pone Promotion Piece, just click anywhere the board or key in Enter on your keyboard.
     * Game status nav bar is located just below the Chess Board.
     * Nav Bar consist of: Tile Selection monitor, Player Turn, Check Condition and finally a Check/Stale mate.
 
