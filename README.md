@@ -61,19 +61,19 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   **** helper functions - finding king/determining ches_pieces side is here.
 
   * General Game FAQ
-  ** Game can be accessed through http://localhost:4000/chess, https://localhost:4000/chess or web live app https://devmac.app/chess
-  ** 100% FIDE Rule Implemented which means first turn is white, clicking/selecting black piece will 
+  **** Game can be accessed through http://localhost:4000/chess, https://localhost:4000/chess or web live app https://devmac.app/chess
+  **** 100% FIDE Rule Implemented which means first turn is white, clicking/selecting black piece will 
   result in nothing.
-  ** Key Enter/Click on piece to move it, a red shaded tile will be on assist to see available moves.
-  ** Drag and Drop is not currently supported.
-  ** Key press directional arrow on your keyboard to select a tile/piece.
-  ** During Pone/Pawn promotion event, mouse scroll can be used to select your desired piece, 
+  **** Key Enter/Click on piece to move it, a red shaded tile will be on assist to see available moves.
+  **** Drag and Drop is not currently supported.
+  **** Key press directional arrow on your keyboard to select a tile/piece.
+  **** During Pone/Pawn promotion event, mouse scroll can be used to select your desired piece, 
   keyboard press left/right arrow key will can also be used. Pressing up arrow will get back the pointer to
   1st index which is the Rook. The order of chess piece is: Rook > Bishop > Knight > Queen.
-  ** Pone promotion extention: exceeding the pointer index will get it back to 1(Rook) or (4)Queen if you 
+  **** Pone promotion extention: exceeding the pointer index will get it back to 1(Rook) or (4)Queen if you 
   hit the bottom index pointer to negative value.
-  ** Game status nav bar is located just below the Chess Board.
-  ** Nav Bar consist of: Tile Selection monitor, Player Turn, Check Condition and finally a Check/Stale mate.
+  **** Game status nav bar is located just below the Chess Board.
+  **** Nav Bar consist of: Tile Selection monitor, Player Turn, Check Condition and finally a Check/Stale mate.
 
 # Acknowledgement
 
